@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-26)
 
 **Core value:** Fast, frictionless checklist instantiation - select templates, get a working checklist immediately, and start making progress.
-**Current focus:** Phase 2 - Authentication (COMPLETE)
+**Current focus:** Phase 3 - Template System (In Progress)
 
 ## Current Position
 
-Phase: 2 of 4 (Authentication - COMPLETE)
-Plan: 4 of 4 in current phase
-Status: Phase 2 complete - all authentication flows verified and approved
-Last activity: 2026-01-26 — Completed 02-04-PLAN.md (Authentication System Verification)
+Phase: 3 of 4 (Template System)
+Plan: 1 of 3 in current phase
+Status: In progress - template data layer complete
+Last activity: 2026-01-26 — Completed 03-01-PLAN.md (Template Data Layer and API Foundation)
 
-Progress: [██████░░░░] 60%
+Progress: [███████░░░] 70%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
+- Total plans completed: 7
 - Average duration: 8min
-- Total execution time: 1.0 hours
+- Total execution time: 1.1 hours
 
 **By Phase:**
 
@@ -29,10 +29,11 @@ Progress: [██████░░░░] 60%
 |-------|-------|-------|----------|
 | 01-foundation | 2 | 18min | 9min |
 | 02-authentication | 4 | 39min | 10min |
+| 03-template-system | 1 | 9min | 9min |
 
 **Recent Trend:**
-- Last 5 plans: 01-02 (<1min), 02-01 (21min), 02-02 (6min), 02-03 (12min), 02-04 (<1min)
-- Trend: Phase 2 complete - authentication foundation solid, verification swift
+- Last 5 plans: 02-01 (21min), 02-02 (6min), 02-03 (12min), 02-04 (<1min), 03-01 (9min)
+- Trend: Consistent execution speed, template data layer deployed efficiently
 
 *Updated after each plan completion*
 
@@ -43,6 +44,9 @@ Progress: [██████░░░░] 60%
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
+- Item ordering with integer field - 0-indexed order field for simple, flexible reordering without complex logic (03-01)
+- Template cascade delete - Items automatically deleted with parent template via Prisma onDelete: Cascade (03-01)
+- User isolation pattern - Defense in depth: userId filter in queries + ownership verification at operation level (03-01)
 - Templates merge (not link) - User wants unified checklist to work through
 - Customization after instantiation - Templates are starting points, not rigid contracts
 - No sharing in v1 - Personal tool focus simplifies complexity
@@ -68,6 +72,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-26T13:42:51Z
-Stopped at: Completed 02-04-PLAN.md (Authentication System Verification) - Phase 2 COMPLETE
+Last session: 2026-01-26T14:23:38Z
+Stopped at: Completed 03-01-PLAN.md (Template Data Layer and API Foundation)
 Resume file: None
