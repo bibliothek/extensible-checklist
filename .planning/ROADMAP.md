@@ -42,10 +42,13 @@ Plans:
   2. User can log in and stay logged in across browser sessions
   3. User can log out from any page
   4. Each user's data is isolated from other users
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] TBD (will be defined during phase planning)
+- [ ] 02-01-PLAN.md — Authentication foundation with database schema and Auth.js configuration
+- [ ] 02-02-PLAN.md — Signup flow with email/password and duplicate email handling
+- [ ] 02-03-PLAN.md — Login and logout functionality with session management
+- [ ] 02-04-PLAN.md — Verify complete authentication system end-to-end
 
 ### Phase 3: Template System
 **Goal**: Users can create reusable templates and instantiate merged checklists
@@ -87,7 +90,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete | 2026-01-26 |
-| 2. Authentication | 0/TBD | Not started | - |
+| 2. Authentication | 0/4 | Not started | - |
 | 3. Template System | 0/TBD | Not started | - |
 | 4. Checklist Workflow | 0/TBD | Not started | - |
 
