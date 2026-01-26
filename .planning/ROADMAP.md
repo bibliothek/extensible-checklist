@@ -61,10 +61,13 @@ Plans:
   4. User can view all templates in their library
   5. User can select multiple templates and create merged checklist
   6. Merged checklist contains all items from selected templates
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] TBD (will be defined during phase planning)
+- [ ] 03-01-PLAN.md — Database schema and template CRUD API foundation
+- [ ] 03-02-PLAN.md — Template library UI with create, edit, and delete
+- [ ] 03-03-PLAN.md — Checklist instantiation with merge logic and deduplication
+- [ ] 03-04-PLAN.md — Verify complete template system end-to-end
 
 ### Phase 4: Checklist Workflow
 **Goal**: Users can manage and complete active checklists
@@ -91,7 +94,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete | 2026-01-26 |
 | 2. Authentication | 4/4 | Complete | 2026-01-26 |
-| 3. Template System | 0/TBD | Not started | - |
+| 3. Template System | 0/4 | Not started | - |
 | 4. Checklist Workflow | 0/TBD | Not started | - |
 
 ---
