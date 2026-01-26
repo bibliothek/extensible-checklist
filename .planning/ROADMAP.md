@@ -12,7 +12,7 @@ Build a web application for managing personal recurring tasks through reusable c
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - Project scaffolding and development environment
+- [x] **Phase 1: Foundation** - Project scaffolding and development environment
 - [ ] **Phase 2: Authentication** - User accounts and session management
 - [ ] **Phase 3: Template System** - Create templates and instantiate merged checklists
 - [ ] **Phase 4: Checklist Workflow** - Complete active checklist management
@@ -30,8 +30,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 2 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Set up Next.js, Prisma, and Tailwind foundation
-- [ ] 01-02-PLAN.md — Verify development environment works end-to-end
+- [x] 01-01-PLAN.md — Set up Next.js, Prisma, and Tailwind foundation
+- [x] 01-02-PLAN.md — Verify development environment works end-to-end
 
 ### Phase 2: Authentication
 **Goal**: Users can securely access their accounts
@@ -86,7 +86,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/2 | Planning complete | - |
+| 1. Foundation | 2/2 | Complete | 2026-01-26 |
 | 2. Authentication | 0/TBD | Not started | - |
 | 3. Template System | 0/TBD | Not started | - |
 | 4. Checklist Workflow | 0/TBD | Not started | - |
