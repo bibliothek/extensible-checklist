@@ -92,13 +92,30 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (Will be populated during roadmap creation) | | |
+| AUTH-01 | Phase 2 | Pending |
+| AUTH-02 | Phase 2 | Pending |
+| AUTH-03 | Phase 2 | Pending |
+| TMPL-01 | Phase 3 | Pending |
+| TMPL-02 | Phase 3 | Pending |
+| TMPL-03 | Phase 3 | Pending |
+| TMPL-04 | Phase 3 | Pending |
+| INST-01 | Phase 3 | Pending |
+| INST-02 | Phase 3 | Pending |
+| INST-03 | Phase 3 | Pending |
+| CHKL-01 | Phase 4 | Pending |
+| CHKL-02 | Phase 4 | Pending |
+| CHKL-03 | Phase 4 | Pending |
+| CHKL-04 | Phase 4 | Pending |
+| CHKL-05 | Phase 4 | Pending |
+| CHKL-06 | Phase 4 | Pending |
+| CHKL-07 | Phase 4 | Pending |
+| CHKL-08 | Phase 4 | Pending |
 
 **Coverage:**
 - v1 requirements: 15 total
-- Mapped to phases: 0
-- Unmapped: 15 ⚠️
+- Mapped to phases: 15
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-01-26*
-*Last updated: 2026-01-26 after initial definition*
+*Last updated: 2026-01-26 after roadmap creation*
