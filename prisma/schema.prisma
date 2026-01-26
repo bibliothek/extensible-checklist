@@ -15,15 +15,16 @@ datasource db {
 
 // Authentication models (Auth.js)
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
+  id            String      @id @default(cuid())
+  email         String      @unique
   password      String
   emailVerified DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
   accounts      Account[]
   sessions      Session[]
   templates     Template[]
+  checklists    Checklist[]
 }
 
 model Account {
@@ -79,4 +80,26 @@ model TemplateItem {
   templateId String
   createdAt  DateTime @default(now())
   template   Template @relation(fields: [templateId], references: [id], onDelete: Cascade)
+}
+
+// Checklist instantiation models
+model Checklist {
+  id        String          @id @default(cuid())
+  name      String
+  userId    String
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items     ChecklistItem[]
+}
+
+model ChecklistItem {
+  id             String    @id @default(cuid())
+  text           String
+  completed      Boolean   @default(false)
+  order          Int
+  sourceTemplate String
+  checklistId    String
+  createdAt      DateTime  @default(now())
+  checklist      Checklist @relation(fields: [checklistId], references: [id], onDelete: Cascade)
 }
