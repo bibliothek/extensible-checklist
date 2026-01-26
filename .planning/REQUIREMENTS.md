@@ -15,16 +15,16 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Template Management
 
-- [ ] **TMPL-01**: User can create new template with checklist items
-- [ ] **TMPL-02**: User can edit existing template (add, remove, reorder items)
-- [ ] **TMPL-03**: User can delete template from library
-- [ ] **TMPL-04**: User can view template library (list of all templates)
+- [x] **TMPL-01**: User can create new template with checklist items
+- [x] **TMPL-02**: User can edit existing template (add, remove, reorder items)
+- [x] **TMPL-03**: User can delete template from library
+- [x] **TMPL-04**: User can view template library (list of all templates)
 
 ### Checklist Instantiation
 
-- [ ] **INST-01**: User can select multiple templates to combine
-- [ ] **INST-02**: User can name the new checklist
-- [ ] **INST-03**: User can create checklist from selected templates (merges all items)
+- [x] **INST-01**: User can select multiple templates to combine
+- [x] **INST-02**: User can name the new checklist
+- [x] **INST-03**: User can create checklist from selected templates (merges all items)
 
 ### Checklist Management
 
@@ -95,13 +95,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AUTH-01 | Phase 2 | Complete |
 | AUTH-02 | Phase 2 | Complete |
 | AUTH-03 | Phase 2 | Complete |
-| TMPL-01 | Phase 3 | Pending |
-| TMPL-02 | Phase 3 | Pending |
-| TMPL-03 | Phase 3 | Pending |
-| TMPL-04 | Phase 3 | Pending |
-| INST-01 | Phase 3 | Pending |
-| INST-02 | Phase 3 | Pending |
-| INST-03 | Phase 3 | Pending |
+| TMPL-01 | Phase 3 | Complete |
+| TMPL-02 | Phase 3 | Complete |
+| TMPL-03 | Phase 3 | Complete |
+| TMPL-04 | Phase 3 | Complete |
+| INST-01 | Phase 3 | Complete |
+| INST-02 | Phase 3 | Complete |
+| INST-03 | Phase 3 | Complete |
 | CHKL-01 | Phase 4 | Pending |
 | CHKL-02 | Phase 4 | Pending |
 | CHKL-03 | Phase 4 | Pending |

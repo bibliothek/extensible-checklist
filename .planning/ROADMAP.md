@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - Project scaffolding and development environment
 - [x] **Phase 2: Authentication** - User accounts and session management
-- [ ] **Phase 3: Template System** - Create templates and instantiate merged checklists
+- [x] **Phase 3: Template System** - Create templates and instantiate merged checklists
 - [ ] **Phase 4: Checklist Workflow** - Complete active checklist management
 
 ## Phase Details
@@ -64,10 +64,10 @@ Plans:
 **Plans**: 4 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Database schema and template CRUD API foundation
-- [ ] 03-02-PLAN.md — Template library UI with create, edit, and delete
-- [ ] 03-03-PLAN.md — Checklist instantiation with merge logic and deduplication
-- [ ] 03-04-PLAN.md — Verify complete template system end-to-end
+- [x] 03-01-PLAN.md — Database schema and template CRUD API foundation
+- [x] 03-02-PLAN.md — Template library UI with create, edit, and delete
+- [x] 03-03-PLAN.md — Checklist instantiation with merge logic and deduplication
+- [x] 03-04-PLAN.md — Verify complete template system end-to-end
 
 ### Phase 4: Checklist Workflow
 **Goal**: Users can manage and complete active checklists
@@ -94,7 +94,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete | 2026-01-26 |
 | 2. Authentication | 4/4 | Complete | 2026-01-26 |
-| 3. Template System | 0/4 | Not started | - |
+| 3. Template System | 4/4 | Complete | 2026-01-26 |
 | 4. Checklist Workflow | 0/TBD | Not started | - |
 
 ---
