@@ -10,29 +10,29 @@ See: .planning/PROJECT.md (updated 2026-01-26)
 ## Current Position
 
 Phase: 2 of 4 (Authentication)
-Plan: 2 of TBD in current phase
-Status: Signup flow complete with password hashing and auto sign-in
-Last activity: 2026-01-26 — Completed 02-02-PLAN.md (Signup Implementation)
+Plan: 3 of TBD in current phase
+Status: Login and logout flows complete with session-aware UI
+Last activity: 2026-01-26 — Completed 02-03-PLAN.md (Login and Logout Implementation)
 
-Progress: [███░░░░░░░] 40%
+Progress: [████░░░░░░] 50%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
+- Total plans completed: 5
 - Average duration: 11min
-- Total execution time: 0.8 hours
+- Total execution time: 1.0 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-foundation | 2 | 18min | 9min |
-| 02-authentication | 2 | 27min | 14min |
+| 02-authentication | 3 | 39min | 13min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (17min), 01-02 (<1min), 02-01 (21min), 02-02 (6min)
-- Trend: Signup flow implemented quickly with existing auth foundation
+- Last 5 plans: 01-01 (17min), 01-02 (<1min), 02-01 (21min), 02-02 (6min), 02-03 (12min)
+- Trend: Authentication flows (signup, login, logout) implemented efficiently
 
 *Updated after each plan completion*
 
@@ -46,6 +46,8 @@ Recent decisions affecting current work:
 - Templates merge (not link) - User wants unified checklist to work through
 - Customization after instantiation - Templates are starting points, not rigid contracts
 - No sharing in v1 - Personal tool focus simplifies complexity
+- Session-aware landing page - Shows logout button when authenticated, signup/login links when not (02-03)
+- Client-side login error handling - Used redirect: false to display errors before navigation (02-03)
 - Auto sign-in after signup - Frictionless onboarding, user doesn't need to manually log in after account creation (02-02)
 - Email normalization - Lowercase and trimmed before database insertion to prevent duplicates (02-02)
 - Prisma 6 for stability - Downgraded from Prisma 7 due to Next.js build incompatibility (02-01)
@@ -65,6 +67,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-26T13:19:13Z
-Stopped at: Completed 02-02-PLAN.md (Signup Implementation)
+Last session: 2026-01-26T13:37:19Z
+Stopped at: Completed 02-03-PLAN.md (Login and Logout Implementation)
 Resume file: None
