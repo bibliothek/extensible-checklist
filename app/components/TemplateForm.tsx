@@ -126,14 +126,14 @@ export default function TemplateForm({ initialData, onSubmit, onCancel }: Templa
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded">
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-300 px-4 py-3 rounded">
           {error}
         </div>
       )}
 
       {/* Template Name */}
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           Template Name
         </label>
         <input
@@ -142,7 +142,7 @@ export default function TemplateForm({ initialData, onSubmit, onCancel }: Templa
           required
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
           placeholder="e.g., Morning Routine"
           disabled={loading}
         />
@@ -150,7 +150,7 @@ export default function TemplateForm({ initialData, onSubmit, onCancel }: Templa
 
       {/* Items List */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           Checklist Items
         </label>
 
@@ -159,7 +159,7 @@ export default function TemplateForm({ initialData, onSubmit, onCancel }: Templa
             {items.map((item, index) => (
               <div
                 key={item.id}
-                className="flex items-center gap-2 p-3 border border-gray-200 rounded-md bg-white"
+                className="flex items-center gap-2 p-3 border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800"
               >
                 {/* Reorder buttons */}
                 <div className="flex flex-col gap-1">
@@ -167,7 +167,7 @@ export default function TemplateForm({ initialData, onSubmit, onCancel }: Templa
                     type="button"
                     onClick={() => moveUp(index)}
                     disabled={index === 0 || loading}
-                    className="text-gray-500 hover:text-gray-700 disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 disabled:opacity-30 disabled:cursor-not-allowed"
                     title="Move up"
                   >
                     ▲
@@ -176,7 +176,7 @@ export default function TemplateForm({ initialData, onSubmit, onCancel }: Templa
                     type="button"
                     onClick={() => moveDown(index)}
                     disabled={index === items.length - 1 || loading}
-                    className="text-gray-500 hover:text-gray-700 disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 disabled:opacity-30 disabled:cursor-not-allowed"
                     title="Move down"
                   >
                     ▼
@@ -188,7 +188,7 @@ export default function TemplateForm({ initialData, onSubmit, onCancel }: Templa
                   type="text"
                   value={item.text}
                   onChange={(e) => updateItemText(item.id, e.target.value)}
-                  className="flex-1 px-3 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 px-3 py-1 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
                   disabled={loading}
                 />
 
@@ -197,7 +197,7 @@ export default function TemplateForm({ initialData, onSubmit, onCancel }: Templa
                   type="button"
                   onClick={() => removeItem(item.id)}
                   disabled={loading}
-                  className="text-red-600 hover:text-red-700 px-3 py-1 disabled:opacity-50"
+                  className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 px-3 py-1 disabled:opacity-50"
                   title="Remove item"
                 >
                   ✕
@@ -214,7 +214,7 @@ export default function TemplateForm({ initialData, onSubmit, onCancel }: Templa
             value={newItemText}
             onChange={(e) => setNewItemText(e.target.value)}
             onKeyDown={handleNewItemKeyDown}
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
             placeholder="Type item and press Enter or click Add"
             disabled={loading}
           />
@@ -222,18 +222,18 @@ export default function TemplateForm({ initialData, onSubmit, onCancel }: Templa
             type="button"
             onClick={addItem}
             disabled={loading || !newItemText.trim()}
-            className="bg-gray-200 text-gray-800 px-6 py-2 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-6 py-2 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             Add Item
           </button>
         </div>
-        <p className="text-xs text-gray-500 mt-2">
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
           Press Enter or click "Add Item" to add to the list
         </p>
       </div>
 
       {/* Action buttons */}
-      <div className="flex gap-4 pt-4 border-t">
+      <div className="flex gap-4 pt-4 border-t dark:border-gray-700">
         <button
           type="submit"
           disabled={loading}
@@ -245,7 +245,7 @@ export default function TemplateForm({ initialData, onSubmit, onCancel }: Templa
           type="button"
           onClick={onCancel}
           disabled={loading}
-          className="flex-1 bg-gray-200 text-gray-800 py-3 px-6 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="flex-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 py-3 px-6 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           Cancel
         </button>

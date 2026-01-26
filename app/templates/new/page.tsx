@@ -37,7 +37,7 @@ export default function NewTemplatePage() {
   if (status === "loading") {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center p-24">
-        <div className="text-gray-500">Loading...</div>
+        <div className="text-gray-500 dark:text-gray-400">Loading...</div>
       </main>
     );
   }
@@ -46,7 +46,7 @@ export default function NewTemplatePage() {
     <main className="min-h-screen p-8 md:p-24">
       <div className="max-w-3xl mx-auto">
         <h1 className="text-4xl font-bold mb-2">Create New Template</h1>
-        <p className="text-gray-600 mb-8">
+        <p className="text-gray-600 dark:text-gray-400 mb-8">
           Build a reusable checklist template with multiple items
         </p>
 

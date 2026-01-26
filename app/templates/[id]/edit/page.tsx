@@ -86,7 +86,7 @@ export default function EditTemplatePage() {
   if (status === "loading" || loading) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center p-24">
-        <div className="text-gray-500">Loading...</div>
+        <div className="text-gray-500 dark:text-gray-400">Loading...</div>
       </main>
     );
   }
@@ -95,7 +95,7 @@ export default function EditTemplatePage() {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center p-24">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-red-600 mb-4">{error}</h1>
+          <h1 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-4">{error}</h1>
           <button
             onClick={() => router.push("/templates")}
             className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700"
@@ -115,7 +115,7 @@ export default function EditTemplatePage() {
     <main className="min-h-screen p-8 md:p-24">
       <div className="max-w-3xl mx-auto">
         <h1 className="text-4xl font-bold mb-2">Edit Template</h1>
-        <p className="text-gray-600 mb-8">
+        <p className="text-gray-600 dark:text-gray-400 mb-8">
           Update your template name and items
         </p>
 

@@ -139,7 +139,7 @@ export default function NewChecklistPage() {
   if (status === "loading" || loading) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center p-24">
-        <div className="text-gray-500">Loading...</div>
+        <div className="text-gray-500 dark:text-gray-400">Loading...</div>
       </main>
     );
   }
@@ -151,11 +151,11 @@ export default function NewChecklistPage() {
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold mb-8">Create Checklist</h1>
 
-          <div className="text-center py-16 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
-            <h2 className="text-xl font-semibold text-gray-700 mb-2">
+          <div className="text-center py-16 bg-gray-50 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-700">
+            <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
               No templates available
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
               Create templates first, then you can use them to build checklists.
             </p>
             <Link
@@ -183,19 +183,19 @@ export default function NewChecklistPage() {
     <main className="min-h-screen p-8 md:p-24">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold mb-2">Create Checklist</h1>
-        <p className="text-gray-600 mb-8">
+        <p className="text-gray-600 dark:text-gray-400 mb-8">
           Select templates to merge into a working checklist
         </p>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded mb-6">
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-300 px-4 py-3 rounded mb-6">
             {error}
           </div>
         )}
 
         {/* Checklist Name Input */}
         <div className="mb-8">
-          <label htmlFor="checklistName" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="checklistName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Checklist Name
           </label>
           <input
@@ -204,7 +204,7 @@ export default function NewChecklistPage() {
             required
             value={checklistName}
             onChange={(e) => setChecklistName(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
             placeholder="e.g., Monday Morning Workflow"
             disabled={creating}
           />
@@ -213,10 +213,10 @@ export default function NewChecklistPage() {
         {/* Template Selection */}
         <div className="mb-8">
           <h2 className="text-xl font-semibold mb-4">Select Templates to Merge</h2>
-          <p className="text-sm text-gray-600 mb-4">
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
             Selection order matters! Items will appear in the order you select templates.
             {selectedTemplateIds.length > 0 && (
-              <span className="font-medium text-blue-600 ml-1">
+              <span className="font-medium text-blue-600 dark:text-blue-400 ml-1">
                 ({selectedTemplateIds.length} selected)
               </span>
             )}
@@ -232,8 +232,8 @@ export default function NewChecklistPage() {
                   key={template.id}
                   className={`border rounded-lg p-4 cursor-pointer transition-all ${
                     isSelected
-                      ? "border-blue-500 bg-blue-50"
-                      : "border-gray-200 hover:border-gray-300 bg-white"
+                      ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+                      : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800"
                   }`}
                   onClick={() => toggleTemplate(template.id)}
                 >
@@ -246,7 +246,7 @@ export default function NewChecklistPage() {
                         className="w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
                         onClick={(e) => e.stopPropagation()}
                       />
-                      <h3 className="text-lg font-semibold text-gray-900">
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                         {template.name}
                       </h3>
                     </div>
@@ -256,7 +256,7 @@ export default function NewChecklistPage() {
                       </span>
                     )}
                   </div>
-                  <p className="text-sm text-gray-600 ml-7">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 ml-7">
                     {template.items.length} {template.items.length === 1 ? "item" : "items"}
                   </p>
                 </div>
@@ -269,7 +269,7 @@ export default function NewChecklistPage() {
         {selectedTemplateIds.length > 0 && (
           <div className="mb-8">
             <h2 className="text-xl font-semibold mb-4">Selected Order</h2>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
               Items will appear in this order. Use arrows to reorder.
             </p>
             <div className="space-y-2">
@@ -280,15 +280,15 @@ export default function NewChecklistPage() {
                 return (
                   <div
                     key={templateId}
-                    className="flex items-center gap-3 p-3 border border-blue-200 rounded-md bg-blue-50"
+                    className="flex items-center gap-3 p-3 border border-blue-200 dark:border-blue-800 rounded-md bg-blue-50 dark:bg-blue-900/20"
                   >
                     <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white font-bold">
                       {index + 1}
                     </span>
 
                     <div className="flex-1">
-                      <h3 className="font-semibold text-gray-900">{template.name}</h3>
-                      <p className="text-sm text-gray-600">
+                      <h3 className="font-semibold text-gray-900 dark:text-white">{template.name}</h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
                         {template.items.length} {template.items.length === 1 ? "item" : "items"}
                       </p>
                     </div>
@@ -298,7 +298,7 @@ export default function NewChecklistPage() {
                         type="button"
                         onClick={() => moveTemplateUp(templateId)}
                         disabled={index === 0 || creating}
-                        className="text-gray-600 hover:text-gray-800 disabled:opacity-30 disabled:cursor-not-allowed"
+                        className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 disabled:opacity-30 disabled:cursor-not-allowed"
                         title="Move up"
                       >
                         ▲
@@ -307,7 +307,7 @@ export default function NewChecklistPage() {
                         type="button"
                         onClick={() => moveTemplateDown(templateId)}
                         disabled={index === selectedTemplateIds.length - 1 || creating}
-                        className="text-gray-600 hover:text-gray-800 disabled:opacity-30 disabled:cursor-not-allowed"
+                        className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 disabled:opacity-30 disabled:cursor-not-allowed"
                         title="Move down"
                       >
                         ▼
@@ -318,7 +318,7 @@ export default function NewChecklistPage() {
                       type="button"
                       onClick={() => toggleTemplate(templateId)}
                       disabled={creating}
-                      className="text-red-600 hover:text-red-700 px-3 py-1 disabled:opacity-50"
+                      className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 px-3 py-1 disabled:opacity-50"
                       title="Remove from selection"
                     >
                       ✕
@@ -331,7 +331,7 @@ export default function NewChecklistPage() {
         )}
 
         {/* Action Buttons */}
-        <div className="flex gap-4 pt-4 border-t">
+        <div className="flex gap-4 pt-4 border-t dark:border-gray-700">
           <button
             type="button"
             onClick={handleCreateChecklist}
@@ -342,7 +342,7 @@ export default function NewChecklistPage() {
           </button>
           <Link
             href="/"
-            className="flex-1 text-center bg-gray-200 text-gray-800 py-3 px-6 rounded-md hover:bg-gray-300 transition-colors"
+            className="flex-1 text-center bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 py-3 px-6 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
           >
             Cancel
           </Link>
