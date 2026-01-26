@@ -23,6 +23,7 @@ model User {
   updatedAt     DateTime  @updatedAt
   accounts      Account[]
   sessions      Session[]
+  templates     Template[]
 }
 
 model Account {
@@ -58,4 +59,24 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+// Template management models
+model Template {
+  id        String         @id @default(cuid())
+  name      String
+  userId    String
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items     TemplateItem[]
+}
+
+model TemplateItem {
+  id         String   @id @default(cuid())
+  text       String
+  order      Int
+  templateId String
+  createdAt  DateTime @default(now())
+  template   Template @relation(fields: [templateId], references: [id], onDelete: Cascade)
 }
