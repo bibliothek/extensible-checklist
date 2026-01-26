@@ -4,7 +4,7 @@ import { db } from "@/lib/db"
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth()
@@ -15,6 +15,8 @@ export async function GET(
         { status: 401 }
       )
     }
+
+    const params = await context.params
 
     const template = await db.template.findFirst({
       where: {
@@ -49,7 +51,7 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth()
@@ -61,6 +63,7 @@ export async function PUT(
       )
     }
 
+    const params = await context.params
     const body = await request.json()
     const { name, items } = body
 
@@ -159,7 +162,7 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth()
@@ -170,6 +173,8 @@ export async function DELETE(
         { status: 401 }
       )
     }
+
+    const params = await context.params
 
     // Check if template exists and user owns it
     const existingTemplate = await db.template.findFirst({

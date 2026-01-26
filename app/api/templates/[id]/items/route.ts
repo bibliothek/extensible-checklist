@@ -4,7 +4,7 @@ import { db } from "@/lib/db"
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth()
@@ -15,6 +15,8 @@ export async function POST(
         { status: 401 }
       )
     }
+
+    const params = await context.params
 
     // Check if template exists and user owns it
     const template = await db.template.findFirst({
