@@ -80,10 +80,12 @@ Plans:
   4. User can uncheck items if needed
   5. User can customize active checklist (add, remove, reorder items)
   6. User can delete checklist when finished
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] TBD (will be defined during phase planning)
+- [ ] 04-01-PLAN.md — Checklist management API and list view with progress indicators
+- [ ] 04-02-PLAN.md — Checklist working page with completion, editing, and grouping
+- [ ] 04-03-PLAN.md — Verify complete checklist workflow end-to-end
 
 ## Progress
 
@@ -95,7 +97,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Foundation | 2/2 | Complete | 2026-01-26 |
 | 2. Authentication | 4/4 | Complete | 2026-01-26 |
 | 3. Template System | 4/4 | Complete | 2026-01-26 |
-| 4. Checklist Workflow | 0/TBD | Not started | - |
+| 4. Checklist Workflow | 0/3 | Not started | - |
 
 ---
 *Roadmap created: 2026-01-26*
