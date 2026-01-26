@@ -27,10 +27,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   1. Web application runs locally with development server
   2. Database is configured and accepting connections
   3. Basic UI framework renders pages
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD (will be defined during phase planning)
+- [ ] 01-01-PLAN.md — Set up Next.js, Prisma, and Tailwind foundation
+- [ ] 01-02-PLAN.md — Verify development environment works end-to-end
 
 ### Phase 2: Authentication
 **Goal**: Users can securely access their accounts
@@ -85,7 +86,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/TBD | Not started | - |
+| 1. Foundation | 0/2 | Planning complete | - |
 | 2. Authentication | 0/TBD | Not started | - |
 | 3. Template System | 0/TBD | Not started | - |
 | 4. Checklist Workflow | 0/TBD | Not started | - |
