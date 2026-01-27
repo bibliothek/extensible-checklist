@@ -90,12 +90,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Create checklist and items in a transaction
+    const userId = session.user.id! // Safe to assert - auth check above ensures this exists
     const checklist = await db.$transaction(async (tx) => {
       // Create the checklist
       const newChecklist = await tx.checklist.create({
         data: {
           name: name.trim(),
-          userId: session.user.id,
+          userId,
           items: {
             create: mergedItems.map((item) => ({
               text: item.text,
