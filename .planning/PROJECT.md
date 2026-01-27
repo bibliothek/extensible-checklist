@@ -8,6 +8,17 @@ A web application for managing personal recurring tasks through reusable checkli
 
 Fast, frictionless checklist instantiation - select templates, get a working checklist immediately, and start making progress.
 
+## Current Milestone: v2.0 Production Ready
+
+**Goal:** Polish UX for power users and prepare for production deployment
+
+**Target features:**
+- Bulk text editing mode for templates (faster template creation/editing)
+- Print view for checklist instances (paper checklist option)
+- Hide completed items in checklist instances (focus on remaining work)
+- Docker containerization (consistent deployment)
+- CI/CD pipeline with Azure App Service (automated production deployment)
+
 ## Requirements
 
 ### Validated
@@ -23,7 +34,11 @@ Fast, frictionless checklist instantiation - select templates, get a working che
 
 ### Active
 
-(To be defined for next milestone)
+- Bulk text editing mode for templates
+- Print view for checklist instances
+- Hide completed items toggle in checklist instances
+- Docker image for deployment
+- CI/CD pipeline deploying to Azure App Service
 
 ### Out of Scope
 
@@ -78,4 +93,4 @@ Fast, frictionless checklist instantiation - select templates, get a working che
 | Dark mode throughout | Modern UX expectation | ✓ Good - required bug fixes but worth it |
 
 ---
-*Last updated: 2026-01-27 after v1.0 milestone completion*
+*Last updated: 2026-01-27 after v2.0 milestone initialization*

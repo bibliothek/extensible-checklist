@@ -5,17 +5,17 @@
 See: .planning/PROJECT.md (updated 2026-01-27)
 
 **Core value:** Fast, frictionless checklist instantiation - select templates, get a working checklist immediately, and start making progress.
-**Current focus:** v1.0 milestone complete - planning next milestone
+**Current focus:** v2.0 Production Ready - UX polish and deployment
 
 ## Current Position
 
-Milestone: v1.0 MVP complete
-Phase: Next milestone not yet planned
-Plan: N/A
-Status: Ready for next milestone planning
-Last activity: 2026-01-27 — v1.0 milestone archived
+Milestone: v2.0 Production Ready
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-01-27 — Milestone v2.0 started
 
-Progress: v1.0 [███████████] 100% | v1.1 [░░░░░░░░░░░] 0%
+Progress: v1.0 [███████████] 100% | v2.0 [░░░░░░░░░░░] 0%
 
 ## Performance Metrics
 
