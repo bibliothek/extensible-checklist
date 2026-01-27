@@ -63,10 +63,12 @@ Plans:
   3. Each line in bulk text mode creates one item, empty lines are ignored
   4. User can print a checklist with browser print dialog, formatted for paper with minimal black & white styling
   5. Printed checklist preserves template grouping for easy reference
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 05-01: TBD during phase planning
+- [ ] 05-01-PLAN.md — Bulk text mode for templates
+- [ ] 05-02-PLAN.md — Print view for checklists
+- [ ] 05-03-PLAN.md — Verify power user UX features
 
 #### Phase 6: Checklist Focus
 **Goal**: Users can hide completed work to focus on remaining tasks
@@ -105,6 +107,6 @@ Plans:
 | 2. Template Management | v1.0 | 3/3 | Complete | 2026-01-26 |
 | 3. Checklist Instantiation | v1.0 | 4/4 | Complete | 2026-01-27 |
 | 4. Checklist Workflow | v1.0 | 3/3 | Complete | 2026-01-27 |
-| 5. Power User UX | v2.0 | 0/TBD | Not started | - |
+| 5. Power User UX | v2.0 | 0/3 | Not started | - |
 | 6. Checklist Focus | v2.0 | 0/TBD | Not started | - |
 | 7. Production Deployment | v2.0 | 0/TBD | Not started | - |
