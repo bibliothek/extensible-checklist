@@ -102,14 +102,14 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INST-01 | Phase 3 | Complete |
 | INST-02 | Phase 3 | Complete |
 | INST-03 | Phase 3 | Complete |
-| CHKL-01 | Phase 4 | Pending |
-| CHKL-02 | Phase 4 | Pending |
-| CHKL-03 | Phase 4 | Pending |
-| CHKL-04 | Phase 4 | Pending |
-| CHKL-05 | Phase 4 | Pending |
-| CHKL-06 | Phase 4 | Pending |
-| CHKL-07 | Phase 4 | Pending |
-| CHKL-08 | Phase 4 | Pending |
+| CHKL-01 | Phase 4 | Complete |
+| CHKL-02 | Phase 4 | Complete |
+| CHKL-03 | Phase 4 | Complete |
+| CHKL-04 | Phase 4 | Complete |
+| CHKL-05 | Phase 4 | Complete |
+| CHKL-06 | Phase 4 | Complete |
+| CHKL-07 | Phase 4 | Complete |
+| CHKL-08 | Phase 4 | Complete |
 
 **Coverage:**
 - v1 requirements: 15 total
@@ -118,4 +118,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-26*
-*Last updated: 2026-01-26 after roadmap creation*
+*Last updated: 2026-01-27 after phase 4 completion*
