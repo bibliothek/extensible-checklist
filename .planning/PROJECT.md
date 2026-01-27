@@ -12,18 +12,18 @@ Fast, frictionless checklist instantiation - select templates, get a working che
 
 ### Validated
 
-(None yet - ship to validate)
+- ✓ User can create an account and log in — v1.0
+- ✓ User can create, edit, and delete checklist templates — v1.0
+- ✓ User can instantiate a new checklist by selecting multiple templates — v1.0
+- ✓ Selected templates merge into a unified checklist — v1.0 (with deduplication)
+- ✓ User can customize the instantiated checklist (add, remove, reorder items) — v1.0
+- ✓ User can check off items as they complete them — v1.0
+- ✓ User can view their template library — v1.0
+- ✓ User can view their active checklists — v1.0 (with progress indicators)
 
 ### Active
 
-- [ ] User can create an account and log in
-- [ ] User can create, edit, and delete checklist templates
-- [ ] User can instantiate a new checklist by selecting multiple templates
-- [ ] Selected templates merge into a unified checklist
-- [ ] User can customize the instantiated checklist (add, remove, reorder items)
-- [ ] User can check off items as they complete them
-- [ ] User can view their template library
-- [ ] User can view their active checklists
+(To be defined for next milestone)
 
 ### Out of Scope
 
@@ -37,6 +37,14 @@ Fast, frictionless checklist instantiation - select templates, get a working che
 - Template marketplace or discovery - users create their own
 
 ## Context
+
+**Current State (v1.0 shipped):**
+- Next.js 16 web application with ~3,181 lines TypeScript
+- PostgreSQL database with Prisma ORM
+- Auth.js v5 authentication with JWT sessions
+- Complete template and checklist management
+- Dark mode support, responsive design
+- Running locally at http://localhost:3000
 
 **Use Case:** Personal recurring tasks and routines that benefit from reusable structure but need flexibility. Examples include weekly planning, project kickoffs, travel preparation, or any process run repeatedly with minor variations.
 
@@ -59,9 +67,15 @@ Fast, frictionless checklist instantiation - select templates, get a working che
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Templates merge (not link) | User wants unified checklist to work through, not jumping between multiple lists | - Pending |
-| Customization after instantiation | Templates are starting points, not rigid contracts - flexibility is key to recurring task workflow | - Pending |
-| No sharing in v1 | Personal tool focus simplifies auth, permissions, and UI complexity | - Pending |
+| Templates merge (not link) | User wants unified checklist to work through, not jumping between multiple lists | ✓ Good - users appreciate single unified view |
+| Customization after instantiation | Templates are starting points, not rigid contracts - flexibility is key to recurring task workflow | ✓ Good - add/remove/reorder works well |
+| No sharing in v1 | Personal tool focus simplifies auth, permissions, and UI complexity | ✓ Good - shipped faster without complexity |
+| Next.js 16 with App Router | Modern React patterns, server components, built-in routing | ✓ Good - productive development |
+| Auth.js v5 with JWT sessions | Stateless authentication, no session storage needed | ✓ Good - simple and scalable |
+| Prisma ORM | Type-safe database queries, migrations, modern DX | ✓ Good - caught errors at compile time |
+| Case-sensitive deduplication | Predictable behavior, simpler implementation | ✓ Good - works as expected |
+| Optimistic UI updates | Instant feedback for all interactions | ✓ Good - feels responsive |
+| Dark mode throughout | Modern UX expectation | ✓ Good - required bug fixes but worth it |
 
 ---
-*Last updated: 2026-01-26 after initialization*
+*Last updated: 2026-01-27 after v1.0 milestone completion*
