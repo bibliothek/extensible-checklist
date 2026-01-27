@@ -359,16 +359,24 @@ export default function ChecklistDetailPage({
             <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
               {checklist.name}
             </h1>
-            <Link
-              href="/checklists"
-              className="text-blue-600 dark:text-blue-400 hover:underline"
-            >
-              ← Back to Checklists
-            </Link>
+            <div className="flex gap-4 items-center print:hidden">
+              <button
+                onClick={() => window.print()}
+                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+              >
+                Print Checklist
+              </button>
+              <Link
+                href="/checklists"
+                className="text-blue-600 dark:text-blue-400 hover:underline"
+              >
+                ← Back to Checklists
+              </Link>
+            </div>
           </div>
 
           {/* Progress display */}
-          <div className="mb-4">
+          <div className="mb-4 print:hidden">
             <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mb-2">
               <span className="font-medium">
                 {completed} of {total} items completed
@@ -386,7 +394,7 @@ export default function ChecklistDetailPage({
 
         {/* Error banner */}
         {error && (
-          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-300 px-4 py-3 rounded mb-6">
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-300 px-4 py-3 rounded mb-6 print:hidden">
             {error}
           </div>
         )}
@@ -396,17 +404,17 @@ export default function ChecklistDetailPage({
           {Object.entries(grouped).map(([templateName, items]) => (
             <div
               key={templateName}
-              className="border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 overflow-hidden"
+              className="template-group border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 overflow-hidden"
             >
               {/* Group header */}
               <button
                 onClick={() => toggleGroup(templateName)}
-                className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors print:bg-white print:hover:bg-white print:cursor-default"
               >
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white print:text-black">
                   {templateName}
                 </h2>
-                <span className="text-gray-500 dark:text-gray-400 text-xl">
+                <span className="text-gray-500 dark:text-gray-400 text-xl print:hidden">
                   {collapsed[templateName] ? "▶" : "▼"}
                 </span>
               </button>
@@ -421,7 +429,7 @@ export default function ChecklistDetailPage({
                     return (
                       <div
                         key={item.id}
-                        className="p-4 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                        className="checklist-item p-4 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors print:bg-white print:hover:bg-white"
                       >
                         <div className="flex items-start gap-3">
                           {/* Checkbox */}
@@ -431,7 +439,7 @@ export default function ChecklistDetailPage({
                             onChange={() =>
                               toggleCompletion(item.id, item.completed)
                             }
-                            className="mt-1 w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer"
+                            className="mt-1 w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer print:appearance-none print:border print:border-black print:w-4 print:h-4"
                           />
 
                           {/* Item text (editable) */}
@@ -451,15 +459,15 @@ export default function ChecklistDetailPage({
                                 e.currentTarget.blur();
                               }
                             }}
-                            className={`flex-1 px-2 py-1 border border-transparent hover:border-gray-300 dark:hover:border-gray-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded bg-transparent ${
+                            className={`flex-1 px-2 py-1 border border-transparent hover:border-gray-300 dark:hover:border-gray-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded bg-transparent print:border-none print:px-0 print:text-black ${
                               item.completed
-                                ? "line-through text-gray-500 dark:text-gray-400"
-                                : "text-gray-900 dark:text-white"
+                                ? "line-through text-gray-500 dark:text-gray-400 print:line-through print:text-gray-600"
+                                : "text-gray-900 dark:text-white print:text-black"
                             }`}
                           />
 
                           {/* Reorder buttons */}
-                          <div className="flex flex-col gap-1">
+                          <div className="flex flex-col gap-1 print:hidden">
                             <button
                               onClick={() => moveItem(item.id, "up")}
                               disabled={isFirst}
@@ -481,7 +489,7 @@ export default function ChecklistDetailPage({
                           {/* Delete button */}
                           <button
                             onClick={() => deleteItem(item.id, item.text)}
-                            className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 px-2 py-1"
+                            className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 px-2 py-1 print:hidden"
                             title="Delete item"
                           >
                             ✕
@@ -497,7 +505,7 @@ export default function ChecklistDetailPage({
         </div>
 
         {/* Add new item form */}
-        <form onSubmit={addItem} className="mt-8">
+        <form onSubmit={addItem} className="mt-8 print:hidden">
           <div className="flex gap-3">
             <input
               type="text"
