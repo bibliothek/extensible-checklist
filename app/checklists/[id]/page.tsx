@@ -263,15 +263,21 @@ export default function ChecklistDetailPage({
 
       const createdItem = await response.json();
 
-      // Replace temp item with real item
-      const updatedItems = checklist.items.map((item) =>
-        item.id === tempId ? createdItem : item
-      );
-      setChecklist({ ...checklist, items: updatedItems });
+      // Replace temp item with real item using functional state update
+      setChecklist((currentChecklist) => {
+        if (!currentChecklist) return currentChecklist;
+        const updatedItems = currentChecklist.items.map((item) =>
+          item.id === tempId ? createdItem : item
+        );
+        return { ...currentChecklist, items: updatedItems };
+      });
     } catch (err) {
-      // Remove temp item on error
-      const updatedItems = checklist.items.filter((item) => item.id !== tempId);
-      setChecklist({ ...checklist, items: updatedItems });
+      // Remove temp item on error using functional state update
+      setChecklist((currentChecklist) => {
+        if (!currentChecklist) return currentChecklist;
+        const updatedItems = currentChecklist.items.filter((item) => item.id !== tempId);
+        return { ...currentChecklist, items: updatedItems };
+      });
       setError("Failed to add item");
     }
   }
