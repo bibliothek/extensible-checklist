@@ -94,10 +94,12 @@ Plans:
   3. Pushing to main branch triggers GitHub Actions workflow
   4. Workflow builds Docker image, pushes to Azure Container Registry, and deploys to Azure App Service
   5. Prisma migrations run automatically during deployment without manual intervention
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 07-01: TBD during phase planning
+- [ ] 07-01-PLAN.md — Docker foundation with multi-stage build and migrations
+- [ ] 07-02-PLAN.md — Local Docker development and health check endpoint
+- [ ] 07-03-PLAN.md — Azure CI/CD pipeline and deployment documentation
 
 ## Progress
 
