@@ -1,5 +1,11 @@
 # Multi-stage Dockerfile for Next.js 16 with Prisma
 # Based on Next.js official Docker example
+#
+# DATABASE CONFIGURATION:
+# This Dockerfile supports SQLite database via file-based storage.
+# Set DATABASE_URL environment variable at runtime with format:
+#   DATABASE_URL=file:/app/data/dev.db
+# Mount a volume at /app/data to persist database across container restarts.
 
 # Stage 1: Dependencies
 FROM node:20-alpine AS dependencies
@@ -63,6 +69,9 @@ RUN chmod +x ./scripts/migrate-and-start.sh
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules/prisma ./node_modules/prisma
+
+# Create data directory for SQLite database with proper permissions
+RUN mkdir -p /app/data && chown -R nextjs:nodejs /app/data
 
 # Switch to non-root user
 USER nextjs
