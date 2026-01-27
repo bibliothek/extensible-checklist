@@ -24,3 +24,53 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@media print {
+  /* Reset to white background for print */
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Hide all elements with .no-print class or print:hidden utility */
+  .no-print {
+    display: none !important;
+  }
+
+  /* Ensure checklist content is black and white */
+  * {
+    background: white !important;
+    color: black !important;
+    border-color: black !important;
+  }
+
+  /* Checkbox styling for manual check-off */
+  input[type="checkbox"] {
+    -webkit-appearance: checkbox !important;
+    appearance: checkbox !important;
+    border: 1px solid black !important;
+    background: white !important;
+  }
+
+  /* Remove shadows and unnecessary styling */
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* Page break controls */
+  .template-group {
+    page-break-inside: avoid;
+  }
+
+  /* Ensure proper spacing for readability */
+  h1, h2, h3 {
+    margin-top: 0.5em;
+    margin-bottom: 0.25em;
+  }
+
+  /* Item spacing */
+  .checklist-item {
+    margin-bottom: 0.5em;
+  }
+}
