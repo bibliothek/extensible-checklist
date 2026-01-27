@@ -66,9 +66,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 05-01-PLAN.md — Bulk text mode for templates
-- [ ] 05-02-PLAN.md — Print view for checklists
-- [ ] 05-03-PLAN.md — Verify power user UX features
+- [x] 05-01-PLAN.md — Bulk text mode for templates
+- [x] 05-02-PLAN.md — Print view for checklists
+- [x] 05-03-PLAN.md — Verify power user UX features
 
 #### Phase 6: Checklist Focus
 **Goal**: Users can hide completed work to focus on remaining tasks
@@ -107,6 +107,6 @@ Plans:
 | 2. Template Management | v1.0 | 3/3 | Complete | 2026-01-26 |
 | 3. Checklist Instantiation | v1.0 | 4/4 | Complete | 2026-01-27 |
 | 4. Checklist Workflow | v1.0 | 3/3 | Complete | 2026-01-27 |
-| 5. Power User UX | v2.0 | 0/3 | Not started | - |
+| 5. Power User UX | v2.0 | 3/3 | Complete | 2026-01-27 |
 | 6. Checklist Focus | v2.0 | 0/TBD | Not started | - |
 | 7. Production Deployment | v2.0 | 0/TBD | Not started | - |

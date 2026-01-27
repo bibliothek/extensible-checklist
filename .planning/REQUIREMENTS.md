@@ -9,13 +9,13 @@ Requirements for v2.0 Production Ready milestone. Each maps to roadmap phases.
 
 ### UX Enhancements
 
-- [ ] **UX-01**: User can toggle between individual item mode and bulk text mode when creating templates
-- [ ] **UX-02**: User can toggle between individual item mode and bulk text mode when editing templates
-- [ ] **UX-03**: In bulk text mode, each line creates one checklist item (auto-split on newlines)
-- [ ] **UX-04**: In bulk text mode, empty lines are ignored
-- [ ] **UX-05**: User can print a checklist with template grouping preserved
-- [ ] **UX-06**: Print view uses minimal black & white styling suitable for paper
-- [ ] **UX-07**: Print view is triggered via browser print (CSS @media print)
+- [x] **UX-01**: User can toggle between individual item mode and bulk text mode when creating templates
+- [x] **UX-02**: User can toggle between individual item mode and bulk text mode when editing templates
+- [x] **UX-03**: In bulk text mode, each line creates one checklist item (auto-split on newlines)
+- [x] **UX-04**: In bulk text mode, empty lines are ignored
+- [x] **UX-05**: User can print a checklist with template grouping preserved
+- [x] **UX-06**: Print view uses minimal black & white styling suitable for paper
+- [x] **UX-07**: Print view is triggered via browser print (CSS @media print)
 - [ ] **UX-08**: User can toggle hide/show completed items on a checklist
 - [ ] **UX-09**: Hide completed preference is saved per-checklist
 - [ ] **UX-10**: Template groups with all items checked are hidden when hide completed is enabled
@@ -54,13 +54,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| UX-01 | Phase 5 | Pending |
-| UX-02 | Phase 5 | Pending |
-| UX-03 | Phase 5 | Pending |
-| UX-04 | Phase 5 | Pending |
-| UX-05 | Phase 5 | Pending |
-| UX-06 | Phase 5 | Pending |
-| UX-07 | Phase 5 | Pending |
+| UX-01 | Phase 5 | Complete |
+| UX-02 | Phase 5 | Complete |
+| UX-03 | Phase 5 | Complete |
+| UX-04 | Phase 5 | Complete |
+| UX-05 | Phase 5 | Complete |
+| UX-06 | Phase 5 | Complete |
+| UX-07 | Phase 5 | Complete |
 | UX-08 | Phase 6 | Pending |
 | UX-09 | Phase 6 | Pending |
 | UX-10 | Phase 6 | Pending |
