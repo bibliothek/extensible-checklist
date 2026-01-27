@@ -84,13 +84,14 @@ model TemplateItem {
 
 // Checklist instantiation models
 model Checklist {
-  id        String          @id @default(cuid())
-  name      String
-  userId    String
-  createdAt DateTime        @default(now())
-  updatedAt DateTime        @updatedAt
-  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  items     ChecklistItem[]
+  id            String          @id @default(cuid())
+  name          String
+  userId        String
+  hideCompleted Boolean         @default(false)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items         ChecklistItem[]
 }
 
 model ChecklistItem {
