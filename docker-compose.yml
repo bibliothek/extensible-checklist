@@ -1,17 +1,7 @@
-services:
-  postgres:
-    image: postgres:16-alpine
-    container_name: extensible-checklist-db
-    environment:
-      POSTGRES_USER: johndoe
-      POSTGRES_PASSWORD: randompassword
-      POSTGRES_DB: mydb
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    restart: unless-stopped
+# Docker Compose configuration for local development with SQLite
+# Database file persists in ./data directory on host machine
 
+services:
   app:
     build:
       context: .
@@ -20,11 +10,14 @@ services:
     ports:
       - "3000:3000"
     environment:
-      DATABASE_URL: postgresql://johndoe:randompassword@postgres:5432/mydb
+      # SQLite database configuration
+      DATABASE_URL: file:/app/data/dev.db
+      # NextAuth.js configuration
       NEXTAUTH_URL: http://localhost:3000
-      NEXTAUTH_SECRET: dev-secret-change-in-production
-    depends_on:
-      - postgres
+      NEXTAUTH_SECRET: local-dev-secret-not-for-production
+    volumes:
+      # Mount local data directory for SQLite database persistence
+      - ./data:/app/data
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
@@ -32,6 +25,3 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
-
-volumes:
-  postgres_data:
