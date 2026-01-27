@@ -415,7 +415,7 @@ export default function ChecklistDetailPage({
                     return (
                       <div
                         key={item.id}
-                        className="p-4 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
+                        className="p-4 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
                       >
                         <div className="flex items-start gap-3">
                           {/* Checkbox */}
