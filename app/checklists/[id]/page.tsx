@@ -17,6 +17,7 @@ interface Checklist {
   id: string;
   name: string;
   createdAt: string;
+  hideCompleted: boolean;
   items: ChecklistItem[];
 }
 
@@ -37,6 +38,7 @@ export default function ChecklistDetailPage({
   const [error, setError] = useState("");
   const [newItemText, setNewItemText] = useState("");
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
+  const [hideCompleted, setHideCompleted] = useState(false);
 
   // Resolve params promise
   useEffect(() => {
@@ -78,6 +80,7 @@ export default function ChecklistDetailPage({
       }
 
       setChecklist(found);
+      setHideCompleted(found.hideCompleted || false);
     } catch (err) {
       setError("Failed to load checklist");
     } finally {
@@ -112,6 +115,39 @@ export default function ChecklistDetailPage({
       // Revert on error
       setChecklist(checklist);
       setError("Failed to update item");
+    }
+  }
+
+  // Toggle hide completed
+  async function toggleHideCompleted() {
+    if (!checklist) return;
+
+    const newHideCompleted = !hideCompleted;
+
+    // Optimistic update
+    setHideCompleted(newHideCompleted);
+    setChecklist({ ...checklist, hideCompleted: newHideCompleted });
+
+    try {
+      const response = await fetch(`/api/checklists/${checklistId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          hideCompleted: newHideCompleted,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update hide completed preference");
+      }
+
+      const updatedChecklist = await response.json();
+      setChecklist(updatedChecklist);
+    } catch (err) {
+      // Revert on error
+      setHideCompleted(!newHideCompleted);
+      setChecklist({ ...checklist, hideCompleted: !newHideCompleted });
+      setError("Failed to update hide completed preference");
     }
   }
 
@@ -284,7 +320,12 @@ export default function ChecklistDetailPage({
 
   // Group items by source template
   function groupItemsByTemplate(items: ChecklistItem[]): GroupedItems {
-    const sorted = [...items].sort((a, b) => a.order - b.order);
+    // Filter out completed items if hideCompleted is enabled
+    const filteredItems = hideCompleted
+      ? items.filter(item => !item.completed)
+      : items;
+
+    const sorted = [...filteredItems].sort((a, b) => a.order - b.order);
     const grouped: GroupedItems = {};
 
     sorted.forEach((item) => {
@@ -350,6 +391,13 @@ export default function ChecklistDetailPage({
   const { total, completed, percentage } = calculateProgress();
   const grouped = groupItemsByTemplate(checklist.items);
 
+  // Filter out fully completed groups when hideCompleted is true
+  const visibleGroups = Object.entries(grouped).filter(([templateName, items]) => {
+    if (!hideCompleted) return true;
+    // Show group if it has at least one incomplete item
+    return items.some(item => !item.completed);
+  });
+
   return (
     <main className="min-h-screen p-8 md:p-24">
       <div className="max-w-4xl mx-auto">
@@ -361,8 +409,14 @@ export default function ChecklistDetailPage({
             </h1>
             <div className="flex gap-4 items-center print:hidden">
               <button
+                onClick={toggleHideCompleted}
+                className="bg-blue-600 dark:bg-blue-700 text-white px-4 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+              >
+                {hideCompleted ? "Show All" : "Hide Completed"}
+              </button>
+              <button
                 onClick={() => window.print()}
-                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+                className="bg-blue-600 dark:bg-blue-700 text-white px-4 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
               >
                 Print Checklist
               </button>
@@ -401,7 +455,7 @@ export default function ChecklistDetailPage({
 
         {/* Grouped items */}
         <div className="space-y-6">
-          {Object.entries(grouped).map(([templateName, items]) => (
+          {visibleGroups.map(([templateName, items]) => (
             <div
               key={templateName}
               className="template-group border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 overflow-hidden"
