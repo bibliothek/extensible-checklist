@@ -79,10 +79,10 @@ Plans:
   2. When hiding completed, checked items disappear from view
   3. When hiding completed, template groups with all items checked are hidden
   4. Hide/show preference is remembered per-checklist across sessions
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 06-01: TBD during phase planning
+- [ ] 06-01-PLAN.md — Hide completed toggle with per-checklist persistence
 
 #### Phase 7: Production Deployment
 **Goal**: Application runs in Docker and auto-deploys to Azure
