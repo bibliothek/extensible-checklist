@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-26)
 
 **Core value:** Fast, frictionless checklist instantiation - select templates, get a working checklist immediately, and start making progress.
-**Current focus:** Phase 3 - Template System (In Progress)
+**Current focus:** Phase 4 - Checklist Workflow (In Progress)
 
 ## Current Position
 
-Phase: 3 of 4 (Template System)
-Plan: 4 of 4 in current phase
-Status: Phase 3 COMPLETE - template system validated and production-ready
-Last activity: 2026-01-26 — Completed 03-04-PLAN.md (Template System Verification)
+Phase: 4 of 4 (Checklist Workflow)
+Plan: 1 of 3 in current phase
+Status: In progress - checklist management API and list view complete
+Last activity: 2026-01-27 — Completed 04-01-PLAN.md (Checklist Management API and List View)
 
-Progress: [█████████░] 90%
+Progress: [██████████░] 92%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 10
-- Average duration: 16min
-- Total execution time: 2.65 hours
+- Total plans completed: 11
+- Average duration: 15min
+- Total execution time: 2.77 hours
 
 **By Phase:**
 
@@ -30,10 +30,11 @@ Progress: [█████████░] 90%
 | 01-foundation | 2 | 18min | 9min |
 | 02-authentication | 4 | 39min | 10min |
 | 03-template-system | 4 | 100min | 25min |
+| 04-checklist-workflow | 1 | 7min | 7min |
 
 **Recent Trend:**
-- Last 5 plans: 02-04 (<1min), 03-01 (9min), 03-02 (66min), 03-03 (10min), 03-04 (15min)
-- Trend: Phase 3 COMPLETE - template system validated, ready for Phase 4 checklist management
+- Last 5 plans: 03-01 (9min), 03-02 (66min), 03-03 (10min), 03-04 (15min), 04-01 (7min)
+- Trend: Phase 4 started - checklist list and API foundation complete, efficient execution
 
 *Updated after each plan completion*
 
@@ -44,6 +45,9 @@ Progress: [█████████░] 90%
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
+- Progress indicator format - Text (X/Y items) + visual progress bar + percentage for multiple formats (04-01)
+- Manual items source - Use string literal "Manual" for user-added items to distinguish from template items (04-01)
+- Delete response format - 200 with success message (not 204) for consistency with template API (04-01)
 - Dark mode as essential UX - Added dark mode styling to template/checklist pages for consistency (03-04)
 - Next.js 15 async params - Route handlers must await params object in dynamic routes (03-04)
 - Deduplication strategy - Case-sensitive exact text match with first-occurrence-wins for predictable behavior (03-03)
@@ -81,6 +85,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-26T15:45:00Z
-Stopped at: Completed 03-04-PLAN.md (Template System Verification) - Phase 3 COMPLETE
+Last session: 2026-01-27T10:20:00Z
+Stopped at: Completed 04-01-PLAN.md (Checklist Management API and List View)
 Resume file: None
