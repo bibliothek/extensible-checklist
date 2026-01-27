@@ -37,7 +37,7 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 
 # Install runtime dependencies
-RUN apk add --no-cache openssl bash
+RUN apk add --no-cache openssl bash wget
 
 # Create non-root user for security
 RUN addgroup --system --gid 1001 nodejs && \
