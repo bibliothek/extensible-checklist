@@ -75,7 +75,7 @@ export async function POST(
   }
 }
 
-// PATCH - Toggle item completion
+// PATCH - Update item (completion or text)
 export async function PATCH(
   request: Request,
   context: { params: Promise<{ id: string }> }
@@ -92,11 +92,34 @@ export async function PATCH(
 
     const params = await context.params
     const body = await request.json()
-    const { itemId, completed } = body
+    const { itemId, completed, text } = body
 
-    if (!itemId || typeof completed !== "boolean") {
+    if (!itemId) {
       return NextResponse.json(
-        { message: "Valid itemId and completed boolean required" },
+        { message: "Valid itemId required" },
+        { status: 400 }
+      )
+    }
+
+    // At least one field must be provided
+    if (completed === undefined && text === undefined) {
+      return NextResponse.json(
+        { message: "At least one of completed or text must be provided" },
+        { status: 400 }
+      )
+    }
+
+    // Validate types if provided
+    if (completed !== undefined && typeof completed !== "boolean") {
+      return NextResponse.json(
+        { message: "completed must be a boolean" },
+        { status: 400 }
+      )
+    }
+
+    if (text !== undefined && typeof text !== "string") {
+      return NextResponse.json(
+        { message: "text must be a string" },
         { status: 400 }
       )
     }
@@ -119,14 +142,21 @@ export async function PATCH(
       )
     }
 
-    // Update completion status
+    // Build update data object
+    const updateData: { completed?: boolean; text?: string } = {}
+    if (completed !== undefined) {
+      updateData.completed = completed
+    }
+    if (text !== undefined) {
+      updateData.text = text
+    }
+
+    // Update item
     const updatedItem = await db.checklistItem.update({
       where: {
         id: itemId,
       },
-      data: {
-        completed,
-      },
+      data: updateData,
     })
 
     return NextResponse.json(updatedItem)
