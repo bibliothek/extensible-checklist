@@ -9,9 +9,9 @@ Requirements for infrastructure simplification milestone.
 
 ### Database Migration
 
-- [ ] **DB-01**: Prisma schema updated to use SQLite provider
-- [ ] **DB-02**: Database connection configuration updated for SQLite file path
-- [ ] **DB-03**: Prisma migrations regenerated for SQLite compatibility
+- [x] **DB-01**: Prisma schema updated to use SQLite provider
+- [x] **DB-02**: Database connection configuration updated for SQLite file path
+- [x] **DB-03**: Prisma migrations regenerated for SQLite compatibility
 
 ### Docker Configuration
 
@@ -53,9 +53,9 @@ Mapping requirements to phases.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DB-01 | Phase 8 | Pending |
-| DB-02 | Phase 8 | Pending |
-| DB-03 | Phase 8 | Pending |
+| DB-01 | Phase 8 | Complete |
+| DB-02 | Phase 8 | Complete |
+| DB-03 | Phase 8 | Complete |
 | DOCK-01 | Phase 9 | Pending |
 | DOCK-02 | Phase 9 | Pending |
 | DOCK-03 | Phase 9 | Pending |
@@ -77,4 +77,4 @@ Mapping requirements to phases.
 
 ---
 *Requirements defined: 2026-01-27*
-*Last updated: 2026-01-27 after roadmap creation*
+*Last updated: 2026-01-27 after Phase 8 completion*

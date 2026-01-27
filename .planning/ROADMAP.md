@@ -96,7 +96,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 08-01-PLAN.md — Migrate Prisma schema and configuration to SQLite
+- [x] 08-01: Migrate Prisma schema and configuration to SQLite
 
 #### Phase 9: Docker & Azure Update
 **Goal**: Containerized deployment uses SQLite with persistent Azure Files storage
@@ -136,9 +136,9 @@ Plans:
 | 5. Power User UX | v2.0 | 3/3 | Complete | 2026-01-27 |
 | 6. Docker Foundation | v2.0 | 2/2 | Complete | 2026-01-27 |
 | 7. Production Deployment | v2.0 | 3/3 | Complete | 2026-01-27 |
-| 8. Database Migration | v2.1 | 0/1 | Not started | - |
+| 8. Database Migration | v2.1 | 1/1 | Complete | 2026-01-27 |
 | 9. Docker & Azure Update | v2.1 | 0/? | Not started | - |
 | 10. Documentation & Verification | v2.1 | 0/? | Not started | - |
 
 ---
-*Last updated: 2026-01-27 after v2.1 roadmap creation*
+*Last updated: 2026-01-27 after Phase 8 completion*

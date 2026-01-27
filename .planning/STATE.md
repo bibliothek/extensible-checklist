@@ -5,13 +5,13 @@
 See: .planning/PROJECT.md (updated 2026-01-27)
 
 **Core value:** Fast, frictionless checklist instantiation - select templates, get a working checklist immediately, and start making progress.
-**Current focus:** Phase 8: Database Migration (v2.1 Infrastructure Simplification)
+**Current focus:** Phase 9: Docker & Azure Update (v2.1 Infrastructure Simplification)
 
 ## Current Position
 
-Phase: 8 of 10 (Database Migration)
-Plan: 1 of 1 in current phase
-Status: Phase complete
+Phase: 9 of 10 (Docker & Azure Update)
+Plan: 0 of ? in current phase
+Status: Ready to plan
 Last activity: 2026-01-27 — Completed 08-01-PLAN.md (Database Migration)
 
 Progress: [████████████████░░] 87% (21/24 total plans across all milestones)
