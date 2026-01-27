@@ -26,102 +26,51 @@ body {
 }
 
 @media print {
-  /* Reset to white background for print */
+  /* Ultra-minimal print styling - simple list format */
   body {
     background: white !important;
     color: black !important;
-    font-size: 9pt !important;
-    line-height: 1.2 !important;
+    font-size: 8pt !important;
+    line-height: 1.1 !important;
     margin: 0.25in !important;
-    padding: 0 !important;
   }
 
-  /* Hide all elements with .no-print class or print:hidden utility */
+  /* Hide interactive elements */
   .no-print {
     display: none !important;
   }
 
-  /* Ensure checklist content is black and white */
+  /* Black and white only */
   * {
     background: white !important;
     color: black !important;
-    border-color: black !important;
-  }
-
-  /* Checkbox styling for manual check-off - smaller */
-  input[type="checkbox"] {
-    -webkit-appearance: checkbox !important;
-    appearance: checkbox !important;
-    border: 1px solid black !important;
-    background: white !important;
-    width: 10px !important;
-    height: 10px !important;
-    margin: 0 4px 0 0 !important;
-    padding: 0 !important;
-    vertical-align: middle !important;
-  }
-
-  /* Remove shadows and unnecessary styling */
-  * {
     box-shadow: none !important;
-    text-shadow: none !important;
+    border: none !important;
   }
 
-  /* Page break controls */
-  .template-group {
-    page-break-inside: avoid;
-    margin-bottom: 0.5em !important;
+  /* Simple checkbox */
+  input[type="checkbox"] {
+    width: 9px !important;
+    height: 9px !important;
+    margin: 0 3px 0 0 !important;
   }
 
-  /* Compact headers */
-  h1 {
-    font-size: 12pt !important;
-    margin: 0.25em 0 0.15em 0 !important;
-    padding: 0 !important;
-    font-weight: bold !important;
-  }
-
-  h2 {
-    font-size: 10pt !important;
-    margin: 0.2em 0 0.1em 0 !important;
-    padding: 0 !important;
-    font-weight: bold !important;
-  }
-
-  h3, h4, h5, h6 {
+  /* Very simple headers - just bold */
+  h1, h2, h3, h4, h5, h6 {
     font-size: 9pt !important;
-    margin: 0.15em 0 0.1em 0 !important;
-    padding: 0 !important;
     font-weight: bold !important;
-  }
-
-  /* Compact item spacing */
-  .checklist-item {
-    margin: 0 0 2px 0 !important;
-    padding: 1px 0 !important;
-    font-size: 9pt !important;
-    line-height: 1.2 !important;
-  }
-
-  /* Remove extra padding from containers */
-  div, section, article {
+    margin: 0.1em 0 !important;
     padding: 0 !important;
   }
 
-  /* Compact lists */
-  ul, ol {
+  /* Minimal spacing everywhere */
+  * {
     margin: 0 !important;
-    padding-left: 1em !important;
-  }
-
-  li {
-    margin: 0 0 2px 0 !important;
     padding: 0 !important;
   }
 
-  /* Reduce spacing in any paragraphs */
-  p {
-    margin: 0 0 0.1em 0 !important;
-    padding: 0 !important;
+  /* Only add tiny spacing for readability */
+  .checklist-item, li {
+    margin-bottom: 1px !important;
   }
 }
