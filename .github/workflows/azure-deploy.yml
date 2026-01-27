@@ -5,8 +5,15 @@
 #
 # Prerequisites:
 # - Azure Container Registry (ACR) created
-# - Azure App Service (Linux Container) created and configured
-# - GitHub secrets configured (see README.md for details)
+# - Azure App Service (Linux Container) created
+# - Azure Storage Account with File Share created for SQLite persistence
+# - App Service configured with Azure Files volume mount at /app/data
+# - GitHub secrets configured (REGISTRY_*, AZURE_WEBAPP_*)
+#
+# Environment variables configured in Azure App Service:
+# - DATABASE_URL=file:/app/data/dev.db
+# - NEXTAUTH_URL=https://<your-app>.azurewebsites.net
+# - NEXTAUTH_SECRET=<generated-secret>
 
 name: Azure Production Deployment
 
@@ -60,11 +67,11 @@ jobs:
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
 
       # Step 6: Verify deployment health
-      # Waits for container startup and migration, then checks health endpoint
+      # Waits for container startup, SQLite initialization, and migrations
       # Fails the workflow if health check doesn't return successful response
       - name: Verify deployment health
         run: |
-          echo "Waiting 30 seconds for container startup and migrations..."
+          echo "Waiting 30 seconds for container startup, SQLite initialization, and migrations..."
           sleep 30
 
           echo "Checking health endpoint..."
