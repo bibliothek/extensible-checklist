@@ -12,5 +12,26 @@ services:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
 
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: extensible-checklist-app
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://johndoe:randompassword@postgres:5432/mydb
+      NEXTAUTH_URL: http://localhost:3000
+      NEXTAUTH_SECRET: dev-secret-change-in-production
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
 volumes:
   postgres_data:
