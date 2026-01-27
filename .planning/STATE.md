@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-01-27)
 
 ## Current Position
 
-Phase: 5 of 7 (Power User UX)
-Plan: 3 of 3
-Status: Phase complete
-Last activity: 2026-01-27 — Completed 05-03-PLAN.md (Verification of bulk text and print features)
+Phase: 6 of 7 (Checklist Focus)
+Plan: 1 of 3
+Status: In progress
+Last activity: 2026-01-27 — Completed 06-01-PLAN.md (Hide completed toggle)
 
-Progress: [█████░░░░░] 16/20 plans complete (v1.0: 13/13, v2.0: 3/7)
+Progress: [█████░░░░░] 17/20 plans complete (v1.0: 13/13, v2.0: 4/7)
 
 ## Performance Metrics
 
@@ -35,7 +35,7 @@ Progress: [█████░░░░░] 16/20 plans complete (v1.0: 13/13, v2
 **v2.0 Status:**
 - In progress
 - Phase 5: 3/3 complete ✓
-- Phase 6: 0/TBD
+- Phase 6: 1/3 complete
 - Phase 7: 0/TBD
 
 ## Accumulated Context
@@ -55,6 +55,8 @@ Recent decisions affecting v2.0 work:
 - Aggressive ink saving — Force all print elements to black/white with no backgrounds (05-02)
 - Ultra-minimal print styling — 8pt font, 9pt bold headers, 1px spacing for maximum density (05-03)
 - Checkpoint refinement pattern — Iterative fixes during verification improve final quality (05-03)
+- Per-resource preferences — Store UI preferences (like hideCompleted) per resource, not user-wide (06-01)
+- Client-side filtering — Apply display filters in React, not DB queries, for instant optimistic updates (06-01)
 
 ### Pending Todos
 
@@ -67,6 +69,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-27
-Stopped at: Completed Phase 5 (Power User UX) - all 3 plans executed
+Stopped at: Completed 06-01-PLAN.md (Hide completed toggle)
 Resume file: None
-Next step: Run /gsd:plan-phase 6 to begin Checklist Focus phase
+Next step: Run /gsd:plan for 06-02 (Search functionality) or 06-03 (Sort/filter)
