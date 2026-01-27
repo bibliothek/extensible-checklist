@@ -25,6 +25,8 @@ export default function TemplateForm({ initialData, onSubmit, onCancel }: Templa
   const [newItemText, setNewItemText] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [isBulkMode, setIsBulkMode] = useState(false);
+  const [bulkText, setBulkText] = useState("");
 
   // Add item via button or Enter key
   function addItem() {
@@ -92,10 +94,64 @@ export default function TemplateForm({ initialData, onSubmit, onCancel }: Templa
     ));
   }
 
+  // Toggle between bulk and individual mode
+  function toggleBulkMode() {
+    if (isBulkMode) {
+      // Switching FROM bulk TO individual
+      // Parse bulkText into items array
+      const lines = bulkText
+        .split('\n')
+        .map(line => line.trim())
+        .filter(line => line.length > 0);
+
+      const newItems: TemplateItem[] = lines.map((line, index) => {
+        // Try to preserve existing item ID if text matches
+        const existingItem = items.find(item => item.text === line);
+        return {
+          id: existingItem?.id || crypto.randomUUID(),
+          text: line,
+          order: index,
+        };
+      });
+
+      setItems(newItems);
+      setIsBulkMode(false);
+    } else {
+      // Switching FROM individual TO bulk
+      // Convert items array to text
+      const text = items.map(item => item.text).join('\n');
+      setBulkText(text);
+      setIsBulkMode(true);
+    }
+  }
+
+  // Handle bulk text changes
+  function handleBulkTextChange(text: string) {
+    setBulkText(text);
+  }
+
   // Handle form submission
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
+
+    // If in bulk mode, parse text to items first
+    let finalItems = items;
+    if (isBulkMode) {
+      const lines = bulkText
+        .split('\n')
+        .map(line => line.trim())
+        .filter(line => line.length > 0);
+
+      finalItems = lines.map((line, index) => {
+        const existingItem = items.find(item => item.text === line);
+        return {
+          id: existingItem?.id || crypto.randomUUID(),
+          text: line,
+          order: index,
+        };
+      });
+    }
 
     // Validation
     if (!name.trim()) {
@@ -103,7 +159,7 @@ export default function TemplateForm({ initialData, onSubmit, onCancel }: Templa
       return;
     }
 
-    if (items.length === 0) {
+    if (finalItems.length === 0) {
       setError("At least one item is required");
       return;
     }
@@ -112,7 +168,7 @@ export default function TemplateForm({ initialData, onSubmit, onCancel }: Templa
     try {
       await onSubmit({
         name: name.trim(),
-        items: items.map(item => ({
+        items: finalItems.map(item => ({
           text: item.text,
           order: item.order,
         })),
@@ -150,11 +206,39 @@ export default function TemplateForm({ initialData, onSubmit, onCancel }: Templa
 
       {/* Items List */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Checklist Items
-        </label>
+        <div className="flex items-center justify-between mb-4">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Checklist Items
+          </label>
+          <button
+            type="button"
+            onClick={toggleBulkMode}
+            disabled={loading}
+            className="text-sm bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-4 py-2 rounded-md hover:bg-blue-200 dark:hover:bg-blue-900/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            {isBulkMode ? "Switch to Individual Mode" : "Switch to Bulk Text Mode"}
+          </button>
+        </div>
 
-        {items.length > 0 && (
+        {isBulkMode ? (
+          // Bulk text mode
+          <div className="space-y-2">
+            <textarea
+              value={bulkText}
+              onChange={(e) => handleBulkTextChange(e.target.value)}
+              rows={15}
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-mono"
+              placeholder="Enter one item per line. Empty lines will be ignored."
+              disabled={loading}
+            />
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              Each line becomes one checklist item
+            </p>
+          </div>
+        ) : (
+          // Individual mode
+          <>
+            {items.length > 0 && (
           <div className="space-y-2 mb-4">
             {items.map((item, index) => (
               <div
@@ -207,29 +291,31 @@ export default function TemplateForm({ initialData, onSubmit, onCancel }: Templa
           </div>
         )}
 
-        {/* Add new item input */}
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={newItemText}
-            onChange={(e) => setNewItemText(e.target.value)}
-            onKeyDown={handleNewItemKeyDown}
-            className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-            placeholder="Type item and press Enter or click Add"
-            disabled={loading}
-          />
-          <button
-            type="button"
-            onClick={addItem}
-            disabled={loading || !newItemText.trim()}
-            className="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-6 py-2 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            Add Item
-          </button>
-        </div>
-        <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-          Press Enter or click "Add Item" to add to the list
-        </p>
+            {/* Add new item input */}
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={newItemText}
+                onChange={(e) => setNewItemText(e.target.value)}
+                onKeyDown={handleNewItemKeyDown}
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                placeholder="Type item and press Enter or click Add"
+                disabled={loading}
+              />
+              <button
+                type="button"
+                onClick={addItem}
+                disabled={loading || !newItemText.trim()}
+                className="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-6 py-2 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                Add Item
+              </button>
+            </div>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+              Press Enter or click "Add Item" to add to the list
+            </p>
+          </>
+        )}
       </div>
 
       {/* Action buttons */}
