@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-01-27)
 
 **Core value:** Fast, frictionless checklist instantiation - select templates, get a working checklist immediately, and start making progress.
-**Current focus:** Planning next milestone
+**Current focus:** Milestone v2.1 Infrastructure Simplification
 
 ## Current Position
 
-Phase: Not started (next milestone)
+Phase: Not started (defining requirements)
 Plan: —
-Status: v2.0 milestone complete - ready for next milestone
-Last activity: 2026-01-27 — v2.0 milestone complete
+Status: Defining requirements for v2.1
+Last activity: 2026-01-27 — Milestone v2.1 started
 
 Progress: v1.0: 13/13 plans ✓ | v2.0: 7/7 plans ✓ | Total: 20 plans shipped
 

@@ -8,6 +8,16 @@ A web application for managing personal recurring tasks through reusable checkli
 
 Fast, frictionless checklist instantiation - select templates, get a working checklist immediately, and start making progress.
 
+## Current Milestone: v2.1 Infrastructure Simplification
+
+**Goal:** Simplify deployment by replacing PostgreSQL with SQLite and Azure Files persistence.
+
+**Target features:**
+- SQLite database (single file, no separate DB service)
+- Azure Files mount for SQLite persistence
+- Single instance deployment model
+- Simplified infrastructure and reduced costs
+
 ## Requirements
 
 ### Validated
@@ -31,7 +41,12 @@ Fast, frictionless checklist instantiation - select templates, get a working che
 
 ### Active
 
-(No active milestone - planning next milestone)
+**v2.1 Infrastructure Simplification:**
+- [ ] Database migrated from PostgreSQL to SQLite
+- [ ] Azure deployment updated for SQLite with Azure Files mount
+- [ ] Docker configuration updated for SQLite
+- [ ] Documentation updated for simplified deployment
+- [ ] Full deployment flow tested and verified
 
 ### Out of Scope
 
@@ -46,9 +61,9 @@ Fast, frictionless checklist instantiation - select templates, get a working che
 
 ## Context
 
-**Current State (v2.0 shipped):**
+**Current State (v2.0 shipped, migrating to v2.1):**
 - Next.js 16 web application with ~3,646 lines TypeScript
-- PostgreSQL database with Prisma ORM
+- PostgreSQL database with Prisma ORM (migrating to SQLite in v2.1)
 - Auth.js v5 authentication with JWT sessions
 - Complete template and checklist management
 - Power user features: bulk text editing, print view, hide completed
@@ -97,4 +112,4 @@ Fast, frictionless checklist instantiation - select templates, get a working che
 | Dual image tagging | Tag with commit SHA and 'latest' | ✓ Good - enables rollback and version tracking |
 
 ---
-*Last updated: 2026-01-27 after v2.0 milestone completion*
+*Last updated: 2026-01-27 after v2.1 milestone start*
