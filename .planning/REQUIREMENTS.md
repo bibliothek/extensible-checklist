@@ -64,13 +64,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 | UX-08 | Phase 6 | Complete |
 | UX-09 | Phase 6 | Complete |
 | UX-10 | Phase 6 | Complete |
-| DEV-01 | Phase 7 | Pending |
-| DEV-02 | Phase 7 | Pending |
-| DEV-03 | Phase 7 | Pending |
-| DEV-04 | Phase 7 | Pending |
-| DEV-05 | Phase 7 | Pending |
-| DEV-06 | Phase 7 | Pending |
-| DEV-07 | Phase 7 | Pending |
+| DEV-01 | Phase 7 | Complete |
+| DEV-02 | Phase 7 | Complete |
+| DEV-03 | Phase 7 | Complete |
+| DEV-04 | Phase 7 | Complete |
+| DEV-05 | Phase 7 | Complete |
+| DEV-06 | Phase 7 | Complete |
+| DEV-07 | Phase 7 | Complete |
 
 **Coverage:**
 - v2.0 requirements: 17 total
