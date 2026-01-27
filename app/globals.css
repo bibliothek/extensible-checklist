@@ -30,6 +30,10 @@ body {
   body {
     background: white !important;
     color: black !important;
+    font-size: 9pt !important;
+    line-height: 1.2 !important;
+    margin: 0.25in !important;
+    padding: 0 !important;
   }
 
   /* Hide all elements with .no-print class or print:hidden utility */
@@ -44,12 +48,17 @@ body {
     border-color: black !important;
   }
 
-  /* Checkbox styling for manual check-off */
+  /* Checkbox styling for manual check-off - smaller */
   input[type="checkbox"] {
     -webkit-appearance: checkbox !important;
     appearance: checkbox !important;
     border: 1px solid black !important;
     background: white !important;
+    width: 10px !important;
+    height: 10px !important;
+    margin: 0 4px 0 0 !important;
+    padding: 0 !important;
+    vertical-align: middle !important;
   }
 
   /* Remove shadows and unnecessary styling */
@@ -61,16 +70,58 @@ body {
   /* Page break controls */
   .template-group {
     page-break-inside: avoid;
+    margin-bottom: 0.5em !important;
   }
 
-  /* Ensure proper spacing for readability */
-  h1, h2, h3 {
-    margin-top: 0.5em;
-    margin-bottom: 0.25em;
+  /* Compact headers */
+  h1 {
+    font-size: 12pt !important;
+    margin: 0.25em 0 0.15em 0 !important;
+    padding: 0 !important;
+    font-weight: bold !important;
   }
 
-  /* Item spacing */
+  h2 {
+    font-size: 10pt !important;
+    margin: 0.2em 0 0.1em 0 !important;
+    padding: 0 !important;
+    font-weight: bold !important;
+  }
+
+  h3, h4, h5, h6 {
+    font-size: 9pt !important;
+    margin: 0.15em 0 0.1em 0 !important;
+    padding: 0 !important;
+    font-weight: bold !important;
+  }
+
+  /* Compact item spacing */
   .checklist-item {
-    margin-bottom: 0.5em;
+    margin: 0 0 2px 0 !important;
+    padding: 1px 0 !important;
+    font-size: 9pt !important;
+    line-height: 1.2 !important;
+  }
+
+  /* Remove extra padding from containers */
+  div, section, article {
+    padding: 0 !important;
+  }
+
+  /* Compact lists */
+  ul, ol {
+    margin: 0 !important;
+    padding-left: 1em !important;
+  }
+
+  li {
+    margin: 0 0 2px 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Reduce spacing in any paragraphs */
+  p {
+    margin: 0 0 0.1em 0 !important;
+    padding: 0 !important;
   }
 }
