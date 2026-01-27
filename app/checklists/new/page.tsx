@@ -127,9 +127,8 @@ export default function NewChecklistPage() {
 
       const checklist = await response.json();
 
-      // Redirect to homepage with success message for now
-      // TODO: Once checklist view page exists, redirect to /checklists/[id]
-      router.push("/?checklist=created");
+      // Redirect to the newly created checklist detail page
+      router.push(`/checklists/${checklist.id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create checklist");
       setCreating(false);
