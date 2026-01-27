@@ -8,21 +8,11 @@ A web application for managing personal recurring tasks through reusable checkli
 
 Fast, frictionless checklist instantiation - select templates, get a working checklist immediately, and start making progress.
 
-## Current Milestone: v2.0 Production Ready
-
-**Goal:** Polish UX for power users and prepare for production deployment
-
-**Target features:**
-- Bulk text editing mode for templates (faster template creation/editing)
-- Print view for checklist instances (paper checklist option)
-- Hide completed items in checklist instances (focus on remaining work)
-- Docker containerization (consistent deployment)
-- CI/CD pipeline with Azure App Service (automated production deployment)
-
 ## Requirements
 
 ### Validated
 
+**v1.0 MVP:**
 - ✓ User can create an account and log in — v1.0
 - ✓ User can create, edit, and delete checklist templates — v1.0
 - ✓ User can instantiate a new checklist by selecting multiple templates — v1.0
@@ -32,13 +22,16 @@ Fast, frictionless checklist instantiation - select templates, get a working che
 - ✓ User can view their template library — v1.0
 - ✓ User can view their active checklists — v1.0 (with progress indicators)
 
+**v2.0 Production Ready:**
+- ✓ Bulk text editing mode for templates — v2.0
+- ✓ Print view for checklist instances — v2.0
+- ✓ Hide completed items toggle in checklist instances — v2.0
+- ✓ Docker image for deployment — v2.0
+- ✓ CI/CD pipeline deploying to Azure App Service — v2.0
+
 ### Active
 
-- Bulk text editing mode for templates
-- Print view for checklist instances
-- Hide completed items toggle in checklist instances
-- Docker image for deployment
-- CI/CD pipeline deploying to Azure App Service
+(No active milestone - planning next milestone)
 
 ### Out of Scope
 
@@ -53,13 +46,16 @@ Fast, frictionless checklist instantiation - select templates, get a working che
 
 ## Context
 
-**Current State (v1.0 shipped):**
-- Next.js 16 web application with ~3,181 lines TypeScript
+**Current State (v2.0 shipped):**
+- Next.js 16 web application with ~3,646 lines TypeScript
 - PostgreSQL database with Prisma ORM
 - Auth.js v5 authentication with JWT sessions
 - Complete template and checklist management
+- Power user features: bulk text editing, print view, hide completed
 - Dark mode support, responsive design
-- Running locally at http://localhost:3000
+- Docker containerization with automated migrations
+- CI/CD pipeline deploying to Azure App Service
+- Production-ready with health monitoring
 
 **Use Case:** Personal recurring tasks and routines that benefit from reusable structure but need flexibility. Examples include weekly planning, project kickoffs, travel preparation, or any process run repeatedly with minor variations.
 
@@ -91,6 +87,14 @@ Fast, frictionless checklist instantiation - select templates, get a working che
 | Case-sensitive deduplication | Predictable behavior, simpler implementation | ✓ Good - works as expected |
 | Optimistic UI updates | Instant feedback for all interactions | ✓ Good - feels responsive |
 | Dark mode throughout | Modern UX expectation | ✓ Good - required bug fixes but worth it |
+| Mode toggle pattern (bulk text) | Bidirectional data sync when switching modes | ✓ Good - preserves user data during mode changes |
+| Ultra-minimal print styling | 8pt font, 9pt headers for maximum density on paper | ✓ Good - fits 50+ items per page as needed |
+| Per-checklist preferences | Store hideCompleted per checklist, not user-wide | ✓ Good - different checklists have different needs |
+| Client-side filtering | Apply hide completed in React, not DB queries | ✓ Good - instant optimistic updates |
+| Standalone Next.js output | Enable output: 'standalone' for Docker | ✓ Good - optimized deployment bundle |
+| Automated migrations at startup | Run Prisma migrations before app starts | ✓ Good - no manual DB setup needed |
+| Auto-deploy on main | No manual approval gate for production | ✓ Good - rapid iteration, continuous delivery |
+| Dual image tagging | Tag with commit SHA and 'latest' | ✓ Good - enables rollback and version tracking |
 
 ---
-*Last updated: 2026-01-27 after v2.0 milestone initialization*
+*Last updated: 2026-01-27 after v2.0 milestone completion*

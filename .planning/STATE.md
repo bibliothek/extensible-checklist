@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-27)
 
 **Core value:** Fast, frictionless checklist instantiation - select templates, get a working checklist immediately, and start making progress.
-**Current focus:** Phase 7: Production Deployment
+**Current focus:** Planning next milestone
 
 ## Current Position
 
-Phase: 7 of 7 (Production Deployment)
-Plan: 3 of 3
-Status: Phase complete - v2.0 milestone achieved
-Last activity: 2026-01-27 — Completed 07-03-PLAN.md (Azure deployment pipeline)
+Phase: Not started (next milestone)
+Plan: —
+Status: v2.0 milestone complete - ready for next milestone
+Last activity: 2026-01-27 — v2.0 milestone complete
 
-Progress: [██████████] 20/20 plans complete (v1.0: 13/13, v2.0: 7/7) ✓
+Progress: v1.0: 13/13 plans ✓ | v2.0: 7/7 plans ✓ | Total: 20 plans shipped
 
 ## Performance Metrics
 
@@ -47,30 +47,8 @@ Progress: [██████████] 20/20 plans complete (v1.0: 13/13, v2
 
 ### Decisions
 
-Decisions are logged in PROJECT.md Key Decisions table.
-Recent decisions affecting v2.0 work:
-
-- Next.js 16 with App Router — established tech stack
-- Optimistic UI updates — pattern to continue in v2.0
-- Dark mode throughout — must maintain in new features
-- Inline text editing — pattern established for in-place editing
-- Template grouping preserved — maintain in print view
-- Mode toggle pattern — bidirectional data sync when switching between editing modes (05-01)
-- Hybrid CSS approach — Tailwind print utilities + @media print block for maintainability (05-02)
-- Aggressive ink saving — Force all print elements to black/white with no backgrounds (05-02)
-- Ultra-minimal print styling — 8pt font, 9pt bold headers, 1px spacing for maximum density (05-03)
-- Checkpoint refinement pattern — Iterative fixes during verification improve final quality (05-03)
-- Per-resource preferences — Store UI preferences (like hideCompleted) per resource, not user-wide (06-01)
-- Client-side filtering — Apply display filters in React, not DB queries, for instant optimistic updates (06-01)
-- Standalone Next.js output — Enable output: 'standalone' for optimized Docker deployment (07-01)
-- Automated migrations at startup — Run Prisma migrations before app starts in containers (07-01)
-- Multi-stage Docker builds — Separate dependencies, building, and runtime for minimal image size (07-01)
-- Docker network hostname resolution — Use service names for inter-container communication (07-02)
-- Health check pattern — Verify database connectivity with SELECT 1 query returning 200/503 (07-02)
-- Container healthcheck timing — 40s start period to accommodate migrations and startup (07-02)
-- Auto-deploy on push to main — No manual approval gate for continuous delivery (07-03)
-- Dual image tagging — Tag with commit SHA and 'latest' for versioning and rollback (07-03)
-- Health verification with retry — 6 retry attempts over 1 minute to ensure deployment success (07-03)
+All decisions logged in PROJECT.md Key Decisions table.
+v2.0 decisions now recorded, STATE.md cleared for next milestone.
 
 ### Pending Todos
 
@@ -83,6 +61,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-27
-Stopped at: Completed 07-03-PLAN.md (Azure deployment pipeline)
+Stopped at: v2.0 milestone completion
 Resume file: None
-Next step: v2.0 complete - project ready for production deployment
+Next step: Start next milestone with /gsd:new-milestone
