@@ -49,32 +49,32 @@ Requirements for infrastructure simplification milestone.
 
 ## Traceability
 
-Mapping requirements to phases. Will be populated during roadmap creation.
+Mapping requirements to phases.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DB-01 | TBD | Pending |
-| DB-02 | TBD | Pending |
-| DB-03 | TBD | Pending |
-| DOCK-01 | TBD | Pending |
-| DOCK-02 | TBD | Pending |
-| DOCK-03 | TBD | Pending |
-| AZ-01 | TBD | Pending |
-| AZ-02 | TBD | Pending |
-| AZ-03 | TBD | Pending |
-| AZ-04 | TBD | Pending |
-| DOC-01 | TBD | Pending |
-| DOC-02 | TBD | Pending |
-| DOC-03 | TBD | Pending |
-| VER-01 | TBD | Pending |
-| VER-02 | TBD | Pending |
-| VER-03 | TBD | Pending |
+| DB-01 | Phase 8 | Pending |
+| DB-02 | Phase 8 | Pending |
+| DB-03 | Phase 8 | Pending |
+| DOCK-01 | Phase 9 | Pending |
+| DOCK-02 | Phase 9 | Pending |
+| DOCK-03 | Phase 9 | Pending |
+| AZ-01 | Phase 9 | Pending |
+| AZ-02 | Phase 9 | Pending |
+| AZ-03 | Phase 9 | Pending |
+| AZ-04 | Phase 9 | Pending |
+| DOC-01 | Phase 10 | Pending |
+| DOC-02 | Phase 10 | Pending |
+| DOC-03 | Phase 10 | Pending |
+| VER-01 | Phase 10 | Pending |
+| VER-02 | Phase 10 | Pending |
+| VER-03 | Phase 10 | Pending |
 
 **Coverage:**
 - v2.1 requirements: 16 total
-- Mapped to phases: 0 (pending roadmap)
-- Unmapped: 16 ⚠️
+- Mapped to phases: 16/16 ✓
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-01-27*
-*Last updated: 2026-01-27 after initial definition*
+*Last updated: 2026-01-27 after roadmap creation*

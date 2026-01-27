@@ -5,50 +5,57 @@
 See: .planning/PROJECT.md (updated 2026-01-27)
 
 **Core value:** Fast, frictionless checklist instantiation - select templates, get a working checklist immediately, and start making progress.
-**Current focus:** Milestone v2.1 Infrastructure Simplification
+**Current focus:** Phase 8: Database Migration (v2.1 Infrastructure Simplification)
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements for v2.1
-Last activity: 2026-01-27 — Milestone v2.1 started
+Phase: 8 of 10 (Database Migration)
+Plan: 0 of ? in current phase
+Status: Ready to plan
+Last activity: 2026-01-27 — v2.1 milestone roadmap created
 
-Progress: v1.0: 13/13 plans ✓ | v2.0: 7/7 plans ✓ | Total: 20 plans shipped
+Progress: [████████████████░░] 70% (20/23 total plans across all milestones)
 
 ## Performance Metrics
 
-**Velocity (v1.0):**
-- Total plans completed: 13
-- Average duration: 14min
-- Total execution time: 3.1 hours
+**Velocity:**
+- Total plans completed: 20 (from v1.0 + v2.0)
+- Average duration: ~45 min (estimated from milestone stats)
+- Total execution time: ~15 hours across v1.0 and v2.0
 
 **By Phase:**
 
-| Phase | Plans | Total | Avg/Plan |
-|-------|-------|-------|----------|
-| 1. Foundation | 2 | 18min | 9min |
-| 2. Authentication | 4 | 39min | 10min |
-| 3. Template System | 4 | 100min | 25min |
-| 4. Checklist Workflow | 3 | 27min | 9min |
+| Phase | Plans | Status |
+|-------|-------|--------|
+| 1. Foundation | 4 | Complete |
+| 2. Templates | 3 | Complete |
+| 3. Checklist Instantiation | 3 | Complete |
+| 4. Active Checklists | 3 | Complete |
+| 5. Power User UX | 3 | Complete |
+| 6. Docker Foundation | 2 | Complete |
+| 7. Production Deployment | 3 | Complete |
+| 8. Database Migration | ? | Not started |
+| 9. Docker & Azure Update | ? | Not started |
+| 10. Documentation & Verification | ? | Not started |
 
-**v2.0 Status:**
-- Complete ✓
-- Phase 5: 3/3 complete ✓
-- Phase 6: 1/1 complete ✓
-- Phase 7: 3/3 complete ✓
+**Recent Trend:**
+- v1.0 MVP: 1 day (13 plans)
+- v2.0 Production Ready: <1 day (7 plans)
+- Trend: Accelerating
 
-**v2.0 Total:**
-- Plans completed: 7
-- Average duration: ~4.3min
-- Total execution time: ~30min
+*Updated after roadmap creation*
 
 ## Accumulated Context
 
 ### Decisions
 
-All decisions logged in PROJECT.md Key Decisions table.
-v2.0 decisions now recorded, STATE.md cleared for next milestone.
+Decisions are logged in PROJECT.md Key Decisions table.
+Recent decisions affecting current work:
+
+- **Phase 6**: Standalone Next.js output for Docker optimization
+- **Phase 6**: Automated migrations at startup for zero-touch deployment
+- **Phase 7**: Auto-deploy on main for rapid iteration
+- **Phase 7**: Dual image tagging (SHA + latest) for version tracking
 
 ### Pending Todos
 
@@ -56,11 +63,14 @@ None yet.
 
 ### Blockers/Concerns
 
-None yet.
+None yet. Fresh start for v2.1 infrastructure simplification milestone.
 
 ## Session Continuity
 
 Last session: 2026-01-27
-Stopped at: v2.0 milestone completion
+Stopped at: Roadmap created for v2.1 milestone
 Resume file: None
-Next step: Start next milestone with /gsd:new-milestone
+Next action: Run `/gsd:plan-phase 8` to start database migration planning
+
+---
+*Last updated: 2026-01-27 after v2.1 roadmap creation*
