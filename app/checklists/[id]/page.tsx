@@ -401,7 +401,7 @@ export default function ChecklistDetailPage({
               {/* Group header */}
               <button
                 onClick={() => toggleGroup(templateName)}
-                className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-750 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               >
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                   {templateName}
@@ -421,7 +421,7 @@ export default function ChecklistDetailPage({
                     return (
                       <div
                         key={item.id}
-                        className="p-4 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
+                        className="p-4 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                       >
                         <div className="flex items-start gap-3">
                           {/* Checkbox */}
