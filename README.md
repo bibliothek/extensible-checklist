@@ -94,7 +94,7 @@ npm start
 
 ## Docker Development
 
-Run the complete stack (application + database) in Docker containers.
+Run the application in a Docker container with SQLite database.
 
 ### Prerequisites
 
@@ -103,41 +103,42 @@ Run the complete stack (application + database) in Docker containers.
 
 ### Usage
 
-1. **Start the full stack**
+1. **Start the application**
    ```bash
    docker-compose up --build
    ```
 
    This will:
    - Build the Next.js application Docker image
-   - Start PostgreSQL database container
-   - Run Prisma migrations automatically
+   - Run SQLite migrations automatically
    - Start the application on port 3000
+   - Database file persists in `./data/dev.db` on your host machine
 
 2. **Access the application**
    Open [http://localhost:3000](http://localhost:3000)
 
 3. **View logs**
    ```bash
-   # All services
    docker-compose logs -f
-
-   # Application only
-   docker-compose logs -f app
-
-   # Database only
-   docker-compose logs -f postgres
    ```
 
-4. **Stop the stack**
+4. **Stop the application**
    ```bash
    docker-compose down
    ```
 
-5. **Stop and remove volumes** (clears database)
+5. **Reset database** (delete the database file)
    ```bash
-   docker-compose down -v
+   rm -rf ./data
    ```
+
+### Database Persistence
+
+The SQLite database file is stored in `./data/dev.db` on your host machine. This means:
+- Database data persists across container restarts
+- You can back up the database by copying the `./data` directory
+- Deleting `./data` directory will reset the database
+- The `./data` directory is automatically created on first run
 
 ## Production Deployment (Azure)
 
