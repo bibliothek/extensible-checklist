@@ -65,10 +65,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --chown=nextjs:nodejs scripts/migrate-and-start.sh ./scripts/migrate-and-start.sh
 RUN chmod +x ./scripts/migrate-and-start.sh
 
-# Copy node_modules with Prisma CLI for migrations
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules/@prisma ./node_modules/@prisma
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules/prisma ./node_modules/prisma
+# Copy full node_modules for Prisma migrations
+# Prisma CLI needs complete dependency tree, simpler to copy all
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
 
 # Create data directory for SQLite database with proper permissions
 RUN mkdir -p /app/data && chown -R nextjs:nodejs /app/data

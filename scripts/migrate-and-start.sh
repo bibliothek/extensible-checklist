@@ -19,7 +19,7 @@ echo "DATABASE_URL is configured"
 
 # Run Prisma migrations
 echo "Running Prisma migrations..."
-npx prisma migrate deploy
+node node_modules/prisma/build/index.js migrate deploy
 
 # Check migration exit code
 if [ $? -ne 0 ]; then
