@@ -61,9 +61,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | UX-05 | Phase 5 | Complete |
 | UX-06 | Phase 5 | Complete |
 | UX-07 | Phase 5 | Complete |
-| UX-08 | Phase 6 | Pending |
-| UX-09 | Phase 6 | Pending |
-| UX-10 | Phase 6 | Pending |
+| UX-08 | Phase 6 | Complete |
+| UX-09 | Phase 6 | Complete |
+| UX-10 | Phase 6 | Complete |
 | DEV-01 | Phase 7 | Pending |
 | DEV-02 | Phase 7 | Pending |
 | DEV-03 | Phase 7 | Pending |

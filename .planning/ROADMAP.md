@@ -82,7 +82,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 06-01-PLAN.md — Hide completed toggle with per-checklist persistence
+- [x] 06-01-PLAN.md — Hide completed toggle with per-checklist persistence
 
 #### Phase 7: Production Deployment
 **Goal**: Application runs in Docker and auto-deploys to Azure
@@ -108,5 +108,5 @@ Plans:
 | 3. Checklist Instantiation | v1.0 | 4/4 | Complete | 2026-01-27 |
 | 4. Checklist Workflow | v1.0 | 3/3 | Complete | 2026-01-27 |
 | 5. Power User UX | v2.0 | 3/3 | Complete | 2026-01-27 |
-| 6. Checklist Focus | v2.0 | 0/TBD | Not started | - |
+| 6. Checklist Focus | v2.0 | 1/1 | Complete | 2026-01-27 |
 | 7. Production Deployment | v2.0 | 0/TBD | Not started | - |
