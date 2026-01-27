@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-27)
 
 **Core value:** Fast, frictionless checklist instantiation - select templates, get a working checklist immediately, and start making progress.
-**Current focus:** Phase 6: Checklist Focus
+**Current focus:** Phase 7: Production Deployment
 
 ## Current Position
 
-Phase: 6 of 7 (Checklist Focus)
-Plan: 1 of 1
-Status: Phase complete
-Last activity: 2026-01-27 — Completed 06-01-PLAN.md (Hide completed toggle)
+Phase: 7 of 7 (Production Deployment)
+Plan: 1 of TBD
+Status: In progress
+Last activity: 2026-01-27 — Completed 07-01-PLAN.md (Docker foundation)
 
-Progress: [█████░░░░░] 17/20 plans complete (v1.0: 13/13, v2.0: 4/7)
+Progress: [█████░░░░░] 18/20 plans complete (v1.0: 13/13, v2.0: 5/7)
 
 ## Performance Metrics
 
@@ -36,7 +36,7 @@ Progress: [█████░░░░░] 17/20 plans complete (v1.0: 13/13, v2
 - In progress
 - Phase 5: 3/3 complete ✓
 - Phase 6: 1/1 complete ✓
-- Phase 7: 0/TBD
+- Phase 7: 1/TBD in progress
 
 ## Accumulated Context
 
@@ -57,6 +57,9 @@ Recent decisions affecting v2.0 work:
 - Checkpoint refinement pattern — Iterative fixes during verification improve final quality (05-03)
 - Per-resource preferences — Store UI preferences (like hideCompleted) per resource, not user-wide (06-01)
 - Client-side filtering — Apply display filters in React, not DB queries, for instant optimistic updates (06-01)
+- Standalone Next.js output — Enable output: 'standalone' for optimized Docker deployment (07-01)
+- Automated migrations at startup — Run Prisma migrations before app starts in containers (07-01)
+- Multi-stage Docker builds — Separate dependencies, building, and runtime for minimal image size (07-01)
 
 ### Pending Todos
 
@@ -69,6 +72,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-27
-Stopped at: Completed Phase 6 (Checklist Focus) - 1 plan executed
+Stopped at: Completed 07-01-PLAN.md (Docker foundation)
 Resume file: None
-Next step: Run /gsd:plan-phase 7 to begin Production Deployment phase
+Next step: Continue Phase 7 production deployment work
