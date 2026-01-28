@@ -1,5 +1,34 @@
 # Project Milestones: Extensible Checklist
 
+## v2.1 Infrastructure Simplification (Shipped: 2026-01-28)
+
+**Delivered:** Simplified deployment with SQLite database and Azure Files persistence, eliminating managed database service
+
+**Phases completed:** 8-10 (3 phases, 5 plans total)
+
+**Key accomplishments:**
+
+- Database simplification: Migrated from PostgreSQL to SQLite for file-based, zero-config deployment
+- Docker optimization: Single-container deployment with automated migrations and volume persistence
+- Azure Files integration: Production persistence without managed database service (cost reduction ~$37/month)
+- Comprehensive deployment guide: 877-line documentation covering setup, troubleshooting, and maintenance
+- Three-tier verification: Complete end-to-end testing across local, Docker, and Azure environments
+- Zero external dependencies: Local development requires only Node.js (no Docker or database services)
+
+**Stats:**
+
+- 12 files created/modified
+- 1,129 insertions, 152 deletions
+- ~3,646 lines TypeScript/JavaScript (maintained)
+- 3 phases, 5 plans
+- <1 day from start to ship (2026-01-27 16:58 → 2026-01-28 15:09)
+
+**Git range:** `dc8b6b9` (feat(08-01)) → `a2a662e` (docs(10))
+
+**What's next:** Project ready for v2.2 milestone (UI/UX enhancements) or additional feature development
+
+---
+
 ## v2.0 Production Ready (Shipped: 2026-01-27)
 
 **Delivered:** Power user UX enhancements and production deployment infrastructure

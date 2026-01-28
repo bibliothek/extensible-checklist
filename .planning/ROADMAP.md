@@ -4,7 +4,7 @@
 
 - ✅ **v1.0 MVP** - Phases 1-4 (shipped 2026-01-27)
 - ✅ **v2.0 Production Ready** - Phases 5-7 (shipped 2026-01-27)
-- 🚧 **v2.1 Infrastructure Simplification** - Phases 8-10 (in progress)
+- ✅ **v2.1 Infrastructure Simplification** - Phases 8-10 (shipped 2026-01-28)
 
 ## Phases
 
@@ -81,51 +81,16 @@ Plans:
 
 </details>
 
-### 🚧 v2.1 Infrastructure Simplification (In Progress)
+<details>
+<summary>✅ v2.1 Infrastructure Simplification (Phases 8-10) - SHIPPED 2026-01-28</summary>
 
-**Milestone Goal:** Simplify deployment by replacing PostgreSQL with SQLite and Azure Files persistence for reduced complexity and cost.
+- [x] Phase 8: Database Migration (1/1 plan) — completed 2026-01-27
+- [x] Phase 9: Docker & Azure Update (2/2 plans) — completed 2026-01-28
+- [x] Phase 10: Documentation & Verification (2/2 plans) — completed 2026-01-28
 
-#### Phase 8: Database Migration
-**Goal**: Application uses SQLite instead of PostgreSQL
-**Depends on**: Nothing (first phase of milestone)
-**Requirements**: DB-01, DB-02, DB-03
-**Success Criteria** (what must be TRUE):
-  1. Prisma schema uses SQLite provider instead of PostgreSQL
-  2. Application connects to local SQLite file instead of PostgreSQL server
-  3. All database operations work identically with SQLite backend
-**Plans**: 1 plan
+_See [milestones/v2.1-ROADMAP.md](.planning/milestones/v2.1-ROADMAP.md) for full details_
 
-Plans:
-- [x] 08-01: Migrate Prisma schema and configuration to SQLite
-
-#### Phase 9: Docker & Azure Update
-**Goal**: Containerized deployment uses SQLite with persistent Azure Files storage
-**Depends on**: Phase 8
-**Requirements**: DOCK-01, DOCK-02, DOCK-03, AZ-01, AZ-02, AZ-03, AZ-04
-**Success Criteria** (what must be TRUE):
-  1. Docker container runs with SQLite database persisted via volume mount
-  2. Azure Files storage account configured and mounted to App Service
-  3. GitHub Actions workflow deploys SQLite-based application to Azure
-  4. Production deployment maintains data across container restarts
-**Plans**: 2 plans
-
-Plans:
-- [x] 09-01-PLAN.md — Docker SQLite support with volume mount configuration
-- [x] 09-02-PLAN.md — Azure deployment update with Files storage and documentation
-
-#### Phase 10: Documentation & Verification
-**Goal**: Complete deployment is documented and verified working end-to-end
-**Depends on**: Phase 9
-**Requirements**: DOC-01, DOC-02, DOC-03, VER-01, VER-02, VER-03
-**Success Criteria** (what must be TRUE):
-  1. Developer can follow README to set up local SQLite development environment
-  2. Developer can follow deployment guide to configure Azure Files and deploy
-  3. Complete user workflow (create account, templates, checklists) verified on production
-**Plans**: 2 plans
-
-Plans:
-- [x] 10-01-PLAN.md — Update README.md for SQLite (DOC-01, DOC-03)
-- [x] 10-02-PLAN.md — End-to-end verification: local, Docker, Azure (VER-01, VER-02, VER-03)
+</details>
 
 ## Progress
 
@@ -143,4 +108,4 @@ Plans:
 | 10. Documentation & Verification | v2.1 | 2/2 | Complete | 2026-01-28 |
 
 ---
-*Last updated: 2026-01-28 after Phase 10 completion*
+*Last updated: 2026-01-28 after v2.1 milestone completion*

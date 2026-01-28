@@ -8,15 +8,23 @@ A web application for managing personal recurring tasks through reusable checkli
 
 Fast, frictionless checklist instantiation - select templates, get a working checklist immediately, and start making progress.
 
-## Current Milestone: v2.1 Infrastructure Simplification
+## Current State
 
-**Goal:** Simplify deployment by replacing PostgreSQL with SQLite and Azure Files persistence.
+**Latest milestone:** v2.1 Infrastructure Simplification (shipped 2026-01-28)
 
-**Target features:**
-- SQLite database (single file, no separate DB service)
-- Azure Files mount for SQLite persistence
-- Single instance deployment model
-- Simplified infrastructure and reduced costs
+**Architecture:**
+- Next.js 16 web application (~3,646 LOC TypeScript)
+- SQLite database (file-based, zero-config)
+- Auth.js v5 authentication with JWT sessions
+- Docker containerization with volume persistence
+- Azure App Service deployment with Azure Files storage
+- CI/CD pipeline via GitHub Actions
+
+**Infrastructure benefits:**
+- Cost: ~$18/month (reduced from $55 with PostgreSQL)
+- Zero external dependencies for local development
+- Single-container deployment model
+- Simplified operations (no database service management)
 
 ## Requirements
 
@@ -39,14 +47,16 @@ Fast, frictionless checklist instantiation - select templates, get a working che
 - ✓ Docker image for deployment — v2.0
 - ✓ CI/CD pipeline deploying to Azure App Service — v2.0
 
+**v2.1 Infrastructure Simplification:**
+- ✓ Database migrated from PostgreSQL to SQLite — v2.1
+- ✓ Azure deployment updated for SQLite with Azure Files mount — v2.1 (cost reduction $37/month)
+- ✓ Docker configuration updated for SQLite — v2.1
+- ✓ Documentation updated for simplified deployment — v2.1 (877-line guide)
+- ✓ Full deployment flow tested and verified — v2.1 (local, Docker, Azure)
+
 ### Active
 
-**v2.1 Infrastructure Simplification:**
-- [ ] Database migrated from PostgreSQL to SQLite
-- [ ] Azure deployment updated for SQLite with Azure Files mount
-- [ ] Docker configuration updated for SQLite
-- [ ] Documentation updated for simplified deployment
-- [ ] Full deployment flow tested and verified
+(No active requirements — ready for next milestone)
 
 ### Out of Scope
 
@@ -61,16 +71,16 @@ Fast, frictionless checklist instantiation - select templates, get a working che
 
 ## Context
 
-**Current State (v2.0 shipped, migrating to v2.1):**
+**Current State (v2.1 shipped):**
 - Next.js 16 web application with ~3,646 lines TypeScript
-- PostgreSQL database with Prisma ORM (migrating to SQLite in v2.1)
+- SQLite database (file-based) with Prisma ORM
 - Auth.js v5 authentication with JWT sessions
 - Complete template and checklist management
 - Power user features: bulk text editing, print view, hide completed
 - Dark mode support, responsive design
-- Docker containerization with automated migrations
-- CI/CD pipeline deploying to Azure App Service
-- Production-ready with health monitoring
+- Docker containerization with automated migrations and volume persistence
+- CI/CD pipeline deploying to Azure App Service with Azure Files storage
+- Production-ready with health monitoring (~$18/month infrastructure cost)
 
 **Use Case:** Personal recurring tasks and routines that benefit from reusable structure but need flexibility. Examples include weekly planning, project kickoffs, travel preparation, or any process run repeatedly with minor variations.
 
@@ -110,6 +120,11 @@ Fast, frictionless checklist instantiation - select templates, get a working che
 | Automated migrations at startup | Run Prisma migrations before app starts | ✓ Good - no manual DB setup needed |
 | Auto-deploy on main | No manual approval gate for production | ✓ Good - rapid iteration, continuous delivery |
 | Dual image tagging | Tag with commit SHA and 'latest' | ✓ Good - enables rollback and version tracking |
+| SQLite for deployment | Replace PostgreSQL with file-based SQLite | ✓ Good - eliminated $37/month cost, simplified ops |
+| Azure Files persistence | Volume mount for SQLite database | ✓ Good - stateful storage without database service |
+| Full node_modules in Docker | Copy complete node_modules for Prisma CLI | ✓ Good - reliable dependency resolution vs selective copying |
+| AUTH_TRUST_HOST=true | Trust host when behind Azure reverse proxy | ✓ Good - required for Auth.js v5, prevents UntrustedHost errors |
+| Three-tier verification | Test local → Docker → Azure for confidence | ✓ Good - caught issues early, validated persistence |
 
 ---
-*Last updated: 2026-01-27 after v2.1 milestone start*
+*Last updated: 2026-01-28 after v2.1 milestone completion*
