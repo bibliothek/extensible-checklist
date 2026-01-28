@@ -8,22 +8,12 @@ A web application for managing personal recurring tasks through reusable checkli
 
 Fast, frictionless checklist instantiation - select templates, get a working checklist immediately, and start making progress.
 
-## Current Milestone: v2.2 UX & Access Control
-
-**Goal:** Improve navigation and access control with dashboard, template export, and email-based access restrictions
-
-**Target features:**
-- Template export to markdown for personal backup
-- Dashboard home page with recent checklists and quick actions
-- Persistent navigation bar for easy switching between sections
-- Pre-approved email list for controlled access
-
 ## Current State
 
-**Latest milestone:** v2.1 Infrastructure Simplification (shipped 2026-01-28)
+**Latest milestone:** v2.2 UX & Access Control (shipped 2026-01-28)
 
 **Architecture:**
-- Next.js 16 web application (~3,646 LOC TypeScript)
+- Next.js 16 web application (~4,500 LOC TypeScript)
 - SQLite database (file-based, zero-config)
 - Auth.js v5 authentication with JWT sessions
 - Docker containerization with volume persistence
@@ -64,14 +54,16 @@ Fast, frictionless checklist instantiation - select templates, get a working che
 - ✓ Documentation updated for simplified deployment — v2.1 (877-line guide)
 - ✓ Full deployment flow tested and verified — v2.1 (local, Docker, Azure)
 
+**v2.2 UX & Access Control:**
+- ✓ User can export all templates to markdown file — v2.2 (timestamped filenames, universal format)
+- ✓ User sees dashboard with recent checklists and quick actions — v2.2 (progress indicators, create buttons)
+- ✓ User can navigate between Templates and Checklists via persistent nav bar — v2.2 (active state highlighting)
+- ✓ Signup is restricted to pre-approved email addresses — v2.2 (APPROVED_EMAILS environment variable)
+- ✓ Non-approved emails receive clear error message on signup attempt — v2.2 (403 with actionable message)
+
 ### Active
 
-**v2.2 UX & Access Control:**
-- [ ] User can export all templates to markdown file — v2.2
-- [ ] User sees dashboard with recent checklists and quick actions — v2.2
-- [ ] User can navigate between Templates and Checklists via persistent nav bar — v2.2
-- [ ] Signup is restricted to pre-approved email addresses — v2.2
-- [ ] Non-approved emails receive clear error message on signup attempt — v2.2
+(No active requirements - start next milestone with `/gsd:new-milestone`)
 
 ### Out of Scope
 
@@ -86,12 +78,15 @@ Fast, frictionless checklist instantiation - select templates, get a working che
 
 ## Context
 
-**Current State (v2.1 shipped):**
-- Next.js 16 web application with ~3,646 lines TypeScript
+**Current State (v2.2 shipped):**
+- Next.js 16 web application with ~4,500 lines TypeScript
 - SQLite database (file-based) with Prisma ORM
 - Auth.js v5 authentication with JWT sessions
-- Complete template and checklist management
+- Complete template and checklist management with markdown export
 - Power user features: bulk text editing, print view, hide completed
+- Dashboard with recent checklists and quick actions
+- Persistent navigation bar with active state highlighting
+- Email-based signup access control
 - Dark mode support, responsive design
 - Docker containerization with automated migrations and volume persistence
 - CI/CD pipeline deploying to Azure App Service with Azure Files storage
@@ -140,6 +135,15 @@ Fast, frictionless checklist instantiation - select templates, get a working che
 | Full node_modules in Docker | Copy complete node_modules for Prisma CLI | ✓ Good - reliable dependency resolution vs selective copying |
 | AUTH_TRUST_HOST=true | Trust host when behind Azure reverse proxy | ✓ Good - required for Auth.js v5, prevents UntrustedHost errors |
 | Three-tier verification | Test local → Docker → Azure for confidence | ✓ Good - caught issues early, validated persistence |
+| Markdown export format | Use ## headings and - [ ] checkboxes for universal compatibility | ✓ Good - works in all markdown viewers |
+| Timestamped export filenames | YYYY-MM-DD-HHmmss format for chronological sorting | ✓ Good - clear backup history |
+| Navigation active state detection | pathname?.startsWith('/section') for flexible matching | ✓ Good - highlights entire section |
+| Dashboard card reuse | Same grid pattern as templates/checklists pages | ✓ Good - visual consistency across app |
+| Root layout navigation | Navigation component in layout.tsx for persistence | ✓ Good - available on all pages |
+| Dashboard redirect | useEffect on home page redirects authenticated users | ✓ Good - clean landing experience |
+| APPROVED_EMAILS format | Comma-separated environment variable | ✓ Good - simple config without DB changes |
+| Email validation placement | After input checks, before password hashing | ✓ Good - early rejection of invalid signups |
+| Open signup fallback | Empty APPROVED_EMAILS allows all signups | ✓ Good - graceful default behavior |
 
 ---
-*Last updated: 2026-01-28 after v2.2 milestone started*
+*Last updated: 2026-01-28 after v2.2 milestone completion*

@@ -1,5 +1,34 @@
 # Project Milestones: Extensible Checklist
 
+## v2.2 UX & Access Control (Shipped: 2026-01-28)
+
+**Delivered:** Enhanced user experience with dashboard, navigation, template export, and controlled access
+
+**Phases completed:** 11-13 (3 phases, 4 plans total)
+
+**Key accomplishments:**
+
+- Template export to markdown with timestamped filenames for personal backup and data portability
+- Persistent navigation bar with active state highlighting for seamless section switching
+- Dashboard home page showing recent checklists with progress indicators and quick action buttons
+- Email-based signup access control via APPROVED_EMAILS environment variable
+- Improved authentication flow with dashboard redirect for authenticated users
+- Logout button integration in navigation bar
+
+**Stats:**
+
+- 18 files created/modified
+- 1,504 insertions, 85 deletions
+- ~4,500 lines TypeScript (from ~3,646)
+- 3 phases, 4 plans, 4 tasks
+- 2 days from start to ship (2026-01-26 → 2026-01-28)
+
+**Git range:** `3d43974` (feat(11-01)) → `c44e10c` (docs(13))
+
+**What's next:** Planning next milestone with `/gsd:new-milestone`
+
+---
+
 ## v2.1 Infrastructure Simplification (Shipped: 2026-01-28)
 
 **Delivered:** Simplified deployment with SQLite database and Azure Files persistence, eliminating managed database service
