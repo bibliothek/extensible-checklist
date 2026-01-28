@@ -140,10 +140,10 @@ Plans:
   2. Non-approved emails receive clear error message on signup attempt
   3. Approved users can create accounts and log in normally
   4. Email validation supports comma-separated format in environment variable
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] TBD
+- [ ] 13-01-PLAN.md — Email validation in signup API with APPROVED_EMAILS environment variable
 
 ## Progress
 
