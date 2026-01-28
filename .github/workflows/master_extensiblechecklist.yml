@@ -60,4 +60,32 @@ jobs:
           app-name: 'extensiblechecklist'
           slot-name: 'Production'
           images: 'index.docker.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_6885630C247C4FFC98794F8FD3DB32F7 }}/extensiblechecklist:${{ github.sha }}'
-          
+ 
+      - name: Verify deployment health
+        run: |
+          echo "Waiting 30 seconds for container startup, SQLite initialization, and migrations..."
+          sleep 30
+
+          echo "Checking health endpoint..."
+          HEALTH_URL="${{ secrets.APP_URL }}/api/health"
+
+          # Retry health check up to 6 times (1 minute total)
+          for i in {1..6}; do
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$HEALTH_URL")
+
+            if [ "$HTTP_CODE" = "200" ]; then
+              echo "✓ Health check passed (HTTP $HTTP_CODE)"
+              RESPONSE=$(curl -s "$HEALTH_URL")
+              echo "Response: $RESPONSE"
+              exit 0
+            else
+              echo "⚠ Health check attempt $i/6 returned HTTP $HTTP_CODE"
+              if [ $i -lt 6 ]; then
+                sleep 10
+              fi
+            fi
+          done
+
+          echo "✗ Health check failed after 6 attempts"
+          exit 1         
+
