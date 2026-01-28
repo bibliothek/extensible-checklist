@@ -121,10 +121,11 @@ Plans:
   1. Developer can follow README to set up local SQLite development environment
   2. Developer can follow deployment guide to configure Azure Files and deploy
   3. Complete user workflow (create account, templates, checklists) verified on production
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 10-01: TBD
+- [ ] 10-01-PLAN.md — Update README.md for SQLite (DOC-01, DOC-03)
+- [ ] 10-02-PLAN.md — End-to-end verification: local, Docker, Azure (VER-01, VER-02, VER-03)
 
 ## Progress
 
@@ -139,7 +140,7 @@ Plans:
 | 7. Production Deployment | v2.0 | 3/3 | Complete | 2026-01-27 |
 | 8. Database Migration | v2.1 | 1/1 | Complete | 2026-01-27 |
 | 9. Docker & Azure Update | v2.1 | 2/2 | Complete | 2026-01-28 |
-| 10. Documentation & Verification | v2.1 | 0/? | Not started | - |
+| 10. Documentation & Verification | v2.1 | 0/2 | Not started | - |
 
 ---
 *Last updated: 2026-01-28 after Phase 9 completion*
