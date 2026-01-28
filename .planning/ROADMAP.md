@@ -5,6 +5,7 @@
 - ✅ **v1.0 MVP** - Phases 1-4 (shipped 2026-01-27)
 - ✅ **v2.0 Production Ready** - Phases 5-7 (shipped 2026-01-27)
 - ✅ **v2.1 Infrastructure Simplification** - Phases 8-10 (shipped 2026-01-28)
+- 🚧 **v2.2 UX & Access Control** - Phases 11-13 (in progress)
 
 ## Phases
 
@@ -92,6 +93,57 @@ _See [milestones/v2.1-ROADMAP.md](.planning/milestones/v2.1-ROADMAP.md) for full
 
 </details>
 
+### 🚧 v2.2 UX & Access Control (In Progress)
+
+**Milestone Goal:** Improve navigation and access control with dashboard, template export, and email-based access restrictions
+
+- [ ] **Phase 11: Template Export** - Users can backup templates to markdown files
+- [ ] **Phase 12: Navigation & Dashboard** - Persistent nav bar and dashboard home page
+- [ ] **Phase 13: Access Control** - Email-based signup restrictions
+
+### Phase 11: Template Export
+**Goal**: Users can export their template library to markdown files for backup
+**Depends on**: Nothing (standalone feature)
+**Requirements**: EXPORT-01, EXPORT-02, EXPORT-03, EXPORT-04
+**Success Criteria** (what must be TRUE):
+  1. User can trigger template export from templates library page
+  2. Export downloads a markdown file with timestamp in filename
+  3. Downloaded file contains all templates formatted as headings with checkbox items
+  4. Template items appear in correct order matching the UI
+**Plans**: TBD
+
+Plans:
+- [ ] TBD
+
+### Phase 12: Navigation & Dashboard
+**Goal**: Users have persistent navigation and a dashboard home page with recent activity
+**Depends on**: Phase 11 (UI structure changes)
+**Requirements**: NAV-01, NAV-02, NAV-03, NAV-04, NAV-05, NAV-06
+**Success Criteria** (what must be TRUE):
+  1. User sees navigation bar at top of every authenticated page
+  2. Navigation bar includes Templates and Checklists links with active state highlighting
+  3. User lands on dashboard after login showing recent checklists
+  4. Dashboard displays recent checklists with progress indicators
+  5. Dashboard includes quick action buttons for Create Checklist and Create Template
+**Plans**: TBD
+
+Plans:
+- [ ] TBD
+
+### Phase 13: Access Control
+**Goal**: Signup is restricted to pre-approved email addresses with clear error messaging
+**Depends on**: Phase 12 (completes UX before adding restrictions)
+**Requirements**: ACCESS-01, ACCESS-02, ACCESS-03, ACCESS-04
+**Success Criteria** (what must be TRUE):
+  1. User signup validates email against approved list from environment variable
+  2. Non-approved emails receive clear error message on signup attempt
+  3. Approved users can create accounts and log in normally
+  4. Email validation supports comma-separated format in environment variable
+**Plans**: TBD
+
+Plans:
+- [ ] TBD
+
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
@@ -106,6 +158,9 @@ _See [milestones/v2.1-ROADMAP.md](.planning/milestones/v2.1-ROADMAP.md) for full
 | 8. Database Migration | v2.1 | 1/1 | Complete | 2026-01-27 |
 | 9. Docker & Azure Update | v2.1 | 2/2 | Complete | 2026-01-28 |
 | 10. Documentation & Verification | v2.1 | 2/2 | Complete | 2026-01-28 |
+| 11. Template Export | v2.2 | 0/? | Not started | - |
+| 12. Navigation & Dashboard | v2.2 | 0/? | Not started | - |
+| 13. Access Control | v2.2 | 0/? | Not started | - |
 
 ---
-*Last updated: 2026-01-28 after v2.1 milestone completion*
+*Last updated: 2026-01-28 after v2.2 roadmap creation*
