@@ -16,12 +16,12 @@ Requirements for v2.2 UX & Access Control milestone.
 
 ### Navigation
 
-- [ ] **NAV-01**: User sees persistent navigation bar on all authenticated pages
-- [ ] **NAV-02**: Navigation bar includes Templates and Checklists links
-- [ ] **NAV-03**: Dashboard replaces landing page as home after login
-- [ ] **NAV-04**: Dashboard displays recent checklists with progress indicators
-- [ ] **NAV-05**: Dashboard includes quick action buttons for Create Checklist and Create Template
-- [ ] **NAV-06**: Navigation bar shows current section as active/highlighted
+- [x] **NAV-01**: User sees persistent navigation bar on all authenticated pages
+- [x] **NAV-02**: Navigation bar includes Templates and Checklists links
+- [x] **NAV-03**: Dashboard replaces landing page as home after login
+- [x] **NAV-04**: Dashboard displays recent checklists with progress indicators
+- [x] **NAV-05**: Dashboard includes quick action buttons for Create Checklist and Create Template
+- [x] **NAV-06**: Navigation bar shows current section as active/highlighted
 
 ### Access Control
 
@@ -52,12 +52,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | EXPORT-02 | Phase 11 | Complete |
 | EXPORT-03 | Phase 11 | Complete |
 | EXPORT-04 | Phase 11 | Complete |
-| NAV-01 | Phase 12 | Pending |
-| NAV-02 | Phase 12 | Pending |
-| NAV-03 | Phase 12 | Pending |
-| NAV-04 | Phase 12 | Pending |
-| NAV-05 | Phase 12 | Pending |
-| NAV-06 | Phase 12 | Pending |
+| NAV-01 | Phase 12 | Complete |
+| NAV-02 | Phase 12 | Complete |
+| NAV-03 | Phase 12 | Complete |
+| NAV-04 | Phase 12 | Complete |
+| NAV-05 | Phase 12 | Complete |
+| NAV-06 | Phase 12 | Complete |
 | ACCESS-01 | Phase 13 | Pending |
 | ACCESS-02 | Phase 13 | Pending |
 | ACCESS-03 | Phase 13 | Pending |
@@ -70,4 +70,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-28*
-*Last updated: 2026-01-28 after roadmap creation*
+*Last updated: 2026-01-28 after Phase 12 completion*

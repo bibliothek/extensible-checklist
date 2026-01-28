@@ -98,7 +98,7 @@ _See [milestones/v2.1-ROADMAP.md](.planning/milestones/v2.1-ROADMAP.md) for full
 **Milestone Goal:** Improve navigation and access control with dashboard, template export, and email-based access restrictions
 
 - [x] **Phase 11: Template Export** - Users can backup templates to markdown files
-- [ ] **Phase 12: Navigation & Dashboard** - Persistent nav bar and dashboard home page
+- [x] **Phase 12: Navigation & Dashboard** - Persistent nav bar and dashboard home page
 - [ ] **Phase 13: Access Control** - Email-based signup restrictions
 
 ### Phase 11: Template Export
@@ -128,8 +128,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 12-01-PLAN.md — Create Navigation component and Dashboard page
-- [ ] 12-02-PLAN.md — Integrate navigation into layout and redirect home page
+- [x] 12-01-PLAN.md — Create Navigation component and Dashboard page
+- [x] 12-02-PLAN.md — Integrate navigation into layout and redirect home page
 
 ### Phase 13: Access Control
 **Goal**: Signup is restricted to pre-approved email addresses with clear error messaging
@@ -160,8 +160,8 @@ Plans:
 | 9. Docker & Azure Update | v2.1 | 2/2 | Complete | 2026-01-28 |
 | 10. Documentation & Verification | v2.1 | 2/2 | Complete | 2026-01-28 |
 | 11. Template Export | v2.2 | 1/1 | Complete | 2026-01-28 |
-| 12. Navigation & Dashboard | v2.2 | 0/2 | Not started | - |
+| 12. Navigation & Dashboard | v2.2 | 2/2 | Complete | 2026-01-28 |
 | 13. Access Control | v2.2 | 0/? | Not started | - |
 
 ---
-*Last updated: 2026-01-28 after v2.2 roadmap creation*
+*Last updated: 2026-01-28 after Phase 12 completion*
