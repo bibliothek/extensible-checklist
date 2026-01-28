@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import Navigation from "../components/Navigation";
 
 interface ChecklistItem {
   id: string;
@@ -94,19 +93,14 @@ export default function DashboardPage() {
 
   if (status === "loading" || loading) {
     return (
-      <div>
-        <Navigation />
-        <main className="flex min-h-screen flex-col items-center justify-center p-24">
-          <div className="text-gray-500">Loading...</div>
-        </main>
-      </div>
+      <main className="flex min-h-screen flex-col items-center justify-center p-24">
+        <div className="text-gray-500">Loading...</div>
+      </main>
     );
   }
 
   return (
-    <div>
-      <Navigation />
-      <main className="min-h-screen p-8 md:p-24">
+    <main className="min-h-screen p-8 md:p-24">
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-between items-center mb-8">
             <div>
@@ -210,6 +204,5 @@ export default function DashboardPage() {
           )}
         </div>
       </main>
-    </div>
   );
 }
