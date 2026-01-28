@@ -93,13 +93,13 @@ _See [milestones/v2.1-ROADMAP.md](.planning/milestones/v2.1-ROADMAP.md) for full
 
 </details>
 
-### 🚧 v2.2 UX & Access Control (In Progress)
+### ✅ v2.2 UX & Access Control (Complete)
 
 **Milestone Goal:** Improve navigation and access control with dashboard, template export, and email-based access restrictions
 
 - [x] **Phase 11: Template Export** - Users can backup templates to markdown files
 - [x] **Phase 12: Navigation & Dashboard** - Persistent nav bar and dashboard home page
-- [ ] **Phase 13: Access Control** - Email-based signup restrictions
+- [x] **Phase 13: Access Control** - Email-based signup restrictions
 
 ### Phase 11: Template Export
 **Goal**: Users can export their template library to markdown files for backup
@@ -143,7 +143,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 13-01-PLAN.md — Email validation in signup API with APPROVED_EMAILS environment variable
+- [x] 13-01-PLAN.md — Email validation in signup API with APPROVED_EMAILS environment variable
 
 ## Progress
 
@@ -161,7 +161,7 @@ Plans:
 | 10. Documentation & Verification | v2.1 | 2/2 | Complete | 2026-01-28 |
 | 11. Template Export | v2.2 | 1/1 | Complete | 2026-01-28 |
 | 12. Navigation & Dashboard | v2.2 | 2/2 | Complete | 2026-01-28 |
-| 13. Access Control | v2.2 | 0/? | Not started | - |
+| 13. Access Control | v2.2 | 1/1 | Complete | 2026-01-28 |
 
 ---
-*Last updated: 2026-01-28 after Phase 12 completion*
+*Last updated: 2026-01-28 after Phase 13 completion*
