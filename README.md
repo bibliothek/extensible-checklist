@@ -219,14 +219,17 @@ Set these in **Azure Portal** → **App Service** → **Configuration** → **Ap
 
 | Setting | Value | Description |
 |---------|-------|-------------|
-| `DATABASE_URL` | `postgresql://user:password@host:5432/db?sslmode=require` | PostgreSQL connection string (Azure Database for PostgreSQL or external) |
+| `DATABASE_URL` | `file:/app/data/dev.db` | SQLite database file path (mounted via Azure Files) |
 | `NEXTAUTH_SECRET` | Generate: `openssl rand -base64 32` | Secret for NextAuth.js session encryption |
 | `NEXTAUTH_URL` | `https://<app-name>.azurewebsites.net` | Public URL of your application |
+| `AUTH_TRUST_HOST` | `true` | Required for Auth.js v5 behind reverse proxy |
 | `WEBSITES_PORT` | `3000` | Port the container listens on |
 
-**Database Options:**
-- **Azure Database for PostgreSQL**: Managed service (recommended for production)
-- **External PostgreSQL**: Self-hosted or third-party (e.g., Supabase, Neon)
+**SQLite Persistence:**
+
+SQLite requires persistent storage to retain data across container restarts. This is achieved using **Azure Files** storage mounted to the container at `/app/data`.
+
+For complete Azure Files setup instructions (storage account, file share, mount configuration), see **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)**.
 
 Click **Save** after adding settings. The app will restart automatically.
 
@@ -308,12 +311,8 @@ Database migrations run automatically when the container starts (via `scripts/mi
 **Application won't load:**
 - Verify `WEBSITES_PORT=3000` is set in App Service Configuration
 - Check that `NEXTAUTH_URL` matches your App Service URL
+- Verify `AUTH_TRUST_HOST=true` is set for Auth.js v5
 - Review Application Insights or Log Analytics for errors
-
-**Database connection errors:**
-- For Azure Database for PostgreSQL: Enable SSL and add `?sslmode=require` to connection string
-- Verify firewall rules allow App Service IPs
-- Test connection string locally: `psql <DATABASE_URL>`
 
 ## Database Migrations
 
