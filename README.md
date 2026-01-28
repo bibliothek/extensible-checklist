@@ -27,7 +27,6 @@ A powerful checklist management application with template-based workflow. Create
 ### Prerequisites
 
 - Node.js 20 or higher
-- Docker Desktop (for database)
 
 ### Setup
 
@@ -48,26 +47,23 @@ A powerful checklist management application with template-based workflow. Create
    ```
 
    Edit `.env` and set:
-   - `DATABASE_URL`: PostgreSQL connection string (default works with docker-compose)
+   - `DATABASE_URL`: SQLite file path (default: `file:./prisma/dev.db`)
    - `NEXTAUTH_SECRET`: Generate with `openssl rand -base64 32`
    - `NEXTAUTH_URL`: `http://localhost:3000` for local development
 
-4. **Start PostgreSQL database**
-   ```bash
-   docker-compose up postgres
-   ```
+   The SQLite database file will be created automatically when you run migrations.
 
-5. **Run database migrations**
+4. **Run database migrations**
    ```bash
    npm run db:push
    ```
 
-6. **Start development server**
+5. **Start development server**
    ```bash
    npm run dev
    ```
 
-7. **Access the application**
+6. **Access the application**
    Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ### Development Commands
