@@ -10,16 +10,16 @@ See: .planning/PROJECT.md (updated 2026-01-28)
 ## Current Position
 
 Phase: 12 of 13 (Navigation & Dashboard)
-Plan: 1 of 1 (complete)
+Plan: 2 of 2 (complete)
 Status: Phase complete
-Last activity: 2026-01-28 — Completed 12-01-PLAN.md
+Last activity: 2026-01-28 — Completed 12-02-PLAN.md
 
 Progress: [████████████░] 92% (12/13 phases complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 27 (v1.0: 13, v2.0: 7, v2.1: 5, v2.2: 2)
+- Total plans completed: 28 (v1.0: 13, v2.0: 7, v2.1: 5, v2.2: 3)
 - Average duration: ~12 min
 - Total execution time: ~5.7 hours across all milestones
 
@@ -31,7 +31,7 @@ Progress: [████████████░] 92% (12/13 phases complete)
 | 5-7 | 7 | Complete (v2.0) |
 | 8-10 | 5 | Complete (v2.1) |
 | 11 | 1 | Complete (v2.2) |
-| 12 | 1 | Complete (v2.2) |
+| 12 | 2 | Complete (v2.2) |
 | 13 | TBD | Not started (v2.2) |
 
 **Recent Trend:**
@@ -56,6 +56,8 @@ Full decisions logged in PROJECT.md Key Decisions table.
 - Timestamped filenames (11-01): YYYY-MM-DD-HHmmss format for chronological backup sorting
 - Navigation active state (12-01): pathname?.startsWith('/section') for flexible section detection
 - Dashboard layout (12-01): Reuses checklist card grid pattern for visual consistency
+- Navigation in root layout (12-02): Persistence across all pages via layout integration
+- Auth-based redirect (12-02): useEffect redirects authenticated users to dashboard from home
 
 ### Pending Todos
 
@@ -68,7 +70,7 @@ None - v2.1 complete and verified. Infrastructure simplified and production-read
 ## Session Continuity
 
 Last session: 2026-01-28
-Stopped at: Completed 12-01-PLAN.md (Navigation & Dashboard)
+Stopped at: Completed 12-02-PLAN.md (Navigation & Dashboard)
 Resume file: None
 Next action: `/gsd:plan-phase 13` to plan Access Control phase
 
