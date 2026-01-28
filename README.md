@@ -11,13 +11,13 @@ A powerful checklist management application with template-based workflow. Create
 - **Hide Completed**: Toggle visibility of completed items to focus on remaining work
 - **Inline Editing**: Edit checklist and item names directly in the interface
 - **Dark Mode**: Modern dark UI throughout the application
-- **Persistent State**: PostgreSQL database ensures data reliability
+- **Persistent State**: SQLite database with file-based storage
 
 ## Tech Stack
 
 - **Next.js 16** (App Router) with React 19
 - **TypeScript** for type safety
-- **Prisma** ORM with PostgreSQL database
+- **Prisma** ORM with SQLite database
 - **NextAuth.js** for authentication
 - **Tailwind CSS v4** for styling
 - **Docker** for containerized deployment
