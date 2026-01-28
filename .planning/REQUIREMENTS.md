@@ -15,16 +15,16 @@ Requirements for infrastructure simplification milestone.
 
 ### Docker Configuration
 
-- [ ] **DOCK-01**: Dockerfile updated to support SQLite
-- [ ] **DOCK-02**: Docker volume mount configured for SQLite database file
-- [ ] **DOCK-03**: Container startup handles SQLite initialization
+- [x] **DOCK-01**: Dockerfile updated to support SQLite
+- [x] **DOCK-02**: Docker volume mount configured for SQLite database file
+- [x] **DOCK-03**: Container startup handles SQLite initialization
 
 ### Azure Deployment
 
-- [ ] **AZ-01**: Azure Files storage configured for SQLite persistence
-- [ ] **AZ-02**: App Service configured with Azure Files volume mount
-- [ ] **AZ-03**: GitHub Actions workflow updated for SQLite deployment
-- [ ] **AZ-04**: Environment variables updated for SQLite connection
+- [x] **AZ-01**: Azure Files storage configured for SQLite persistence
+- [x] **AZ-02**: App Service configured with Azure Files volume mount
+- [x] **AZ-03**: GitHub Actions workflow updated for SQLite deployment
+- [x] **AZ-04**: Environment variables updated for SQLite connection
 
 ### Documentation
 
@@ -56,13 +56,13 @@ Mapping requirements to phases.
 | DB-01 | Phase 8 | Complete |
 | DB-02 | Phase 8 | Complete |
 | DB-03 | Phase 8 | Complete |
-| DOCK-01 | Phase 9 | Pending |
-| DOCK-02 | Phase 9 | Pending |
-| DOCK-03 | Phase 9 | Pending |
-| AZ-01 | Phase 9 | Pending |
-| AZ-02 | Phase 9 | Pending |
-| AZ-03 | Phase 9 | Pending |
-| AZ-04 | Phase 9 | Pending |
+| DOCK-01 | Phase 9 | Complete |
+| DOCK-02 | Phase 9 | Complete |
+| DOCK-03 | Phase 9 | Complete |
+| AZ-01 | Phase 9 | Complete |
+| AZ-02 | Phase 9 | Complete |
+| AZ-03 | Phase 9 | Complete |
+| AZ-04 | Phase 9 | Complete |
 | DOC-01 | Phase 10 | Pending |
 | DOC-02 | Phase 10 | Pending |
 | DOC-03 | Phase 10 | Pending |
@@ -77,4 +77,4 @@ Mapping requirements to phases.
 
 ---
 *Requirements defined: 2026-01-27*
-*Last updated: 2026-01-27 after Phase 8 completion*
+*Last updated: 2026-01-28 after Phase 9 completion*
