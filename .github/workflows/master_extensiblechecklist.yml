@@ -24,16 +24,16 @@ jobs:
       - name: Log in to container registry
         uses: docker/login-action@v2
         with:
-          registry: docker.com/
-          username: ${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_4C3E65A84F6743D5A5508E30EB9D0E82 }}
-          password: ${{ secrets.AZUREAPPSERVICE_CONTAINERPASSWORD_F6F711AAD8B74E298C822A6085AF4752 }}
+          registry: mathaacr.azurecr.io/
+          username: ${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_3591C0468C714B0187A4346DFC2BF8A0 }}
+          password: ${{ secrets.AZUREAPPSERVICE_CONTAINERPASSWORD_AD93D3EF75094AE0B9366693F3ADD13A }}
 
       - name: Build and push container image to registry
         uses: docker/build-push-action@v3
         with:
           context: .
           push: true
-          tags: docker.com/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_4C3E65A84F6743D5A5508E30EB9D0E82 }}/extensiblechecklist:${{ github.sha }}
+          tags: mathaacr.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_3591C0468C714B0187A4346DFC2BF8A0 }}/extensiblechecklist:${{ github.sha }}
           file: ./Dockerfile
 
   deploy:
@@ -49,9 +49,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_EBEF077F42D741868D819EBD5B1CABC7 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_B2FC72AE542B4742AEA3FD15E42A9160 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_40AD0E08BCB240D9910B9553D5DAF5A8 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_57F772039D434D05B900031B05DE89CF }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_9C76276C5EFE462D980B12BE6B2AE2D3 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_953A00CBC3FA4F99A649E6426469036F }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -59,5 +59,5 @@ jobs:
         with:
           app-name: 'extensiblechecklist'
           slot-name: 'Production'
-          images: 'docker.com/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_4C3E65A84F6743D5A5508E30EB9D0E82 }}/extensiblechecklist:${{ github.sha }}'
+          images: 'mathaacr.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_3591C0468C714B0187A4346DFC2BF8A0 }}/extensiblechecklist:${{ github.sha }}'
           
