@@ -110,10 +110,10 @@ _See [milestones/v2.1-ROADMAP.md](.planning/milestones/v2.1-ROADMAP.md) for full
   2. Export downloads a markdown file with timestamp in filename
   3. Downloaded file contains all templates formatted as headings with checkbox items
   4. Template items appear in correct order matching the UI
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] TBD
+- [ ] 11-01-PLAN.md — Export API endpoint and UI button for markdown download
 
 ### Phase 12: Navigation & Dashboard
 **Goal**: Users have persistent navigation and a dashboard home page with recent activity
@@ -158,7 +158,7 @@ Plans:
 | 8. Database Migration | v2.1 | 1/1 | Complete | 2026-01-27 |
 | 9. Docker & Azure Update | v2.1 | 2/2 | Complete | 2026-01-28 |
 | 10. Documentation & Verification | v2.1 | 2/2 | Complete | 2026-01-28 |
-| 11. Template Export | v2.2 | 0/? | Not started | - |
+| 11. Template Export | v2.2 | 0/1 | Not started | - |
 | 12. Navigation & Dashboard | v2.2 | 0/? | Not started | - |
 | 13. Access Control | v2.2 | 0/? | Not started | - |
 
