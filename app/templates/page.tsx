@@ -25,6 +25,7 @@ export default function TemplatesPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [exporting, setExporting] = useState(false);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -81,6 +82,49 @@ export default function TemplatesPage() {
     }
   }
 
+  async function handleExport() {
+    setExporting(true);
+    setError(""); // Clear any previous errors
+
+    try {
+      const response = await fetch("/api/templates/export");
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          router.push("/login");
+          return;
+        }
+        throw new Error("Failed to export templates");
+      }
+
+      // Convert response to blob
+      const blob = await response.blob();
+
+      // Create temporary anchor element to trigger download
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+
+      // Extract filename from Content-Disposition header
+      const contentDisposition = response.headers.get("Content-Disposition");
+      const filename = contentDisposition
+        ? contentDisposition.split("filename=")[1]?.replace(/"/g, "")
+        : "templates.md";
+
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+
+      // Cleanup
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      setError("Failed to export templates");
+    } finally {
+      setExporting(false);
+    }
+  }
+
   if (status === "loading" || loading) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center p-24">
@@ -97,12 +141,21 @@ export default function TemplatesPage() {
             <h1 className="text-4xl font-bold mb-2">Template Library</h1>
             <p className="text-gray-600 dark:text-gray-400">Manage your reusable checklist templates</p>
           </div>
-          <Link
-            href="/templates/new"
-            className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors"
-          >
-            Create New Template
-          </Link>
+          <div className="flex gap-3">
+            <button
+              onClick={handleExport}
+              disabled={exporting}
+              className="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-6 py-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {exporting ? "Exporting..." : "Export to Markdown"}
+            </button>
+            <Link
+              href="/templates/new"
+              className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors"
+            >
+              Create New Template
+            </Link>
+          </div>
         </div>
 
         {error && (
