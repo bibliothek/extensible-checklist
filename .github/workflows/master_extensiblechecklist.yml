@@ -69,8 +69,8 @@ jobs:
           echo "Checking health endpoint..."
           HEALTH_URL="${{ secrets.APP_URL }}/api/health"
 
-          # Retry health check up to 6 times (1 minute total)
-          for i in {1..6}; do
+          # Retry health check up to 9 times (90 seconds total)
+          for i in {1..9}; do
             HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$HEALTH_URL")
 
             if [ "$HTTP_CODE" = "200" ]; then
@@ -79,13 +79,13 @@ jobs:
               echo "Response: $RESPONSE"
               exit 0
             else
-              echo "⚠ Health check attempt $i/6 returned HTTP $HTTP_CODE"
-              if [ $i -lt 6 ]; then
+              echo "⚠ Health check attempt $i/9 returned HTTP $HTTP_CODE"
+              if [ $i -lt 9 ]; then
                 sleep 10
               fi
             fi
           done
 
-          echo "✗ Health check failed after 6 attempts"
+          echo "✗ Health check failed after 9 attempts"
           exit 1         
 
