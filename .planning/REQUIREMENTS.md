@@ -9,10 +9,10 @@ Requirements for v2.2 UX & Access Control milestone.
 
 ### Export
 
-- [ ] **EXPORT-01**: User can trigger template export from templates library page
-- [ ] **EXPORT-02**: Export downloads markdown file with timestamp
-- [ ] **EXPORT-03**: Exported file contains all templates as headings with checkbox items
-- [ ] **EXPORT-04**: Template items preserve order in exported markdown
+- [x] **EXPORT-01**: User can trigger template export from templates library page
+- [x] **EXPORT-02**: Export downloads markdown file with timestamp
+- [x] **EXPORT-03**: Exported file contains all templates as headings with checkbox items
+- [x] **EXPORT-04**: Template items preserve order in exported markdown
 
 ### Navigation
 
@@ -48,10 +48,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| EXPORT-01 | Phase 11 | Pending |
-| EXPORT-02 | Phase 11 | Pending |
-| EXPORT-03 | Phase 11 | Pending |
-| EXPORT-04 | Phase 11 | Pending |
+| EXPORT-01 | Phase 11 | Complete |
+| EXPORT-02 | Phase 11 | Complete |
+| EXPORT-03 | Phase 11 | Complete |
+| EXPORT-04 | Phase 11 | Complete |
 | NAV-01 | Phase 12 | Pending |
 | NAV-02 | Phase 12 | Pending |
 | NAV-03 | Phase 12 | Pending |
