@@ -2,6 +2,30 @@ import { NextResponse } from "next/server"
 import bcrypt from "bcryptjs"
 import { db } from "@/lib/db"
 
+/**
+ * Check if an email is approved for signup
+ * @param email - Email address to validate
+ * @returns true if email is approved or APPROVED_EMAILS is empty/undefined (open signup mode)
+ */
+function isEmailApproved(email: string): boolean {
+  const approvedEmails = process.env.APPROVED_EMAILS
+
+  // If APPROVED_EMAILS is not set or empty, allow all signups (open mode)
+  if (!approvedEmails || approvedEmails.trim() === "") {
+    return true
+  }
+
+  // Parse approved emails list: split by comma, trim whitespace, convert to lowercase
+  const approvedList = approvedEmails
+    .split(",")
+    .map(e => e.trim().toLowerCase())
+    .filter(e => e.length > 0)
+
+  // Check if submitted email is in approved list (case-insensitive)
+  const normalizedEmail = email.trim().toLowerCase()
+  return approvedList.includes(normalizedEmail)
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json()
@@ -19,6 +43,14 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { message: "Password must be at least 8 characters" },
         { status: 400 }
+      )
+    }
+
+    // Validate email against approved list
+    if (!isEmailApproved(email)) {
+      return NextResponse.json(
+        { message: "This email address is not approved for signup. Contact your administrator for access." },
+        { status: 403 }
       )
     }
 
