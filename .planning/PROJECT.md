@@ -8,6 +8,16 @@ A web application for managing personal recurring tasks through reusable checkli
 
 Fast, frictionless checklist instantiation - select templates, get a working checklist immediately, and start making progress.
 
+## Current Milestone: v2.2 UX & Access Control
+
+**Goal:** Improve navigation and access control with dashboard, template export, and email-based access restrictions
+
+**Target features:**
+- Template export to markdown for personal backup
+- Dashboard home page with recent checklists and quick actions
+- Persistent navigation bar for easy switching between sections
+- Pre-approved email list for controlled access
+
 ## Current State
 
 **Latest milestone:** v2.1 Infrastructure Simplification (shipped 2026-01-28)
@@ -56,7 +66,12 @@ Fast, frictionless checklist instantiation - select templates, get a working che
 
 ### Active
 
-(No active requirements — ready for next milestone)
+**v2.2 UX & Access Control:**
+- [ ] User can export all templates to markdown file — v2.2
+- [ ] User sees dashboard with recent checklists and quick actions — v2.2
+- [ ] User can navigate between Templates and Checklists via persistent nav bar — v2.2
+- [ ] Signup is restricted to pre-approved email addresses — v2.2
+- [ ] Non-approved emails receive clear error message on signup attempt — v2.2
 
 ### Out of Scope
 
@@ -127,4 +142,4 @@ Fast, frictionless checklist instantiation - select templates, get a working che
 | Three-tier verification | Test local → Docker → Azure for confidence | ✓ Good - caught issues early, validated persistence |
 
 ---
-*Last updated: 2026-01-28 after v2.1 milestone completion*
+*Last updated: 2026-01-28 after v2.2 milestone started*
