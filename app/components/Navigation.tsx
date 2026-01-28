@@ -2,12 +2,20 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
+import LogoutButton from "./LogoutButton";
 
 export default function Navigation() {
   const pathname = usePathname();
+  const { data: session } = useSession();
 
   const isTemplatesActive = pathname?.startsWith("/templates");
   const isChecklistsActive = pathname?.startsWith("/checklists");
+
+  // Don't show navigation on auth pages
+  if (pathname === "/login" || pathname === "/signup" || pathname === "/") {
+    return null;
+  }
 
   return (
     <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
@@ -16,36 +24,40 @@ export default function Navigation() {
           {/* Logo/Title */}
           <div className="flex-shrink-0">
             <Link
-              href="/"
+              href="/dashboard"
               className="text-xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
               Extensible Checklist
             </Link>
           </div>
 
-          {/* Navigation Links */}
-          <nav className="flex space-x-4">
-            <Link
-              href="/templates"
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                isTemplatesActive
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600"
-              }`}
-            >
-              Templates
-            </Link>
-            <Link
-              href="/checklists"
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                isChecklistsActive
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600"
-              }`}
-            >
-              Checklists
-            </Link>
-          </nav>
+          {/* Navigation Links and Logout */}
+          <div className="flex items-center space-x-4">
+            <nav className="flex space-x-4">
+              <Link
+                href="/templates"
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  isTemplatesActive
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600"
+                }`}
+              >
+                Templates
+              </Link>
+              <Link
+                href="/checklists"
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  isChecklistsActive
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600"
+                }`}
+              >
+                Checklists
+              </Link>
+            </nav>
+
+            {session && <LogoutButton />}
+          </div>
         </div>
       </div>
     </header>
