@@ -11,18 +11,18 @@ See: .planning/PROJECT.md (updated 2026-01-28)
 
 Milestone: v2.2 UX & Access Control (shipped 2026-01-28)
 Phase: Ready for next milestone
-Status: Milestone complete + quick task 001 complete
-Last activity: 2026-01-29 — Quick task 001 (mobile UI fixes) complete
+Status: Milestone complete + 2 quick tasks complete
+Last activity: 2026-01-29 — Quick task 002 (page title and favicon) complete
 
-Progress: All v2.2 phases complete ✓ + 1 quick task
+Progress: All v2.2 phases complete ✓ + 2 quick tasks
 
 ## Performance Metrics
 
 **Velocity:**
 - Total plans completed: 29 (v1.0: 13, v2.0: 7, v2.1: 5, v2.2: 4)
-- Quick tasks completed: 1
-- Average duration: ~10 min (plans), ~29 min (quick-001)
-- Total execution time: ~6.3 hours across all work
+- Quick tasks completed: 2
+- Average duration: ~10 min (plans), ~20 min (quick tasks avg)
+- Total execution time: ~6.5 hours across all work
 
 **By Phase:**
 
@@ -63,6 +63,7 @@ Full decisions logged in PROJECT.md Key Decisions table.
 - Mobile-first responsive pattern (quick-001): Graduated padding (p-4→p-6→p-12→p-24) and stacked buttons (w-full sm:w-auto) for optimal mobile UX
 - Abbreviated logo on mobile (quick-001): "EC" instead of "Extensible Checklist" on <640px screens to prevent overflow
 - Dense checklist view (quick-001): Reduced spacing on mobile (p-2 vs p-4) to fit 2-3x more items on screen
+- Next.js icon generation (quick-002): Use icon.tsx/apple-icon.tsx with ImageResponse for dynamic favicon generation instead of static .ico files
 
 ### Pending Todos
 
@@ -77,13 +78,14 @@ None - v2.2 shipped successfully. All features working as expected.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 001 | Fix mobile UI spacing and button placement | 2026-01-29 | 95401ef | [001-fix-mobile-ui-spacing-and-button-placeme](./quick/001-fix-mobile-ui-spacing-and-button-placeme/) |
+| 002 | Fix page title and favicon branding | 2026-01-29 | 2efca26 | [002-fix-page-title-and-favicon](./quick/002-fix-page-title-and-favicon/) |
 
 ## Session Continuity
 
 Last session: 2026-01-29
-Stopped at: Quick task 001 complete (mobile UI fixes)
+Stopped at: Quick task 002 complete (page title and favicon branding)
 Resume file: None
 Next action: `/gsd:new-milestone` to start next milestone planning, or continue with quick tasks as needed
 
 ---
-*Last updated: 2026-01-29 after quick task 001 completion*
+*Last updated: 2026-01-29 after quick task 002 completion*
