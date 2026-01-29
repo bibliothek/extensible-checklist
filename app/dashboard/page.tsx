@@ -100,23 +100,23 @@ export default function DashboardPage() {
   }
 
   return (
-    <main className="min-h-screen p-8 md:p-24">
+    <main className="min-h-screen p-4 sm:p-6 md:p-12 lg:p-24">
         <div className="max-w-6xl mx-auto">
-          <div className="flex justify-between items-center mb-8">
+          <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-8 gap-4">
             <div>
-              <h1 className="text-4xl font-bold mb-2">Dashboard</h1>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">Dashboard</h1>
               <p className="text-gray-600 dark:text-gray-400">Your active checklists and quick actions</p>
             </div>
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-3">
               <Link
                 href="/checklists/new"
-                className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors"
+                className="bg-blue-600 text-white px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base text-center rounded-md hover:bg-blue-700 transition-colors w-full sm:w-auto"
               >
                 Create Checklist
               </Link>
               <Link
                 href="/templates/new"
-                className="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition-colors"
+                className="bg-green-600 text-white px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base text-center rounded-md hover:bg-green-700 transition-colors w-full sm:w-auto"
               >
                 Create Template
               </Link>

@@ -26,22 +26,22 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1 className="text-4xl font-bold">Extensible Checklist</h1>
-      <p className="mt-4 text-lg text-gray-600">
+    <main className="flex min-h-screen flex-col items-center justify-center p-6 sm:p-12 md:p-24">
+      <h1 className="text-3xl sm:text-4xl font-bold">Extensible Checklist</h1>
+      <p className="mt-3 text-base sm:text-lg text-gray-600">
         Fast, frictionless checklist instantiation
       </p>
 
-      <div className="mt-8 flex gap-4">
+      <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto px-4 sm:px-0">
         <Link
           href="/signup"
-          className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700"
+          className="bg-blue-600 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-md hover:bg-blue-700 text-center w-full sm:w-auto"
         >
           Get Started
         </Link>
         <Link
           href="/login"
-          className="bg-gray-200 text-gray-800 px-6 py-3 rounded-md hover:bg-gray-300"
+          className="bg-gray-200 text-gray-800 px-4 py-2 sm:px-6 sm:py-3 rounded-md hover:bg-gray-300 text-center w-full sm:w-auto"
         >
           Log In
         </Link>
