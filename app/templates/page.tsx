@@ -127,31 +127,31 @@ export default function TemplatesPage() {
 
   if (status === "loading" || loading) {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-center p-24">
+      <main className="flex min-h-screen flex-col items-center justify-center p-6 sm:p-12 md:p-24">
         <div className="text-gray-500">Loading...</div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen p-8 md:p-24">
+    <main className="min-h-screen p-4 sm:p-6 md:p-12 lg:p-24">
       <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-8 gap-4">
           <div>
-            <h1 className="text-4xl font-bold mb-2">Template Library</h1>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">Template Library</h1>
             <p className="text-gray-600 dark:text-gray-400">Manage your reusable checklist templates</p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <button
               onClick={handleExport}
               disabled={exporting}
-              className="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-6 py-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base text-center rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
             >
               {exporting ? "Exporting..." : "Export to Markdown"}
             </button>
             <Link
               href="/templates/new"
-              className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors"
+              className="bg-blue-600 text-white px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base text-center rounded-md hover:bg-blue-700 transition-colors w-full sm:w-auto"
             >
               Create New Template
             </Link>
