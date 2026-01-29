@@ -72,6 +72,12 @@ None - All v2.2 phases complete (100%). Ready for release verification.
 
 None - v2.2 shipped successfully. All features working as expected.
 
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 001 | Fix mobile UI spacing and button placement | 2026-01-29 | 95401ef | [001-fix-mobile-ui-spacing-and-button-placeme](./quick/001-fix-mobile-ui-spacing-and-button-placeme/) |
+
 ## Session Continuity
 
 Last session: 2026-01-29
