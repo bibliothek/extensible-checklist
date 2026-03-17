@@ -1,0 +1,16 @@
+{
+  "OidcClients": [
+    {
+      "ClientId": "extensible-checklist",
+      "ClientSecret": "extensible-checklist-secret",
+      "DisplayName": "Extensible Checklist",
+      "ConsentType": "implicit",
+      "RedirectUris": [
+        "http://localhost:3000/api/auth/callback/mathauth"
+      ],
+      "PostLogoutRedirectUris": [
+        "http://localhost:3000"
+      ]
+    }
+  ]
+}

@@ -32,7 +32,7 @@ export default function NewChecklistPage() {
 
   useEffect(() => {
     if (status === "unauthenticated") {
-      router.push("/login");
+      router.push("/");
       return;
     }
 
@@ -47,7 +47,7 @@ export default function NewChecklistPage() {
 
       if (!response.ok) {
         if (response.status === 401) {
-          router.push("/login");
+          router.push("/");
           return;
         }
         throw new Error("Failed to fetch templates");

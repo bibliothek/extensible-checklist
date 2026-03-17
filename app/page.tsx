@@ -1,10 +1,8 @@
 "use client";
 
-import Link from "next/link";
-import { useSession } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import LogoutButton from "./components/LogoutButton";
 
 export default function Home() {
   const { data: session, status } = useSession();
@@ -32,19 +30,13 @@ export default function Home() {
         Fast, frictionless checklist instantiation
       </p>
 
-      <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto px-4 sm:px-0">
-        <Link
-          href="/signup"
-          className="bg-blue-600 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-md hover:bg-blue-700 text-center w-full sm:w-auto"
+      <div className="mt-8 px-4 sm:px-0">
+        <button
+          onClick={() => signIn("mathauth", { callbackUrl: "/dashboard" })}
+          className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 text-center"
         >
-          Get Started
-        </Link>
-        <Link
-          href="/login"
-          className="bg-gray-200 text-gray-800 px-4 py-2 sm:px-6 sm:py-3 rounded-md hover:bg-gray-300 text-center w-full sm:w-auto"
-        >
-          Log In
-        </Link>
+          Sign In
+        </button>
       </div>
     </main>
   );

@@ -12,8 +12,8 @@ export default function Navigation() {
   const isTemplatesActive = pathname?.startsWith("/templates");
   const isChecklistsActive = pathname?.startsWith("/checklists");
 
-  // Don't show navigation on auth pages
-  if (pathname === "/login" || pathname === "/signup" || pathname === "/") {
+  // Don't show navigation on landing page
+  if (pathname === "/") {
     return null;
   }
 

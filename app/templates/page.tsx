@@ -29,7 +29,7 @@ export default function TemplatesPage() {
 
   useEffect(() => {
     if (status === "unauthenticated") {
-      router.push("/login");
+      router.push("/");
       return;
     }
 
@@ -44,7 +44,7 @@ export default function TemplatesPage() {
 
       if (!response.ok) {
         if (response.status === 401) {
-          router.push("/login");
+          router.push("/");
           return;
         }
         throw new Error("Failed to fetch templates");
@@ -91,7 +91,7 @@ export default function TemplatesPage() {
 
       if (!response.ok) {
         if (response.status === 401) {
-          router.push("/login");
+          router.push("/");
           return;
         }
         throw new Error("Failed to export templates");

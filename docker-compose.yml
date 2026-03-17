@@ -1,5 +1,5 @@
 # Docker Compose configuration for local development with SQLite
-# Database file persists in ./data directory on host machine
+# Database files persist in ./data directory on host machine
 
 services:
   app:
@@ -12,16 +12,47 @@ services:
     environment:
       # SQLite database configuration
       DATABASE_URL: file:/app/data/dev.db
-      # NextAuth.js configuration
+      # NextAuth.js internals (JWT signing + callback URL resolution)
       NEXTAUTH_URL: http://localhost:3000
       NEXTAUTH_SECRET: local-dev-secret-not-for-production
+      AUTH_TRUST_HOST: "true"
+      # OpenID Connect configuration (MathAuth)
+      # OIDC_ISSUER must match the token's iss claim (what the browser sees)
+      OIDC_ISSUER: http://localhost:5001/
+      # OIDC_ISSUER_INTERNAL is used for server-to-server calls within Docker
+      OIDC_ISSUER_INTERNAL: http://mathauth:8080
+      OIDC_CLIENT_ID: extensible-checklist
+      OIDC_CLIENT_SECRET: extensible-checklist-secret
     volumes:
       # Mount local data directory for SQLite database persistence
       - ./data:/app/data
     restart: unless-stopped
+    depends_on:
+      mathauth:
+        condition: service_started
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      test: ["CMD", "wget", "--quiet", "--tries=1", "-O", "/dev/null", "http://localhost:3000/api/health"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
+
+  mathauth:
+    image: mthaller/mathauth:latest
+    container_name: extensible-checklist-auth
+    ports:
+      - "5001:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DatabasePath=/app/data/mathauth.db
+      - DefaultAdmin__Username=admin
+      - DefaultAdmin__Password=Admin!123
+      - OidcClientsFile=/app/config/oidc-clients.json
+      - OpenIddict__Issuer=http://localhost:5001/
+    volumes:
+      - mathauth-data:/app/data
+      - ./auth-config:/app/config:ro
+    restart: unless-stopped
+
+volumes:
+  mathauth-data:

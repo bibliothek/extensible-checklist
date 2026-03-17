@@ -12,21 +12,29 @@ A powerful checklist management application with template-based workflow. Create
 - **Inline Editing**: Edit checklist and item names directly in the interface
 - **Dark Mode**: Modern dark UI throughout the application
 - **Persistent State**: SQLite database with file-based storage
+- **SSO Authentication**: OpenID Connect
 
 ## Tech Stack
 
 - **Next.js 16** (App Router) with React 19
 - **TypeScript** for type safety
 - **Prisma** ORM with SQLite database
-- **NextAuth.js** for authentication
+- **NextAuth.js** with OpenID Connect
 - **Tailwind CSS v4** for styling
 - **Docker** for containerized deployment
+
+## Authentication
+
+Authentication is handled externally via **OpenID Connect**.
+
+The Docker Compose setup includes a local MathAuth instance. For production, point `OIDC_ISSUER` at your OpenId Connect deployment.
 
 ## Local Development
 
 ### Prerequisites
 
 - Node.js 20 or higher
+- A running OpenId connect instance (or use Docker Compose, see below)
 
 ### Setup
 
@@ -50,8 +58,13 @@ A powerful checklist management application with template-based workflow. Create
    - `DATABASE_URL`: SQLite file path (default: `file:./prisma/dev.db`)
    - `NEXTAUTH_SECRET`: Generate with `openssl rand -base64 32`
    - `NEXTAUTH_URL`: `http://localhost:3000` for local development
+   - `OIDC_ISSUER`: URL of your OpenId Connect instance
+   - `OIDC_CLIENT_ID`: Client ID registered in OpenId Connect
+   - `OIDC_CLIENT_SECRET`: Corresponding client secret
 
-   The SQLite database file will be created automatically when you run migrations.
+   Register your app in OpenId Connect with:
+   - **Redirect URI**: `http://localhost:3000/api/auth/callback/mathauth`
+   - **Post-logout URI**: `http://localhost:3000`
 
 4. **Run database migrations**
    ```bash
@@ -90,7 +103,7 @@ npm start
 
 ## Docker Development
 
-Run the application in a Docker container with SQLite database.
+Run the full stack (app + auth) with Docker Compose.
 
 ### Prerequisites
 
@@ -101,40 +114,57 @@ Run the application in a Docker container with SQLite database.
 
 1. **Start the application**
    ```bash
-   docker-compose up --build
+   docker compose up --build
    ```
 
    This will:
+   - Pull the `mthaller/mathauth:latest` image from Docker Hub
    - Build the Next.js application Docker image
-   - Run SQLite migrations automatically
-   - Start the application on port 3000
-   - Database file persists in `./data/dev.db` on your host machine
+   - Start MathAuth on port 5001 with a pre-configured OIDC client
+   - Run SQLite migrations and start the app on port 3000
+   - App database persists in `./data/dev.db`, auth database in a Docker volume
 
 2. **Access the application**
-   Open [http://localhost:3000](http://localhost:3000)
+   - App: [http://localhost:3000](http://localhost:3000)
+   - MathAuth: [http://localhost:5001](http://localhost:5001)
 
-3. **View logs**
+3. **Default MathAuth admin credentials**
+   - Username: `admin`
+   - Password: `Admin!123`
+
+4. **View logs**
    ```bash
-   docker-compose logs -f
+   docker compose logs -f
    ```
 
-4. **Stop the application**
+5. **Stop the application**
    ```bash
-   docker-compose down
+   docker compose down
    ```
 
-5. **Reset database** (delete the database file)
+6. **Reset everything** (databases + auth volume)
    ```bash
+   docker compose down -v
    rm -rf ./data
    ```
 
+### OIDC Client Configuration
+
+The file `auth-config/oidc-clients.json` registers the checklist app with the local MathAuth instance:
+
+| Setting | Value |
+|---------|-------|
+| Client ID | `extensible-checklist` |
+| Client Secret | `extensible-checklist-secret` |
+| Redirect URI | `http://localhost:3000/api/auth/callback/mathauth` |
+| Post-logout URI | `http://localhost:3000` |
+
+To add additional OIDC clients, edit `auth-config/oidc-clients.json` and restart MathAuth.
+
 ### Database Persistence
 
-The SQLite database file is stored in `./data/dev.db` on your host machine. This means:
-- Database data persists across container restarts
-- You can back up the database by copying the `./data` directory
-- Deleting `./data` directory will reset the database
-- The `./data` directory is automatically created on first run
+- **App database**: `./data/dev.db` on the host (bind mount)
+- **Auth database**: `mathauth-data` Docker volume
 
 ## Production Deployment (Azure)
 
@@ -145,6 +175,7 @@ Deploy the application to Azure App Service with automated CI/CD via GitHub Acti
 - Azure subscription
 - Azure CLI installed: `az --version`
 - GitHub repository with admin access
+- A MathAuth instance accessible from both the server and users' browsers
 
 ### Azure Setup
 
@@ -215,7 +246,7 @@ az webapp config container set \
 
 #### 4. Configure App Service Environment Variables
 
-Set these in **Azure Portal** → **App Service** → **Configuration** → **Application settings**:
+Set these in **Azure Portal** > **App Service** > **Configuration** > **Application settings**:
 
 | Setting | Value | Description |
 |---------|-------|-------------|
@@ -224,6 +255,9 @@ Set these in **Azure Portal** → **App Service** → **Configuration** → **Ap
 | `NEXTAUTH_URL` | `https://<app-name>.azurewebsites.net` | Public URL of your application |
 | `AUTH_TRUST_HOST` | `true` | Required for Auth.js v5 behind reverse proxy |
 | `WEBSITES_PORT` | `3000` | Port the container listens on |
+| `OIDC_ISSUER` | `https://identity.com` | MathAuth instance URL |
+| `OIDC_CLIENT_ID` | Your client ID | Registered in MathAuth |
+| `OIDC_CLIENT_SECRET` | Your client secret | Registered in MathAuth |
 
 **SQLite Persistence:**
 
@@ -235,7 +269,7 @@ Click **Save** after adding settings. The app will restart automatically.
 
 #### 5. Enable Health Check
 
-Configure in **Azure Portal** → **App Service** → **Monitoring** → **Health check**:
+Configure in **Azure Portal** > **App Service** > **Monitoring** > **Health check**:
 
 - **Path**: `/api/health`
 - **Interval**: 2 minutes
@@ -245,13 +279,13 @@ Azure will automatically restart the container if health checks fail.
 
 #### 6. Download Publish Profile
 
-In **Azure Portal** → **App Service** → **Overview**:
+In **Azure Portal** > **App Service** > **Overview**:
 - Click **Get publish profile** (downloads XML file)
 - Save the entire XML content - you'll need it for GitHub Secrets
 
 #### 7. Configure GitHub Secrets
 
-In your **GitHub repository** → **Settings** → **Secrets and variables** → **Actions** → **New repository secret**:
+In your **GitHub repository** > **Settings** > **Secrets and variables** > **Actions** > **New repository secret**:
 
 Add these secrets:
 
@@ -303,7 +337,7 @@ Database migrations run automatically when the container starts (via `scripts/mi
 - Check ACR admin user is enabled: `az acr update --name $REGISTRY_NAME --admin-enabled true`
 
 **Health check fails:**
-- Check App Service logs: Azure Portal → App Service → Monitoring → Log stream
+- Check App Service logs: Azure Portal > App Service > Monitoring > Log stream
 - Verify `DATABASE_URL` is set correctly in App Service Configuration
 - Ensure database allows connections from Azure App Service IP
 - Check container startup time - may need to increase health check start period
@@ -313,6 +347,11 @@ Database migrations run automatically when the container starts (via `scripts/mi
 - Check that `NEXTAUTH_URL` matches your App Service URL
 - Verify `AUTH_TRUST_HOST=true` is set for Auth.js v5
 - Review Application Insights or Log Analytics for errors
+
+**OIDC login fails:**
+- Verify `OIDC_ISSUER` is reachable from the App Service container
+- Check the redirect URI registered in MathAuth matches `https://<app-url>/api/auth/callback/mathauth`
+- Ensure `OIDC_CLIENT_ID` and `OIDC_CLIENT_SECRET` match MathAuth configuration
 
 ## Database Migrations
 
@@ -344,10 +383,11 @@ This ensures the database schema is always up-to-date with the deployed code.
 ```
 ├── app/                    # Next.js App Router pages and API routes
 │   ├── api/                # API endpoints
-│   │   ├── auth/           # NextAuth.js configuration
+│   │   ├── auth/           # NextAuth.js OIDC handler
 │   │   └── health/         # Health check endpoint
 │   ├── checklists/         # Checklist management pages
 │   └── templates/          # Template management pages
+├── auth-config/            # OIDC client config for local MathAuth
 ├── components/             # React components
 ├── lib/                    # Utility functions and shared code
 ├── prisma/                 # Database schema and migrations
@@ -355,7 +395,7 @@ This ensures the database schema is always up-to-date with the deployed code.
 │   └── migrations/         # Migration history
 ├── scripts/                # Deployment and utility scripts
 ├── .github/workflows/      # GitHub Actions CI/CD
-├── docker-compose.yml      # Local Docker development
+├── docker-compose.yml      # Local Docker development (app + MathAuth)
 ├── Dockerfile              # Production container image
 └── README.md               # This file
 ```

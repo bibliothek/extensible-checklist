@@ -30,7 +30,7 @@ export default function ChecklistsPage() {
 
   useEffect(() => {
     if (status === "unauthenticated") {
-      router.push("/login");
+      router.push("/");
       return;
     }
 
@@ -45,7 +45,7 @@ export default function ChecklistsPage() {
 
       if (!response.ok) {
         if (response.status === 401) {
-          router.push("/login");
+          router.push("/");
           return;
         }
         throw new Error("Failed to fetch checklists");

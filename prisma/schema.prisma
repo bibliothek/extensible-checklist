@@ -16,9 +16,10 @@ datasource db {
 // Authentication models (Auth.js)
 model User {
   id            String      @id @default(cuid())
-  email         String      @unique
-  password      String
+  name          String?
+  email         String?     @unique
   emailVerified DateTime?
+  image         String?
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
   accounts      Account[]

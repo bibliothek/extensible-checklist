@@ -29,7 +29,7 @@ export default function EditTemplatePage() {
 
   useEffect(() => {
     if (status === "unauthenticated") {
-      router.push("/login");
+      router.push("/");
       return;
     }
 
@@ -44,7 +44,7 @@ export default function EditTemplatePage() {
 
       if (!response.ok) {
         if (response.status === 401) {
-          router.push("/login");
+          router.push("/");
           return;
         }
         if (response.status === 404) {

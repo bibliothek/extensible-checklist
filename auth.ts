@@ -1,51 +1,44 @@
 import NextAuth from "next-auth"
-import CredentialsProvider from "next-auth/providers/credentials"
-import bcrypt from "bcryptjs"
+import { PrismaAdapter } from "@auth/prisma-adapter"
 import { db } from "@/lib/db"
 
+// OIDC_ISSUER is the canonical issuer URL (must match token `iss` claim)
+// OIDC_ISSUER_INTERNAL overrides server-to-server calls in Docker
+// (where localhost isn't reachable from the app container)
+const issuer = process.env.OIDC_ISSUER?.replace(/\/+$/, "")
+const internal = (process.env.OIDC_ISSUER_INTERNAL || process.env.OIDC_ISSUER)?.replace(/\/+$/, "")
+// Keep the raw issuer for token validation (must match iss claim exactly)
+const issuerRaw = process.env.OIDC_ISSUER
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  adapter: PrismaAdapter(db),
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   providers: [
-    CredentialsProvider({
-      name: "credentials",
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
+    {
+      id: "mathauth",
+      name: "MathAuth",
+      type: "oidc",
+      issuer: issuerRaw,
+      clientId: process.env.OIDC_CLIENT_ID,
+      clientSecret: process.env.OIDC_CLIENT_SECRET,
+      authorization: {
+        url: `${issuer}/connect/authorize`,
+        params: {
+          scope: "openid profile offline_access",
+        },
       },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          return null
-        }
-
-        const user = await db.user.findUnique({
-          where: {
-            email: credentials.email as string,
-          },
-        })
-
-        if (!user || !user.password) {
-          return null
-        }
-
-        const isPasswordValid = await bcrypt.compare(
-          credentials.password as string,
-          user.password
-        )
-
-        if (!isPasswordValid) {
-          return null
-        }
-
-        return {
-          id: user.id,
-          email: user.email,
-          emailVerified: user.emailVerified,
-        }
+      token: {
+        url: `${internal}/connect/token`,
       },
-    }),
+      userinfo: {
+        url: `${internal}/connect/userinfo`,
+      },
+      // Discovery endpoint also needs to be reachable from the server
+      wellKnown: `${internal}/.well-known/openid-configuration`,
+    },
   ],
   callbacks: {
     async jwt({ token, user }) {
