@@ -111,7 +111,7 @@ export default function ChecklistsPage() {
             href="/checklists/new"
             className="bg-blue-600 text-white px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base text-center rounded-md hover:bg-blue-700 transition-colors w-full sm:w-auto"
           >
-            Create from Templates
+            New Checklist
           </Link>
         </div>
 
@@ -127,13 +127,13 @@ export default function ChecklistsPage() {
               No active checklists yet
             </h2>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Create your first checklist from templates to get started.
+              Create a blank checklist or start from templates.
             </p>
             <Link
               href="/checklists/new"
               className="inline-block bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors"
             >
-              Create from Templates
+              New Checklist
             </Link>
           </div>
         ) : (

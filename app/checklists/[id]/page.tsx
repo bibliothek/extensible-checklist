@@ -325,7 +325,11 @@ export default function ChecklistDetailPage({
       ? items.filter(item => !item.completed)
       : items;
 
-    const sorted = [...filteredItems].sort((a, b) => a.order - b.order);
+    const sorted = [...filteredItems].sort((a, b) => {
+      // Completed items sink to the bottom within their group
+      if (a.completed !== b.completed) return a.completed ? 1 : -1;
+      return a.order - b.order;
+    });
     const grouped: GroupedItems = {};
 
     sorted.forEach((item) => {
@@ -454,7 +458,7 @@ export default function ChecklistDetailPage({
         )}
 
         {/* Grouped items */}
-        <div className="space-y-3 sm:space-y-4">
+        <div className="space-y-2">
           {visibleGroups.map(([templateName, items]) => (
             <div
               key={templateName}
@@ -463,19 +467,19 @@ export default function ChecklistDetailPage({
               {/* Group header */}
               <button
                 onClick={() => toggleGroup(templateName)}
-                className="w-full flex items-center justify-between p-2.5 sm:p-3 bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors print:bg-white print:hover:bg-white print:cursor-default"
+                className="w-full flex items-center justify-between px-2.5 py-1.5 sm:px-3 sm:py-2 bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors print:bg-white print:hover:bg-white print:cursor-default"
               >
-                <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white print:text-black">
+                <h2 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white print:text-black">
                   {templateName}
                 </h2>
-                <span className="text-gray-500 dark:text-gray-400 text-base sm:text-lg print:hidden">
+                <span className="text-gray-500 dark:text-gray-400 text-sm sm:text-base print:hidden">
                   {collapsed[templateName] ? "▶" : "▼"}
                 </span>
               </button>
 
               {/* Group items */}
               {!collapsed[templateName] && (
-                <div className="divide-y divide-gray-200 dark:divide-gray-700">
+                <div className="divide-y divide-gray-100 dark:divide-gray-700">
                   {items.map((item, idx) => {
                     const isFirst = idx === 0;
                     const isLast = idx === items.length - 1;
@@ -483,9 +487,9 @@ export default function ChecklistDetailPage({
                     return (
                       <div
                         key={item.id}
-                        className="checklist-item p-2 sm:p-3 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors print:bg-white print:hover:bg-white"
+                        className="checklist-item px-2 py-0.5 sm:px-3 sm:py-1 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors print:bg-white print:hover:bg-white"
                       >
-                        <div className="flex items-start gap-2 sm:gap-3">
+                        <div className="flex items-center gap-1.5 sm:gap-2">
                           {/* Checkbox */}
                           <input
                             type="checkbox"
@@ -493,7 +497,7 @@ export default function ChecklistDetailPage({
                             onChange={() =>
                               toggleCompletion(item.id, item.completed)
                             }
-                            className="mt-0.5 sm:mt-1 w-4 h-4 sm:w-5 sm:h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer print:appearance-none print:border print:border-black print:w-4 print:h-4 flex-shrink-0"
+                            className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer print:appearance-none print:border print:border-black print:w-4 print:h-4 flex-shrink-0"
                           />
 
                           {/* Item text (editable) */}
@@ -513,7 +517,7 @@ export default function ChecklistDetailPage({
                                 e.currentTarget.blur();
                               }
                             }}
-                            className={`flex-1 px-1.5 py-0.5 sm:px-2 sm:py-1 text-sm sm:text-base border border-transparent hover:border-gray-300 dark:hover:border-gray-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded bg-transparent print:border-none print:px-0 print:text-black ${
+                            className={`flex-1 px-1 py-0 sm:px-1.5 text-sm border border-transparent hover:border-gray-300 dark:hover:border-gray-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded bg-transparent print:border-none print:px-0 print:text-black ${
                               item.completed
                                 ? "line-through text-gray-500 dark:text-gray-400 print:line-through print:text-gray-600"
                                 : "text-gray-900 dark:text-white print:text-black"
@@ -521,11 +525,11 @@ export default function ChecklistDetailPage({
                           />
 
                           {/* Reorder buttons */}
-                          <div className="flex flex-col gap-0.5 sm:gap-1 print:hidden flex-shrink-0">
+                          <div className="flex flex-col print:hidden flex-shrink-0">
                             <button
                               onClick={() => moveItem(item.id, "up")}
                               disabled={isFirst}
-                              className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 disabled:opacity-30 disabled:cursor-not-allowed text-xs sm:text-sm leading-none"
+                              className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 disabled:opacity-30 disabled:cursor-not-allowed text-xs leading-none"
                               title="Move up"
                             >
                               ▲
@@ -533,7 +537,7 @@ export default function ChecklistDetailPage({
                             <button
                               onClick={() => moveItem(item.id, "down")}
                               disabled={isLast}
-                              className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 disabled:opacity-30 disabled:cursor-not-allowed text-xs sm:text-sm leading-none"
+                              className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 disabled:opacity-30 disabled:cursor-not-allowed text-xs leading-none"
                               title="Move down"
                             >
                               ▼
@@ -543,7 +547,7 @@ export default function ChecklistDetailPage({
                           {/* Delete button */}
                           <button
                             onClick={() => deleteItem(item.id, item.text)}
-                            className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 px-1 sm:px-2 py-0.5 sm:py-1 text-sm sm:text-base print:hidden flex-shrink-0"
+                            className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 px-1 py-0 text-sm print:hidden flex-shrink-0"
                             title="Delete item"
                           >
                             ✕

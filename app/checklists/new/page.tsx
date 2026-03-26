@@ -100,10 +100,6 @@ export default function NewChecklistPage() {
       return;
     }
 
-    if (selectedTemplateIds.length === 0) {
-      setError("Please select at least one template");
-      return;
-    }
 
     setCreating(true);
     setError("");
@@ -135,45 +131,10 @@ export default function NewChecklistPage() {
     }
   }
 
-  if (status === "loading" || loading) {
+if (status === "loading" || loading) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center p-24">
         <div className="text-gray-500 dark:text-gray-400">Loading...</div>
-      </main>
-    );
-  }
-
-  // Empty state: no templates
-  if (templates.length === 0) {
-    return (
-      <main className="min-h-screen p-8 md:p-24">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold mb-8">Create Checklist</h1>
-
-          <div className="text-center py-16 bg-gray-50 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-700">
-            <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
-              No templates available
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Create templates first, then you can use them to build checklists.
-            </p>
-            <Link
-              href="/templates/new"
-              className="inline-block bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors"
-            >
-              Create Your First Template
-            </Link>
-          </div>
-
-          <div className="mt-8">
-            <Link
-              href="/"
-              className="text-blue-600 hover:underline"
-            >
-              ← Back to Home
-            </Link>
-          </div>
-        </div>
       </main>
     );
   }
@@ -183,7 +144,7 @@ export default function NewChecklistPage() {
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold mb-2">Create Checklist</h1>
         <p className="text-gray-600 dark:text-gray-400 mb-8">
-          Select templates to merge into a working checklist
+          Select templates to merge, or leave empty for a blank checklist
         </p>
 
         {error && (
@@ -210,7 +171,7 @@ export default function NewChecklistPage() {
         </div>
 
         {/* Template Selection */}
-        <div className="mb-8">
+        {templates.length > 0 && <div className="mb-8">
           <h2 className="text-xl font-semibold mb-4">Select Templates to Merge</h2>
           <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
             Selection order matters! Items will appear in the order you select templates.
@@ -262,7 +223,7 @@ export default function NewChecklistPage() {
               );
             })}
           </div>
-        </div>
+        </div>}
 
         {/* Selected Templates in Order */}
         {selectedTemplateIds.length > 0 && (
@@ -334,7 +295,7 @@ export default function NewChecklistPage() {
           <button
             type="button"
             onClick={handleCreateChecklist}
-            disabled={creating || !checklistName.trim() || selectedTemplateIds.length === 0}
+            disabled={creating || !checklistName.trim()}
             className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {creating ? "Creating Checklist..." : "Create Checklist"}

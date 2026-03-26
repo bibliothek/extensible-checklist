@@ -25,67 +25,64 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    if (!templateIds || !Array.isArray(templateIds) || templateIds.length === 0) {
-      return NextResponse.json(
-        { error: "At least one template ID is required" },
-        { status: 400 }
-      )
-    }
-
-    // Fetch all specified templates with items
-    const templates = await db.template.findMany({
-      where: {
-        id: { in: templateIds },
-        userId: session.user.id,
-      },
-      include: {
-        items: {
-          orderBy: { order: "asc" },
-        },
-      },
-    })
-
-    // Verify all templates exist and belong to user
-    if (templates.length !== templateIds.length) {
-      return NextResponse.json(
-        { error: "One or more templates not found or not owned by user" },
-        { status: 404 }
-      )
-    }
-
-    // Create a map for quick template lookup by ID
-    const templateMap = new Map(templates.map((t) => [t.id, t]))
+    const safeTemplateIds = Array.isArray(templateIds) ? templateIds : []
 
     // Merge items preserving selection order with deduplication
-    const seenTexts = new Set<string>()
     const mergedItems: Array<{
       text: string
       order: number
       sourceTemplate: string
     }> = []
 
-    let orderCounter = 0
+    if (safeTemplateIds.length > 0) {
+      // Fetch all specified templates with items
+      const templates = await db.template.findMany({
+        where: {
+          id: { in: safeTemplateIds },
+          userId: session.user.id,
+        },
+        include: {
+          items: {
+            orderBy: { order: "asc" },
+          },
+        },
+      })
 
-    // Process templates in the order they were selected
-    for (const templateId of templateIds) {
-      const template = templateMap.get(templateId)
-      if (!template) continue
+      // Verify all templates exist and belong to user
+      if (templates.length !== safeTemplateIds.length) {
+        return NextResponse.json(
+          { error: "One or more templates not found or not owned by user" },
+          { status: 404 }
+        )
+      }
 
-      // Process items from this template
-      for (const item of template.items) {
-        // Deduplicate: skip if text already seen (case-sensitive exact match)
-        if (seenTexts.has(item.text)) {
-          continue
+      // Create a map for quick template lookup by ID
+      const templateMap = new Map(templates.map((t) => [t.id, t]))
+
+      const seenTexts = new Set<string>()
+      let orderCounter = 0
+
+      // Process templates in the order they were selected
+      for (const templateId of safeTemplateIds) {
+        const template = templateMap.get(templateId)
+        if (!template) continue
+
+        // Process items from this template
+        for (const item of template.items) {
+          // Deduplicate: skip if text already seen (case-sensitive exact match)
+          if (seenTexts.has(item.text)) {
+            continue
+          }
+
+          // Add to merged list
+          mergedItems.push({
+            text: item.text,
+            order: orderCounter++,
+            sourceTemplate: template.name,
+          })
+
+          seenTexts.add(item.text)
         }
-
-        // Add to merged list
-        mergedItems.push({
-          text: item.text,
-          order: orderCounter++,
-          sourceTemplate: template.name,
-        })
-
-        seenTexts.add(item.text)
       }
     }
 

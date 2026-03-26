@@ -135,13 +135,13 @@ export default function DashboardPage() {
                 No active checklists yet
               </h2>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
-                Create your first checklist from templates to get started.
+                Create a blank checklist or start from templates.
               </p>
               <Link
                 href="/checklists/new"
                 className="inline-block bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors"
               >
-                Create from Templates
+                New Checklist
               </Link>
             </div>
           ) : (

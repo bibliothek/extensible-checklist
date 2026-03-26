@@ -101,6 +101,47 @@ npm run build
 npm start
 ```
 
+## Hybrid Development (recommended)
+
+Run MathAuth from Docker for authentication, and the app via `npm run dev` for hot reload.
+
+### Setup
+
+1. **Start only the auth container**
+   ```bash
+   docker compose up -d mathauth
+   ```
+
+2. **Create a `.env` file** (if not already present)
+   ```bash
+   cat > .env << 'EOF'
+   DATABASE_URL="file:./data/dev.db"
+   NEXTAUTH_URL="http://localhost:3000"
+   NEXTAUTH_SECRET="local-dev-secret-not-for-production"
+   AUTH_TRUST_HOST="true"
+   OIDC_ISSUER="http://localhost:5001/"
+   OIDC_CLIENT_ID="extensible-checklist"
+   OIDC_CLIENT_SECRET="extensible-checklist-secret"
+   EOF
+   ```
+
+3. **Install dependencies and set up the database**
+   ```bash
+   npm install
+   npx prisma generate
+   npm run db:push
+   ```
+
+4. **Start the dev server**
+   ```bash
+   npm run dev
+   ```
+
+5. **Access the application**
+   - App: [http://localhost:3000](http://localhost:3000) (with hot reload)
+   - MathAuth: [http://localhost:5001](http://localhost:5001)
+   - Default MathAuth admin: `admin` / `Admin!123`
+
 ## Docker Development
 
 Run the full stack (app + auth) with Docker Compose.

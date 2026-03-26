@@ -239,19 +239,20 @@ export default function TemplateForm({ initialData, onSubmit, onCancel }: Templa
           // Individual mode
           <>
             {items.length > 0 && (
-          <div className="space-y-2 mb-4">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-md overflow-hidden mb-3">
+            <div className="divide-y divide-gray-100 dark:divide-gray-700">
             {items.map((item, index) => (
               <div
                 key={item.id}
-                className="flex items-center gap-2 p-3 border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800"
+                className="flex items-center gap-1.5 px-2 py-0.5 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
                 {/* Reorder buttons */}
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col flex-shrink-0">
                   <button
                     type="button"
                     onClick={() => moveUp(index)}
                     disabled={index === 0 || loading}
-                    className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 disabled:opacity-30 disabled:cursor-not-allowed text-xs leading-none"
                     title="Move up"
                   >
                     ▲
@@ -260,7 +261,7 @@ export default function TemplateForm({ initialData, onSubmit, onCancel }: Templa
                     type="button"
                     onClick={() => moveDown(index)}
                     disabled={index === items.length - 1 || loading}
-                    className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 disabled:opacity-30 disabled:cursor-not-allowed text-xs leading-none"
                     title="Move down"
                   >
                     ▼
@@ -272,7 +273,7 @@ export default function TemplateForm({ initialData, onSubmit, onCancel }: Templa
                   type="text"
                   value={item.text}
                   onChange={(e) => updateItemText(item.id, e.target.value)}
-                  className="flex-1 px-3 py-1 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                  className="flex-1 px-1 py-0 text-sm border border-transparent hover:border-gray-300 dark:hover:border-gray-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded bg-transparent text-gray-900 dark:text-white"
                   disabled={loading}
                 />
 
@@ -281,13 +282,14 @@ export default function TemplateForm({ initialData, onSubmit, onCancel }: Templa
                   type="button"
                   onClick={() => removeItem(item.id)}
                   disabled={loading}
-                  className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 px-3 py-1 disabled:opacity-50"
+                  className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 px-1 py-0 text-sm disabled:opacity-50 flex-shrink-0"
                   title="Remove item"
                 >
                   ✕
                 </button>
               </div>
             ))}
+            </div>
           </div>
         )}
 
@@ -298,22 +300,19 @@ export default function TemplateForm({ initialData, onSubmit, onCancel }: Templa
                 value={newItemText}
                 onChange={(e) => setNewItemText(e.target.value)}
                 onKeyDown={handleNewItemKeyDown}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                placeholder="Type item and press Enter or click Add"
+                className="flex-1 px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                placeholder="Type item and press Enter"
                 disabled={loading}
               />
               <button
                 type="button"
                 onClick={addItem}
                 disabled={loading || !newItemText.trim()}
-                className="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-6 py-2 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-4 py-1.5 text-sm rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                Add Item
+                Add
               </button>
             </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-              Press Enter or click "Add Item" to add to the list
-            </p>
           </>
         )}
       </div>
