@@ -93,13 +93,21 @@ export default function NewChecklistPage() {
     setSelectedTemplateIds(newOrder);
   }
 
+  // Generate a default name based on date and selected templates
+  function generateDefaultName(): string {
+    const date = new Date().toISOString().split("T")[0];
+    if (selectedTemplateIds.length === 0) {
+      return `Checklist ${date}`;
+    }
+    const templateNames = selectedTemplateIds
+      .map(id => templates.find(t => t.id === id)?.name)
+      .filter(Boolean);
+    return `${templateNames.join(" + ")} - ${date}`;
+  }
+
   // Create checklist
   async function handleCreateChecklist() {
-    if (!checklistName.trim()) {
-      setError("Checklist name is required");
-      return;
-    }
-
+    const name = checklistName.trim() || generateDefaultName();
 
     setCreating(true);
     setError("");
@@ -111,7 +119,7 @@ export default function NewChecklistPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: checklistName.trim(),
+          name,
           templateIds: selectedTemplateIds,
         }),
       });
@@ -161,11 +169,10 @@ if (status === "loading" || loading) {
           <input
             id="checklistName"
             type="text"
-            required
             value={checklistName}
             onChange={(e) => setChecklistName(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-            placeholder="e.g., Monday Morning Workflow"
+            placeholder={generateDefaultName()}
             disabled={creating}
           />
         </div>
@@ -295,7 +302,7 @@ if (status === "loading" || loading) {
           <button
             type="button"
             onClick={handleCreateChecklist}
-            disabled={creating || !checklistName.trim()}
+            disabled={creating}
             className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {creating ? "Creating Checklist..." : "Create Checklist"}
