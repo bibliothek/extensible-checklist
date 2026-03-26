@@ -178,7 +178,7 @@ export default function DashboardPage() {
                       </div>
 
                       <p className="text-xs text-gray-500 dark:text-gray-500 mb-6">
-                        Created {new Date(checklist.createdAt).toLocaleDateString()}
+                        Created {new Date(checklist.createdAt).toISOString().split("T")[0]}
                       </p>
 
                       <div className="flex gap-3">
