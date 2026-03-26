@@ -102,6 +102,7 @@ export default function TemplateForm({ initialData, onSubmit, onCancel }: Templa
       const lines = bulkText
         .split('\n')
         .map(line => line.trim())
+        .map(line => line.replace(/^- /, ''))
         .filter(line => line.length > 0);
 
       const newItems: TemplateItem[] = lines.map((line, index) => {
@@ -141,6 +142,7 @@ export default function TemplateForm({ initialData, onSubmit, onCancel }: Templa
       const lines = bulkText
         .split('\n')
         .map(line => line.trim())
+        .map(line => line.replace(/^- /, ''))
         .filter(line => line.length > 0);
 
       finalItems = lines.map((line, index) => {
