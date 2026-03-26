@@ -403,7 +403,7 @@ export default function ChecklistDetailPage({
   });
 
   return (
-    <main className="min-h-screen p-3 sm:p-4 md:p-8 lg:p-12">
+    <main className="p-3 sm:p-4 md:p-8 lg:p-12">
       <div className="max-w-4xl mx-auto">
         {/* Header with progress */}
         <div className="mb-4 sm:mb-6">

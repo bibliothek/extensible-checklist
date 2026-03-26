@@ -134,7 +134,7 @@ export default function TemplatesPage() {
   }
 
   return (
-    <main className="min-h-screen p-4 sm:p-6 md:p-12 lg:p-24">
+    <main className="p-4 sm:p-6 md:p-12 lg:p-24">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-8 gap-4">
           <div>
