@@ -703,7 +703,7 @@ export default function ChecklistDetailPage({
                     return (
                       <div
                         key={item.id}
-                        className="checklist-item px-2 py-0.5 sm:px-3 sm:py-1 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors print:bg-white print:hover:bg-white"
+                        className="checklist-item px-2 py-1.5 sm:px-3 sm:py-1 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors print:bg-white print:hover:bg-white"
                       >
                         <div className="flex items-center gap-1.5 sm:gap-2">
                           {/* Checkbox */}
@@ -713,7 +713,7 @@ export default function ChecklistDetailPage({
                             onChange={() =>
                               toggleCompletion(item.id, item.completed)
                             }
-                            className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer print:appearance-none print:border print:border-black print:w-4 print:h-4 flex-shrink-0"
+                            className="w-5 h-5 sm:w-4 sm:h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer print:appearance-none print:border print:border-black print:w-4 print:h-4 flex-shrink-0"
                           />
 
                           {/* Item text (editable) */}
