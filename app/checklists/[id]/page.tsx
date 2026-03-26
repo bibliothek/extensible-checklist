@@ -45,6 +45,7 @@ export default function ChecklistDetailPage({
   const [bulkMode, setBulkMode] = useState(false);
   const [bulkText, setBulkText] = useState("");
   const [showActions, setShowActions] = useState(false);
+  const [bulkApplying, setBulkApplying] = useState(false);
 
   // Set document title for print view
   useEffect(() => {
@@ -383,6 +384,7 @@ export default function ChecklistDetailPage({
   // Parse bulk text and apply changes
   async function applyBulkEdit() {
     if (!checklist) return;
+    setBulkApplying(true);
 
     // Parse the text
     const lines = bulkText.split("\n");
@@ -456,6 +458,8 @@ export default function ChecklistDetailPage({
       setBulkMode(false);
     } catch (err) {
       setError("Failed to apply bulk edit");
+    } finally {
+      setBulkApplying(false);
     }
   }
 
@@ -640,18 +644,27 @@ export default function ChecklistDetailPage({
               value={bulkText}
               onChange={(e) => setBulkText(e.target.value)}
               rows={Math.max(15, bulkText.split("\n").length + 3)}
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-mono text-sm"
+              disabled={bulkApplying}
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-mono text-sm disabled:opacity-50"
             />
-            <div className="flex gap-2 mt-3">
+            <div className="flex items-center gap-2 mt-3">
               <button
                 onClick={applyBulkEdit}
-                className="bg-blue-600 text-white px-4 py-2 text-sm rounded-md hover:bg-blue-700 transition-colors"
+                disabled={bulkApplying}
+                className="bg-blue-600 text-white px-4 py-2 text-sm rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
               >
-                Apply Changes
+                {bulkApplying && (
+                  <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                )}
+                {bulkApplying ? "Applying..." : "Apply Changes"}
               </button>
               <button
                 onClick={() => setBulkMode(false)}
-                className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 px-4 py-2 text-sm"
+                disabled={bulkApplying}
+                className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 px-4 py-2 text-sm disabled:opacity-50"
               >
                 Cancel
               </button>
