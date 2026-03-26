@@ -19,7 +19,7 @@ export async function POST(
 
     const params = await context.params
     const body = await request.json()
-    const { text } = body
+    const { text, sourceTemplate } = body
 
     if (!text || typeof text !== "string") {
       return NextResponse.json(
@@ -60,7 +60,7 @@ export async function POST(
       data: {
         text,
         order: newOrder,
-        sourceTemplate: "Manual",
+        sourceTemplate: (typeof sourceTemplate === "string" && sourceTemplate.trim()) ? sourceTemplate.trim() : "Custom",
         checklistId: params.id,
       },
     })

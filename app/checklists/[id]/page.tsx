@@ -36,9 +36,22 @@ export default function ChecklistDetailPage({
   const [checklist, setChecklist] = useState<Checklist | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [newItemText, setNewItemText] = useState("");
+  const [newItemTexts, setNewItemTexts] = useState<Record<string, string>>({});
+  const [addingGroup, setAddingGroup] = useState(false);
+  const [newGroupName, setNewGroupName] = useState("");
+  const [emptyGroups, setEmptyGroups] = useState<string[]>([]);
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
   const [hideCompleted, setHideCompleted] = useState(false);
+  const [bulkMode, setBulkMode] = useState(false);
+  const [bulkText, setBulkText] = useState("");
+  const [showActions, setShowActions] = useState(false);
+
+  // Set document title for print view
+  useEffect(() => {
+    if (checklist?.name) {
+      document.title = checklist.name;
+    }
+  }, [checklist?.name]);
 
   // Resolve params promise
   useEffect(() => {
@@ -262,10 +275,10 @@ export default function ChecklistDetailPage({
     }
   }
 
-  // Add new item
-  async function addItem(e: React.FormEvent) {
-    e.preventDefault();
-    if (!checklist || !newItemText.trim()) return;
+  // Add new item to a specific group
+  async function addItemToGroup(groupName: string) {
+    const text = newItemTexts[groupName]?.trim();
+    if (!checklist || !text) return;
 
     const tempId = `temp-${Date.now()}`;
     const maxOrder = checklist.items.length > 0
@@ -275,22 +288,22 @@ export default function ChecklistDetailPage({
     // Optimistic update
     const newItem: ChecklistItem = {
       id: tempId,
-      text: newItemText.trim(),
+      text,
       completed: false,
       order: maxOrder + 1,
-      sourceTemplate: "Custom",
+      sourceTemplate: groupName,
     };
     setChecklist({
       ...checklist,
       items: [...checklist.items, newItem],
     });
-    setNewItemText("");
+    setNewItemTexts({ ...newItemTexts, [groupName]: "" });
 
     try {
       const response = await fetch(`/api/checklists/${checklistId}/items`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: newItemText.trim() }),
+        body: JSON.stringify({ text, sourceTemplate: groupName }),
       });
 
       if (!response.ok) {
@@ -299,7 +312,6 @@ export default function ChecklistDetailPage({
 
       const createdItem = await response.json();
 
-      // Replace temp item with real item using functional state update
       setChecklist((currentChecklist) => {
         if (!currentChecklist) return currentChecklist;
         const updatedItems = currentChecklist.items.map((item) =>
@@ -308,13 +320,142 @@ export default function ChecklistDetailPage({
         return { ...currentChecklist, items: updatedItems };
       });
     } catch (err) {
-      // Remove temp item on error using functional state update
       setChecklist((currentChecklist) => {
         if (!currentChecklist) return currentChecklist;
         const updatedItems = currentChecklist.items.filter((item) => item.id !== tempId);
         return { ...currentChecklist, items: updatedItems };
       });
       setError("Failed to add item");
+    }
+  }
+
+  // Add a new empty group
+  function addGroup() {
+    const name = newGroupName.trim();
+    if (!name || !checklist) return;
+    // Add a placeholder so the group appears (empty groups show via visibleGroups)
+    // We just need the group to exist in grouped — we'll handle empty groups in render
+    setNewItemTexts({ ...newItemTexts, [name]: "" });
+    setNewGroupName("");
+    setAddingGroup(false);
+    // Ensure the group is not collapsed
+    setCollapsed({ ...collapsed, [name]: false });
+    // Create a dummy item array entry by adding an empty-group marker to state
+    setChecklist((current) => {
+      if (!current) return current;
+      // If group already exists, do nothing
+      if (current.items.some(i => i.sourceTemplate === name)) return current;
+      // We need at least one item for the group to show up — but we want it empty.
+      // Instead, we'll track empty groups separately.
+      return current;
+    });
+    // Track empty groups in a separate list
+    setEmptyGroups((prev) => prev.includes(name) ? prev : [...prev, name]);
+  }
+
+  // Serialize checklist to bulk text format
+  function serializeToBulk(): string {
+    if (!checklist) return "";
+    const grouped: GroupedItems = {};
+    const sorted = [...checklist.items].sort((a, b) => a.order - b.order);
+    sorted.forEach((item) => {
+      const group = item.sourceTemplate || "Custom";
+      if (!grouped[group]) grouped[group] = [];
+      grouped[group].push(item);
+    });
+    const lines: string[] = [];
+    for (const [groupName, items] of Object.entries(grouped)) {
+      lines.push(`## ${groupName}`);
+      for (const item of items) {
+        lines.push(item.completed ? `- [x] ${item.text}` : `- ${item.text}`);
+      }
+      lines.push("");
+    }
+    return lines.join("\n").trimEnd();
+  }
+
+  // Enter bulk mode
+  function enterBulkMode() {
+    setBulkText(serializeToBulk());
+    setBulkMode(true);
+  }
+
+  // Parse bulk text and apply changes
+  async function applyBulkEdit() {
+    if (!checklist) return;
+
+    // Parse the text
+    const lines = bulkText.split("\n");
+    let currentGroup = "Custom";
+    const newItems: Array<{ text: string; completed: boolean; sourceTemplate: string }> = [];
+
+    for (const rawLine of lines) {
+      const line = rawLine.trim();
+      if (!line) continue;
+      if (line.startsWith("## ")) {
+        currentGroup = line.slice(3).trim();
+        continue;
+      }
+      // Parse item lines
+      let text = line;
+      let completed = false;
+      // Strip leading "- "
+      text = text.replace(/^- /, "");
+      // Check for [x] completion marker
+      if (text.startsWith("[x] ") || text.startsWith("[X] ")) {
+        completed = true;
+        text = text.slice(4);
+      } else if (text.startsWith("[ ] ")) {
+        text = text.slice(4);
+      }
+      if (text.trim()) {
+        newItems.push({ text: text.trim(), completed, sourceTemplate: currentGroup });
+      }
+    }
+
+    // Delete all existing items
+    const deletePromises = checklist.items.map((item) =>
+      fetch(`/api/checklists/${checklistId}/items`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ itemId: item.id }),
+      })
+    );
+
+    try {
+      await Promise.all(deletePromises);
+
+      // Create new items in order
+      const createdItems: ChecklistItem[] = [];
+      for (let i = 0; i < newItems.length; i++) {
+        const resp = await fetch(`/api/checklists/${checklistId}/items`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            text: newItems[i].text,
+            sourceTemplate: newItems[i].sourceTemplate,
+          }),
+        });
+        if (resp.ok) {
+          const created = await resp.json();
+          // Set completion state if needed
+          if (newItems[i].completed) {
+            await fetch(`/api/checklists/${checklistId}/items`, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ itemId: created.id, completed: true }),
+            });
+            created.completed = true;
+          }
+          createdItems.push(created);
+        }
+      }
+
+      setChecklist({ ...checklist, items: createdItems });
+      setEmptyGroups([]);
+      setBulkMode(false);
+    } catch (err) {
+      setError("Failed to apply bulk edit");
     }
   }
 
@@ -395,9 +536,18 @@ export default function ChecklistDetailPage({
   const { total, completed, percentage } = calculateProgress();
   const grouped = groupItemsByTemplate(checklist.items);
 
+  // Include empty groups that don't have items yet
+  for (const name of emptyGroups) {
+    if (!grouped[name]) {
+      grouped[name] = [];
+    }
+  }
+
   // Filter out fully completed groups when hideCompleted is true
   const visibleGroups = Object.entries(grouped).filter(([templateName, items]) => {
     if (!hideCompleted) return true;
+    // Always show empty groups (they have no completed items)
+    if (items.length === 0) return true;
     // Show group if it has at least one incomplete item
     return items.some(item => !item.completed);
   });
@@ -407,29 +557,52 @@ export default function ChecklistDetailPage({
       <div className="max-w-4xl mx-auto">
         {/* Header with progress */}
         <div className="mb-4 sm:mb-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4 gap-3">
-            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white">
-              {checklist.name}
-            </h1>
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 items-stretch sm:items-center print:hidden">
-              <button
-                onClick={toggleHideCompleted}
-                className="bg-blue-600 dark:bg-blue-700 text-white px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors text-center whitespace-nowrap"
-              >
-                {hideCompleted ? "Show All" : "Hide Completed"}
-              </button>
-              <button
-                onClick={() => window.print()}
-                className="bg-blue-600 dark:bg-blue-700 text-white px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors text-center whitespace-nowrap"
-              >
-                Print Checklist
-              </button>
+          <div className="flex items-start sm:items-center justify-between gap-2 mb-3 sm:mb-4">
+            <div className="min-w-0">
               <Link
                 href="/checklists"
-                className="text-blue-600 dark:text-blue-400 hover:underline text-xs sm:text-sm text-center sm:text-left"
+                className="text-blue-600 dark:text-blue-400 hover:underline text-xs print:hidden"
               >
                 ← Back
               </Link>
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white truncate">
+                {checklist.name}
+              </h1>
+            </div>
+            <div className="relative flex-shrink-0 print:hidden">
+              <button
+                onClick={() => setShowActions(!showActions)}
+                className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                title="Actions"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <circle cx="10" cy="4" r="1.5" />
+                  <circle cx="10" cy="10" r="1.5" />
+                  <circle cx="10" cy="16" r="1.5" />
+                </svg>
+              </button>
+              {showActions && (
+                <div className="absolute right-0 top-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-10 min-w-[160px]">
+                  <button
+                    onClick={() => { toggleHideCompleted(); setShowActions(false); }}
+                    className="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    {hideCompleted ? "Show All" : "Hide Completed"}
+                  </button>
+                  <button
+                    onClick={() => { bulkMode ? setBulkMode(false) : enterBulkMode(); setShowActions(false); }}
+                    className="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    {bulkMode ? "Cancel Bulk Edit" : "Bulk Edit"}
+                  </button>
+                  <button
+                    onClick={() => { window.print(); setShowActions(false); }}
+                    className="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    Print
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
@@ -457,6 +630,35 @@ export default function ChecklistDetailPage({
           </div>
         )}
 
+        {/* Bulk edit mode */}
+        {bulkMode ? (
+          <div className="print:hidden">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+              Use <code className="bg-gray-100 dark:bg-gray-700 px-1 rounded">## Group Name</code> for groups. Prefix items with <code className="bg-gray-100 dark:bg-gray-700 px-1 rounded">- </code> or <code className="bg-gray-100 dark:bg-gray-700 px-1 rounded">- [x] </code> for completed.
+            </p>
+            <textarea
+              value={bulkText}
+              onChange={(e) => setBulkText(e.target.value)}
+              rows={Math.max(15, bulkText.split("\n").length + 3)}
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-mono text-sm"
+            />
+            <div className="flex gap-2 mt-3">
+              <button
+                onClick={applyBulkEdit}
+                className="bg-blue-600 text-white px-4 py-2 text-sm rounded-md hover:bg-blue-700 transition-colors"
+              >
+                Apply Changes
+              </button>
+              <button
+                onClick={() => setBulkMode(false)}
+                className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 px-4 py-2 text-sm"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        ) : (
+        <>
         {/* Grouped items */}
         <div className="space-y-2">
           {visibleGroups.map(([templateName, items]) => (
@@ -479,7 +681,8 @@ export default function ChecklistDetailPage({
 
               {/* Group items */}
               {!collapsed[templateName] && (
-                <div className="divide-y divide-gray-100 dark:divide-gray-700">
+                <div>
+                  <div className="divide-y divide-gray-100 dark:divide-gray-700">
                   {items.map((item, idx) => {
                     const isFirst = idx === 0;
                     const isLast = idx === items.length - 1;
@@ -556,34 +759,69 @@ export default function ChecklistDetailPage({
                       </div>
                     );
                   })}
+                  </div>
+
+                  {/* Inline add item input */}
+                  <form
+                    onSubmit={(e) => { e.preventDefault(); addItemToGroup(templateName); }}
+                    className="flex items-center gap-1.5 px-2 py-1 sm:px-3 sm:py-1.5 border-t border-gray-100 dark:border-gray-700 print:hidden"
+                  >
+                    <span className="text-gray-300 dark:text-gray-600 text-sm flex-shrink-0">+</span>
+                    <input
+                      type="text"
+                      value={newItemTexts[templateName] || ""}
+                      onChange={(e) => setNewItemTexts({ ...newItemTexts, [templateName]: e.target.value })}
+                      placeholder="Add item..."
+                      className="flex-1 px-1 py-0 text-sm border border-transparent focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded bg-transparent text-gray-900 dark:text-white placeholder-gray-400"
+                    />
+                  </form>
                 </div>
               )}
             </div>
           ))}
         </div>
 
-        {/* Add new item form */}
-        <form onSubmit={addItem} className="mt-4 sm:mt-6 print:hidden">
-          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-            <input
-              type="text"
-              value={newItemText}
-              onChange={(e) => setNewItemText(e.target.value)}
-              placeholder="Add a new item..."
-              className="flex-1 px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-            />
-            <button
-              type="submit"
-              disabled={!newItemText.trim()}
-              className="bg-blue-600 text-white px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
+        {/* Add Group */}
+        <div className="mt-3 print:hidden">
+          {addingGroup ? (
+            <form
+              onSubmit={(e) => { e.preventDefault(); addGroup(); }}
+              className="flex items-center gap-2"
             >
-              Add Item
+              <input
+                type="text"
+                value={newGroupName}
+                onChange={(e) => setNewGroupName(e.target.value)}
+                placeholder="Group name..."
+                autoFocus
+                className="flex-1 px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              />
+              <button
+                type="submit"
+                disabled={!newGroupName.trim()}
+                className="bg-blue-600 text-white px-3 py-1.5 text-sm rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                Add
+              </button>
+              <button
+                type="button"
+                onClick={() => { setAddingGroup(false); setNewGroupName(""); }}
+                className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 px-2 py-1.5 text-sm"
+              >
+                Cancel
+              </button>
+            </form>
+          ) : (
+            <button
+              onClick={() => setAddingGroup(true)}
+              className="text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            >
+              + Add Group
             </button>
-          </div>
-          <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1.5 sm:mt-2">
-            Press Enter or click "Add Item" to add
-          </p>
-        </form>
+          )}
+        </div>
+        </>
+        )}
       </div>
     </main>
   );
