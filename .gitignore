@@ -6,7 +6,7 @@ obj/
 .vs/
 
 # SQLite data
-data/
+/data/
 *.db
 *.db-journal
 *.db-shm
