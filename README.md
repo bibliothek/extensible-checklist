@@ -7,7 +7,6 @@ A checklist app with reusable templates, built with ASP.NET Core, Entity Framewo
 - **Template System**: Create reusable checklist templates
 - **Merge & Deduplicate**: Create checklists from multiple templates with deduplication
 - **Interactive Editing**: Inline text editing, reordering, completion tracking
-- **Bulk Edit**: Markdown-style bulk editing of checklist items
 - **Grouped Items**: Items grouped by source template, collapsible
 - **Hide Completed**: Toggle visibility of completed items
 - **Print-Optimized**: Clean print layout

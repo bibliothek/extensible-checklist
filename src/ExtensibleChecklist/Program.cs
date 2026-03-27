@@ -276,41 +276,6 @@ api.MapPost("/checklists/{checklistId}/hide-completed", async (int checklistId, 
     return Results.Json(new { checklist.HideCompleted });
 });
 
-// Bulk edit items
-api.MapPost("/checklists/{checklistId}/bulk", async (int checklistId, BulkEditRequest body, AppDbContext db, HttpContext ctx) =>
-{
-    var username = GetUsername(ctx);
-    if (string.IsNullOrEmpty(username)) return Results.Unauthorized();
-
-    var checklist = await db.Checklists
-        .Include(c => c.Items)
-        .FirstOrDefaultAsync(c => c.Id == checklistId && c.UserId == username);
-
-    if (checklist is null) return Results.NotFound();
-
-    // Remove all existing items
-    db.ChecklistItems.RemoveRange(checklist.Items);
-
-    // Add new items from parsed bulk text
-    for (var i = 0; i < body.Items.Count; i++)
-    {
-        var bi = body.Items[i];
-        db.ChecklistItems.Add(new ChecklistItem
-        {
-            Text = bi.Text,
-            Completed = bi.Completed,
-            Order = i,
-            SourceTemplate = bi.SourceTemplate,
-            ChecklistId = checklistId,
-        });
-    }
-
-    checklist.UpdatedAt = DateTime.UtcNow;
-    await db.SaveChangesAsync();
-
-    return Results.Ok();
-});
-
 // Export templates as markdown
 api.MapGet("/templates/export", async (AppDbContext db, HttpContext ctx) =>
 {
@@ -352,5 +317,3 @@ record TextUpdate(string Text);
 record AddItemRequest(string Text, string? SourceTemplate);
 record ReorderUpdate(int ItemId, int Order);
 record ReorderRequest(List<ReorderUpdate> Updates);
-record BulkItem(string Text, bool Completed, string SourceTemplate);
-record BulkEditRequest(List<BulkItem> Items);

@@ -34,7 +34,6 @@
             <button onclick="toggleHideCompleted()" class="btn btn-secondary btn-sm" id="hideBtn">
                 @(checklist.HideCompleted ? "Show All" : "Hide Completed")
             </button>
-            <button onclick="enterBulkMode()" class="btn btn-secondary btn-sm" id="bulkBtn">Bulk Edit</button>
             <button onclick="window.print()" class="btn btn-secondary btn-sm">Print</button>
         </div>
     </div>
@@ -52,18 +51,6 @@
 
     <!-- Error banner -->
     <div id="errorBanner" class="toast toast-error no-print" style="display:none;"></div>
-
-    <!-- Bulk edit mode -->
-    <div id="bulkEditor" style="display:none;" class="no-print">
-        <p class="text-faint" style="margin-bottom: 0.5rem; font-size: 0.85rem;">
-            Use <code>## Group Name</code> for groups. Prefix items with <code>- </code> or <code>- [x] </code> for completed.
-        </p>
-        <textarea id="bulkText" class="form-textarea" rows="20"></textarea>
-        <div class="form-actions" style="margin-top: 0.75rem;">
-            <button onclick="applyBulkEdit()" class="btn btn-primary btn-sm" id="applyBulkBtn">Apply Changes</button>
-            <button onclick="exitBulkMode()" class="btn btn-secondary btn-sm">Cancel</button>
-        </div>
-    </div>
 
     <!-- Grouped items -->
     <div id="itemsView">
@@ -346,78 +333,5 @@
         return false;
     }
 
-    // Bulk edit
-    function enterBulkMode() {
-        const groups = document.querySelectorAll('.checklist-group');
-        let text = '';
-        groups.forEach(g => {
-            const groupName = g.dataset.group;
-            text += `## ${groupName}\n`;
-            g.querySelectorAll('.checklist-item').forEach(item => {
-                const isCompleted = item.dataset.completed === 'true';
-                const itemText = item.querySelector('.item-text').value;
-                text += isCompleted ? `- [x] ${itemText}\n` : `- ${itemText}\n`;
-            });
-            text += '\n';
-        });
-
-        document.getElementById('bulkText').value = text.trimEnd();
-        document.getElementById('bulkEditor').style.display = '';
-        document.getElementById('itemsView').style.display = 'none';
-        document.getElementById('bulkBtn').textContent = 'Cancel Bulk Edit';
-        document.getElementById('bulkBtn').onclick = exitBulkMode;
-    }
-
-    function exitBulkMode() {
-        document.getElementById('bulkEditor').style.display = 'none';
-        document.getElementById('itemsView').style.display = '';
-        document.getElementById('bulkBtn').textContent = 'Bulk Edit';
-        document.getElementById('bulkBtn').onclick = enterBulkMode;
-    }
-
-    async function applyBulkEdit() {
-        const btn = document.getElementById('applyBulkBtn');
-        btn.disabled = true;
-        btn.textContent = 'Applying...';
-
-        const text = document.getElementById('bulkText').value;
-        const lines = text.split('\n');
-        let currentGroup = 'Custom';
-        const items = [];
-
-        for (const rawLine of lines) {
-            const line = rawLine.trim();
-            if (!line) continue;
-            if (line.startsWith('## ')) {
-                currentGroup = line.slice(3).trim();
-                continue;
-            }
-            let itemText = line.replace(/^- /, '');
-            let completed = false;
-            if (itemText.startsWith('[x] ') || itemText.startsWith('[X] ')) {
-                completed = true;
-                itemText = itemText.slice(4);
-            } else if (itemText.startsWith('[ ] ')) {
-                itemText = itemText.slice(4);
-            }
-            if (itemText.trim()) {
-                items.push({ text: itemText.trim(), completed, sourceTemplate: currentGroup });
-            }
-        }
-
-        try {
-            const res = await fetch(`/api/checklists/${checklistId}/bulk`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ items })
-            });
-            if (!res.ok) throw new Error();
-            location.reload();
-        } catch {
-            showError('Failed to apply bulk edit');
-            btn.disabled = false;
-            btn.textContent = 'Apply Changes';
-        }
-    }
 </script>
 }
