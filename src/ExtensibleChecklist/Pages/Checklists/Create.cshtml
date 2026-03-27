@@ -1,0 +1,143 @@
+@page
+@model ExtensibleChecklist.Pages.Checklists.CreateModel
+
+<div class="page-header">
+    <div>
+        <h1>Create Checklist</h1>
+        <p class="text-muted">Select templates to merge, or leave empty for a blank checklist</p>
+    </div>
+</div>
+
+@if (Model.ErrorMessage != null)
+{
+    <div class="toast toast-error">@Model.ErrorMessage</div>
+}
+
+<form method="post" id="createForm" class="form-stack">
+    <div class="form-group">
+        <label for="ChecklistName">Checklist Name</label>
+        <input type="text" id="ChecklistName" asp-for="ChecklistName"
+               placeholder="Auto-generated from templates + date" class="form-input" />
+    </div>
+
+    @if (Model.Templates.Count > 0)
+    {
+        <div class="form-group">
+            <h2 class="section-title">Select Templates to Merge</h2>
+            <p class="text-muted" style="margin-bottom: 1rem; font-size: 0.875rem;">
+                Click templates to select. Selection order determines item order.
+                <span id="selectedCount" class="text-accent"></span>
+            </p>
+
+            <div class="card-grid template-selector">
+                @foreach (var template in Model.Templates)
+                {
+                    <label class="template-card" data-template-id="@template.Id">
+                        <input type="checkbox" name="SelectedTemplateIds" value="@template.Id"
+                               class="template-checkbox" onchange="updateSelection()" />
+                        <div class="template-card-content">
+                            <div class="template-card-header">
+                                <h3>@template.Name</h3>
+                                <span class="selection-badge" style="display:none;"></span>
+                            </div>
+                            <p class="text-muted">@template.Items.Count @(template.Items.Count == 1 ? "item" : "items")</p>
+                        </div>
+                    </label>
+                }
+            </div>
+        </div>
+
+        <div id="selectedOrder" style="display:none;" class="form-group">
+            <h2 class="section-title">Selected Order</h2>
+            <p class="text-muted" style="margin-bottom: 0.5rem; font-size: 0.875rem;">Items will appear in this order.</p>
+            <div id="orderList" class="order-list"></div>
+        </div>
+    }
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Create Checklist</button>
+        <a href="/" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+<script>
+    const selectionOrder = [];
+
+    function updateSelection() {
+        const checkboxes = document.querySelectorAll('.template-checkbox');
+        const currentIds = new Set(selectionOrder);
+
+        checkboxes.forEach(cb => {
+            const id = cb.value;
+            const card = cb.closest('.template-card');
+            const badge = card.querySelector('.selection-badge');
+
+            if (cb.checked && !currentIds.has(id)) {
+                selectionOrder.push(id);
+            } else if (!cb.checked && currentIds.has(id)) {
+                const idx = selectionOrder.indexOf(id);
+                if (idx > -1) selectionOrder.splice(idx, 1);
+            }
+
+            if (cb.checked) {
+                card.classList.add('selected');
+                badge.style.display = '';
+                badge.textContent = selectionOrder.indexOf(id) + 1;
+            } else {
+                card.classList.remove('selected');
+                badge.style.display = 'none';
+            }
+        });
+
+        // Re-number badges
+        checkboxes.forEach(cb => {
+            if (cb.checked) {
+                const card = cb.closest('.template-card');
+                const badge = card.querySelector('.selection-badge');
+                badge.textContent = selectionOrder.indexOf(cb.value) + 1;
+            }
+        });
+
+        const countEl = document.getElementById('selectedCount');
+        countEl.textContent = selectionOrder.length > 0 ? `(${selectionOrder.length} selected)` : '';
+
+        const orderSection = document.getElementById('selectedOrder');
+        const orderList = document.getElementById('orderList');
+
+        if (selectionOrder.length > 0) {
+            orderSection.style.display = '';
+            orderList.innerHTML = selectionOrder.map((id, i) => {
+                const card = document.querySelector(`[data-template-id="${id}"]`);
+                const name = card.querySelector('h3').textContent;
+                return `<div class="order-item">
+                    <span class="order-badge">${i + 1}</span>
+                    <span>${name}</span>
+                </div>`;
+            }).join('');
+        } else {
+            orderSection.style.display = 'none';
+        }
+
+        // Reorder hidden inputs to match selection order
+        const form = document.getElementById('createForm');
+        const existingHidden = form.querySelectorAll('input[name="SelectedTemplateIds"][type="hidden"]');
+        existingHidden.forEach(el => el.remove());
+
+        // Uncheck all checkboxes temporarily and add hidden fields in order
+        checkboxes.forEach(cb => {
+            if (cb.checked) {
+                cb.name = ''; // Prevent checkbox from being submitted
+            }
+        });
+
+        selectionOrder.forEach(id => {
+            const hidden = document.createElement('input');
+            hidden.type = 'hidden';
+            hidden.name = 'SelectedTemplateIds';
+            hidden.value = id;
+            form.appendChild(hidden);
+        });
+    }
+</script>
+}

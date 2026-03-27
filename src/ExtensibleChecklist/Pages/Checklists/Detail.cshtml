@@ -1,0 +1,423 @@
+@page "{id:int}"
+@model ExtensibleChecklist.Pages.Checklists.DetailModel
+
+@if (Model.Checklist is null)
+{
+    <div class="empty-state">
+        <h2>Checklist not found</h2>
+        <a href="/" class="btn btn-primary" style="margin-top: 1rem;">Back to Dashboard</a>
+    </div>
+    return;
+}
+
+@{
+    var checklist = Model.Checklist;
+    var total = checklist.Items.Count;
+    var completed = checklist.Items.Count(i => i.Completed);
+    var pct = total > 0 ? (int)Math.Round(100.0 * completed / total) : 0;
+
+    // Group items by source template
+    var grouped = checklist.Items
+        .OrderBy(i => i.Order)
+        .GroupBy(i => i.SourceTemplate)
+        .ToList();
+}
+
+<div id="checklistApp" data-checklist-id="@checklist.Id" data-hide-completed="@checklist.HideCompleted.ToString().ToLower()">
+    <!-- Header -->
+    <div class="checklist-header">
+        <div>
+            <a href="/" class="link-accent no-print" style="font-size: 0.8rem;">&#8592; Back</a>
+            <h1>@checklist.Name</h1>
+        </div>
+        <div class="checklist-actions no-print">
+            <button onclick="toggleHideCompleted()" class="btn btn-secondary btn-sm" id="hideBtn">
+                @(checklist.HideCompleted ? "Show All" : "Hide Completed")
+            </button>
+            <button onclick="enterBulkMode()" class="btn btn-secondary btn-sm" id="bulkBtn">Bulk Edit</button>
+            <button onclick="window.print()" class="btn btn-secondary btn-sm">Print</button>
+        </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-section no-print">
+        <div class="progress-info">
+            <span id="progressText">@completed of @total items completed</span>
+            <span id="progressPct">@pct%</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: @pct%"></div>
+        </div>
+    </div>
+
+    <!-- Error banner -->
+    <div id="errorBanner" class="toast toast-error no-print" style="display:none;"></div>
+
+    <!-- Bulk edit mode -->
+    <div id="bulkEditor" style="display:none;" class="no-print">
+        <p class="text-faint" style="margin-bottom: 0.5rem; font-size: 0.85rem;">
+            Use <code>## Group Name</code> for groups. Prefix items with <code>- </code> or <code>- [x] </code> for completed.
+        </p>
+        <textarea id="bulkText" class="form-textarea" rows="20"></textarea>
+        <div class="form-actions" style="margin-top: 0.75rem;">
+            <button onclick="applyBulkEdit()" class="btn btn-primary btn-sm" id="applyBulkBtn">Apply Changes</button>
+            <button onclick="exitBulkMode()" class="btn btn-secondary btn-sm">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Grouped items -->
+    <div id="itemsView">
+        @foreach (var group in grouped)
+        {
+            <div class="checklist-group" data-group="@group.Key">
+                <button class="group-header" onclick="toggleGroup(this)">
+                    <h2>@group.Key</h2>
+                    <span class="collapse-icon">&#9660;</span>
+                </button>
+                <div class="group-items">
+                    @foreach (var item in group)
+                    {
+                        <div class="checklist-item @(item.Completed ? "item-completed" : "")"
+                             data-item-id="@item.Id"
+                             data-completed="@item.Completed.ToString().ToLower()"
+                             style="@(checklist.HideCompleted && item.Completed ? "display:none;" : "")">
+                            <input type="checkbox" @(item.Completed ? "checked" : "")
+                                   onchange="toggleItem(@item.Id, @checklist.Id)" class="item-checkbox" />
+                            <input type="text" value="@item.Text" class="item-text"
+                                   onblur="updateItemText(@item.Id, @checklist.Id, this)"
+                                   onkeydown="if(event.key==='Enter') this.blur();" />
+                            <div class="item-actions no-print">
+                                <button onclick="moveItem(@item.Id, @checklist.Id, 'up')" class="btn-icon" title="Move up">&#9650;</button>
+                                <button onclick="moveItem(@item.Id, @checklist.Id, 'down')" class="btn-icon" title="Move down">&#9660;</button>
+                                <button onclick="deleteItem(@item.Id, @checklist.Id)" class="btn-icon btn-icon-danger" title="Delete">&#10005;</button>
+                            </div>
+                        </div>
+                    }
+                    <form class="add-item-form no-print" onsubmit="return addItem(event, '@group.Key', @checklist.Id)">
+                        <span class="text-faint">+</span>
+                        <input type="text" placeholder="Add item..." class="item-text add-item-input" />
+                    </form>
+                </div>
+            </div>
+        }
+
+        <!-- Add group -->
+        <div class="add-group no-print">
+            <button onclick="showAddGroup()" id="addGroupBtn" class="link-accent" style="font-size: 0.875rem;">+ Add Group</button>
+            <form id="addGroupForm" style="display:none;" onsubmit="return addGroup(event, @checklist.Id)" class="add-group-form">
+                <input type="text" placeholder="Group name..." class="form-input" id="newGroupName" style="flex:1;" />
+                <button type="submit" class="btn btn-primary btn-sm">Add</button>
+                <button type="button" onclick="hideAddGroup()" class="btn btn-secondary btn-sm">Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    const checklistId = @checklist.Id;
+    let hideCompleted = @(checklist.HideCompleted ? "true" : "false");
+
+    function sortAllGroups() {
+        document.querySelectorAll('.group-items').forEach(group => {
+            const form = group.querySelector('.add-item-form');
+            const items = Array.from(group.querySelectorAll('.checklist-item'));
+            items.forEach(item => {
+                if (item.dataset.completed === 'true' && form) {
+                    group.insertBefore(item, form);
+                }
+            });
+        });
+    }
+
+    sortAllGroups();
+
+    function showError(msg) {
+        const el = document.getElementById('errorBanner');
+        el.textContent = msg;
+        el.style.display = '';
+        setTimeout(() => el.style.display = 'none', 5000);
+    }
+
+    function updateProgress() {
+        const items = document.querySelectorAll('.checklist-item');
+        const total = items.length;
+        let completed = 0;
+        items.forEach(el => { if (el.dataset.completed === 'true') completed++; });
+        const pct = total > 0 ? Math.round(100 * completed / total) : 0;
+        document.getElementById('progressText').textContent = `${completed} of ${total} items completed`;
+        document.getElementById('progressPct').textContent = `${pct}%`;
+        document.getElementById('progressFill').style.width = `${pct}%`;
+    }
+
+    async function toggleItem(itemId, clId) {
+        const el = document.querySelector(`[data-item-id="${itemId}"]`);
+        const wasCompleted = el.dataset.completed === 'true';
+        const nowCompleted = !wasCompleted;
+
+        // Visual update
+        el.dataset.completed = nowCompleted.toString();
+        el.classList.toggle('item-completed');
+        if (hideCompleted && nowCompleted) el.style.display = 'none';
+        updateProgress();
+
+        // Move within group: completed to bottom, uncompleted to top
+        const group = el.closest('.group-items');
+        if (group) {
+            if (nowCompleted) {
+                // Move before the add-item form (bottom of items)
+                const form = group.querySelector('.add-item-form');
+                if (form) group.insertBefore(el, form);
+            } else {
+                // Move to top of group (before first completed item)
+                const firstCompleted = group.querySelector('.checklist-item[data-completed="true"]');
+                if (firstCompleted) {
+                    group.insertBefore(el, firstCompleted);
+                } else {
+                    const form = group.querySelector('.add-item-form');
+                    if (form) group.insertBefore(el, form);
+                }
+            }
+        }
+
+        try {
+            const res = await fetch(`/api/checklists/${clId}/items/${itemId}/toggle`, { method: 'POST' });
+            if (!res.ok) throw new Error();
+        } catch {
+            // Revert on error
+            el.dataset.completed = wasCompleted.toString();
+            el.classList.toggle('item-completed');
+            el.querySelector('.item-checkbox').checked = wasCompleted;
+            if (hideCompleted && nowCompleted) el.style.display = '';
+            updateProgress();
+            showError('Failed to toggle item');
+        }
+    }
+
+    async function updateItemText(itemId, clId, input) {
+        const text = input.value.trim();
+        if (!text) { location.reload(); return; }
+        try {
+            const res = await fetch(`/api/checklists/${clId}/items/${itemId}/text`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text })
+            });
+            if (!res.ok) throw new Error();
+        } catch {
+            showError('Failed to update item text');
+            location.reload();
+        }
+    }
+
+    async function deleteItem(itemId, clId) {
+        if (!confirm('Delete this item?')) return;
+        const el = document.querySelector(`[data-item-id="${itemId}"]`);
+        el.remove();
+        updateProgress();
+        try {
+            const res = await fetch(`/api/checklists/${clId}/items/${itemId}`, { method: 'DELETE' });
+            if (!res.ok) throw new Error();
+        } catch {
+            showError('Failed to delete item');
+            location.reload();
+        }
+    }
+
+    async function moveItem(itemId, clId, direction) {
+        const el = document.querySelector(`[data-item-id="${itemId}"]`);
+        const container = el.parentElement;
+        const items = Array.from(container.querySelectorAll('.checklist-item'));
+        const idx = items.indexOf(el);
+
+        if (direction === 'up' && idx > 0) {
+            container.insertBefore(el, items[idx - 1]);
+        } else if (direction === 'down' && idx < items.length - 1) {
+            container.insertBefore(items[idx + 1], el);
+        } else return;
+
+        // Build reorder payload
+        const allItems = Array.from(document.querySelectorAll('.checklist-item'));
+        const updates = allItems.map((item, i) => ({ itemId: parseInt(item.dataset.itemId), order: i }));
+
+        try {
+            const res = await fetch(`/api/checklists/${clId}/reorder`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ updates })
+            });
+            if (!res.ok) throw new Error();
+        } catch {
+            showError('Failed to reorder items');
+            location.reload();
+        }
+    }
+
+    async function addItem(event, groupName, clId) {
+        event.preventDefault();
+        const form = event.target;
+        const input = form.querySelector('.add-item-input');
+        const text = input.value.trim();
+        if (!text) return false;
+        input.value = '';
+
+        try {
+            const res = await fetch(`/api/checklists/${clId}/items`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text, sourceTemplate: groupName })
+            });
+            if (!res.ok) throw new Error();
+            location.reload();
+        } catch {
+            showError('Failed to add item');
+        }
+        return false;
+    }
+
+    async function toggleHideCompleted() {
+        try {
+            const res = await fetch(`/api/checklists/${checklistId}/hide-completed`, { method: 'POST' });
+            if (!res.ok) throw new Error();
+            const data = await res.json();
+            hideCompleted = data.hideCompleted;
+            document.getElementById('hideBtn').textContent = hideCompleted ? 'Show All' : 'Hide Completed';
+
+            document.querySelectorAll('.checklist-item').forEach(el => {
+                if (el.dataset.completed === 'true') {
+                    el.style.display = hideCompleted ? 'none' : '';
+                }
+            });
+        } catch {
+            showError('Failed to toggle hide completed');
+        }
+    }
+
+    function toggleGroup(btn) {
+        const items = btn.nextElementSibling;
+        const icon = btn.querySelector('.collapse-icon');
+        if (items.style.display === 'none') {
+            items.style.display = '';
+            icon.textContent = '\u25BC';
+        } else {
+            items.style.display = 'none';
+            icon.textContent = '\u25B6';
+        }
+    }
+
+    function showAddGroup() {
+        document.getElementById('addGroupBtn').style.display = 'none';
+        document.getElementById('addGroupForm').style.display = 'flex';
+        document.getElementById('newGroupName').focus();
+    }
+
+    function hideAddGroup() {
+        document.getElementById('addGroupBtn').style.display = '';
+        document.getElementById('addGroupForm').style.display = 'none';
+    }
+
+    function addGroup(event, clId) {
+        event.preventDefault();
+        const name = document.getElementById('newGroupName').value.trim();
+        if (!name) return false;
+
+        // Create group DOM
+        const view = document.getElementById('itemsView');
+        const addGroupDiv = view.querySelector('.add-group');
+
+        const groupDiv = document.createElement('div');
+        groupDiv.className = 'checklist-group';
+        groupDiv.dataset.group = name;
+        groupDiv.innerHTML = `
+            <button class="group-header" onclick="toggleGroup(this)">
+                <h2>${name}</h2>
+                <span class="collapse-icon">&#9660;</span>
+            </button>
+            <div class="group-items">
+                <form class="add-item-form no-print" onsubmit="return addItem(event, '${name}', ${clId})">
+                    <span class="text-faint">+</span>
+                    <input type="text" placeholder="Add item..." class="item-text add-item-input" />
+                </form>
+            </div>`;
+
+        view.insertBefore(groupDiv, addGroupDiv);
+        hideAddGroup();
+        document.getElementById('newGroupName').value = '';
+        return false;
+    }
+
+    // Bulk edit
+    function enterBulkMode() {
+        const groups = document.querySelectorAll('.checklist-group');
+        let text = '';
+        groups.forEach(g => {
+            const groupName = g.dataset.group;
+            text += `## ${groupName}\n`;
+            g.querySelectorAll('.checklist-item').forEach(item => {
+                const isCompleted = item.dataset.completed === 'true';
+                const itemText = item.querySelector('.item-text').value;
+                text += isCompleted ? `- [x] ${itemText}\n` : `- ${itemText}\n`;
+            });
+            text += '\n';
+        });
+
+        document.getElementById('bulkText').value = text.trimEnd();
+        document.getElementById('bulkEditor').style.display = '';
+        document.getElementById('itemsView').style.display = 'none';
+        document.getElementById('bulkBtn').textContent = 'Cancel Bulk Edit';
+        document.getElementById('bulkBtn').onclick = exitBulkMode;
+    }
+
+    function exitBulkMode() {
+        document.getElementById('bulkEditor').style.display = 'none';
+        document.getElementById('itemsView').style.display = '';
+        document.getElementById('bulkBtn').textContent = 'Bulk Edit';
+        document.getElementById('bulkBtn').onclick = enterBulkMode;
+    }
+
+    async function applyBulkEdit() {
+        const btn = document.getElementById('applyBulkBtn');
+        btn.disabled = true;
+        btn.textContent = 'Applying...';
+
+        const text = document.getElementById('bulkText').value;
+        const lines = text.split('\n');
+        let currentGroup = 'Custom';
+        const items = [];
+
+        for (const rawLine of lines) {
+            const line = rawLine.trim();
+            if (!line) continue;
+            if (line.startsWith('## ')) {
+                currentGroup = line.slice(3).trim();
+                continue;
+            }
+            let itemText = line.replace(/^- /, '');
+            let completed = false;
+            if (itemText.startsWith('[x] ') || itemText.startsWith('[X] ')) {
+                completed = true;
+                itemText = itemText.slice(4);
+            } else if (itemText.startsWith('[ ] ')) {
+                itemText = itemText.slice(4);
+            }
+            if (itemText.trim()) {
+                items.push({ text: itemText.trim(), completed, sourceTemplate: currentGroup });
+            }
+        }
+
+        try {
+            const res = await fetch(`/api/checklists/${checklistId}/bulk`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ items })
+            });
+            if (!res.ok) throw new Error();
+            location.reload();
+        } catch {
+            showError('Failed to apply bulk edit');
+            btn.disabled = false;
+            btn.textContent = 'Apply Changes';
+        }
+    }
+</script>
+}

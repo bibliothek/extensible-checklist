@@ -6,7 +6,7 @@
       "DisplayName": "Extensible Checklist",
       "ConsentType": "implicit",
       "RedirectUris": [
-        "http://localhost:3000/api/auth/callback/mathauth"
+        "http://localhost:3000/signin-oidc"
       ],
       "PostLogoutRedirectUris": [
         "http://localhost:3000"

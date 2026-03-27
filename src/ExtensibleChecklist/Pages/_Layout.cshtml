@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checklist</title>
+    <link rel="icon" href="~/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="~/apple-touch-icon.png" />
+    <link rel="manifest" href="~/manifest.json" />
+    <meta name="theme-color" content="#0f172a" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header class="no-print">
+        <div class="container header-content">
+            <a href="/" class="logo">Checklist</a>
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                var username = User.FindFirst("preferred_username")?.Value
+                    ?? User.FindFirst("name")?.Value
+                    ?? User.Identity.Name
+                    ?? "unknown";
+                <nav class="nav-links">
+                    <a href="/" class="header-btn">Checklists</a>
+                    <a href="/Templates" class="header-btn">Templates</a>
+                </nav>
+                <div class="user-info">
+                    <span>@username</span>
+                    <a href="@(ViewData["OidcIssuer"])account/logout" class="header-btn header-btn-logout">Logout</a>
+                </div>
+            }
+        </div>
+    </header>
+    <main class="container">
+        @RenderBody()
+    </main>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

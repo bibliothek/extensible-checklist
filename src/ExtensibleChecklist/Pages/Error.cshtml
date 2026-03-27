@@ -1,0 +1,11 @@
+@page
+@model ExtensibleChecklist.Pages.ErrorModel
+
+<div class="error-page">
+    <h2>An error occurred</h2>
+    <p>Sorry, something went wrong while processing your request.</p>
+    @if (Model.RequestId != null)
+    {
+        <p class="text-muted">Request ID: @Model.RequestId</p>
+    }
+</div>
