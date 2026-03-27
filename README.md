@@ -42,7 +42,7 @@ A checklist app with reusable templates, built with ASP.NET Core, Entity Framewo
 
    ```bash
    cd src/ExtensibleChecklist
-   dotnet run
+   dotnet watch run
    ```
 
 3. Open the URL printed by `dotnet run` (typically http://localhost:5174) and log in with:
