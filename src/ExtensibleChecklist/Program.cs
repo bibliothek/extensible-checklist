@@ -133,7 +133,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // Health endpoint (no auth)
-app.MapGet("/health", () => Results.Ok(new { status = "healthy" }));
+app.MapGet("/api/health", () => Results.Ok(new { status = "healthy" }));
 
 // ---- API Endpoints for interactive checklist operations ----
 
