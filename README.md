@@ -45,7 +45,7 @@ A checklist app with reusable templates, built with ASP.NET Core, Entity Framewo
    dotnet watch run
    ```
 
-3. Open the URL printed by `dotnet run` (typically http://localhost:5174) and log in with:
+3. Open http://localhost:3000 and log in with:
    - Username: `admin`
    - Password: `Admin!123`
 
@@ -61,17 +61,6 @@ docker compose up --build
 
 - App: http://localhost:3000
 - MathAuth: http://localhost:5001
-
-### Configuration
-
-Dev settings are in `src/ExtensibleChecklist/appsettings.Development.json`:
-
-| Setting | Default | Description |
-|---|---|---|
-| `OIDC_ISSUER` | `http://localhost:5001/` | MathAuth public URL |
-| `OIDC_CLIENT_ID` | `extensible-checklist` | OIDC client ID |
-| `OIDC_CLIENT_SECRET` | `extensible-checklist-secret` | OIDC client secret |
-| `ConnectionStrings:Default` | `Data Source=../../data/checklist.db` | SQLite path |
 
 ### EF Core Migrations
 
@@ -91,6 +80,30 @@ The file `auth-config/oidc-clients.json` registers the app with the local MathAu
 | Client ID | `extensible-checklist` |
 | Redirect URI | `http://localhost:3000/signin-oidc` |
 | Post-logout URI | `http://localhost:3000` |
+
+## Azure Deployment
+
+The app deploys as a Docker container to Azure App Service via GitHub Actions (`.github/workflows/`).
+
+### App Service Configuration
+
+Set these in **Azure Portal > App Service > Configuration > Application settings**:
+
+| Setting | Value | Description |
+|---|---|---|
+| `ConnectionStrings__Default` | `Data Source=/app/data/checklist.db` | SQLite path (mount Azure Files at `/app/data`) |
+| `OIDC_ISSUER` | `https://your-mathauth.example.com/` | MathAuth public URL (what the browser sees) |
+| `OIDC_ISSUER_INTERNAL` | Same as `OIDC_ISSUER`, or internal URL | Server-to-server URL (if different from public) |
+| `OIDC_CLIENT_ID` | Your client ID | Registered in MathAuth |
+| `OIDC_CLIENT_SECRET` | Your client secret | Registered in MathAuth |
+
+Register the app in MathAuth with:
+- **Redirect URI**: `https://your-app.azurewebsites.net/signin-oidc`
+- **Post-logout URI**: `https://your-app.azurewebsites.net`
+
+### SQLite Persistence
+
+Mount an **Azure Files** share at `/app/data` so the database survives container restarts.
 
 ## Project Structure
 
