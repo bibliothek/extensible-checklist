@@ -1,0 +1,3 @@
+[submodule "shared/matha-ui"]
+	path = shared/matha-ui
+	url = https://github.com/bibliothek/matha-ui.git

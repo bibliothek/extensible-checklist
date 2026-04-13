@@ -8,6 +8,8 @@
     <link rel="apple-touch-icon" href="~/apple-touch-icon.png" />
     <link rel="manifest" href="~/manifest.json" />
     <meta name="theme-color" content="#0f172a" />
+    <link rel="stylesheet" href="~/_content/MathaUI/css/base.css" />
+    <link rel="stylesheet" href="~/_content/MathaUI/css/user-menu.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
@@ -25,16 +27,11 @@
                     <a href="/Templates" class="header-btn">Templates</a>
                 </nav>
                 <div class="user-info">
-                    <div class="user-menu">
-                        <button class="user-menu-trigger" onclick="this.parentElement.classList.toggle('open')">
-                            <span>@username</span>
-                            <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5l3 3 3-3"/></svg>
-                        </button>
-                        <div class="user-menu-dropdown">
-                            <a href="@(ViewData["OidcIssuer"])" class="user-menu-item">Account</a>
-                            <a href="/logout" class="user-menu-item user-menu-item--danger">Logout</a>
-                        </div>
-                    </div>
+                    @await Component.InvokeAsync("UserMenu", new {
+                        username,
+                        accountUrl = (string?)ViewData["OidcIssuer"] ?? "/",
+                        logoutUrl = "/logout"
+                    })
                 </div>
             }
         </div>
@@ -42,13 +39,6 @@
     <main class="container">
         @RenderBody()
     </main>
-    <script>
-        document.addEventListener('click', function(e) {
-            document.querySelectorAll('.user-menu.open').forEach(function(menu) {
-                if (!menu.contains(e.target)) menu.classList.remove('open');
-            });
-        });
-    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
