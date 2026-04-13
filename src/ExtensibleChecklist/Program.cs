@@ -87,6 +87,8 @@ builder.Services.AddAuthentication(options =>
             var publicAuthority = oidcIssuer.TrimEnd('/');
             context.ProtocolMessage.IssuerAddress = context.ProtocolMessage.IssuerAddress
                 .Replace(oidcIssuerInternal.TrimEnd('/'), publicAuthority);
+            context.ProtocolMessage.PostLogoutRedirectUri =
+                $"{context.Request.Scheme}://{context.Request.Host}";
             return Task.CompletedTask;
         },
     };
@@ -131,6 +133,13 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Logout: clear local cookie, then redirect to OIDC logout
+app.MapGet("/logout", async (HttpContext ctx) =>
+{
+    await ctx.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+    await ctx.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
+}).AllowAnonymous();
 
 // Health endpoint (no auth)
 app.MapGet("/api/health", () => Results.Ok(new { status = "healthy" }));
