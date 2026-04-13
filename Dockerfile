@@ -4,10 +4,12 @@ EXPOSE 8080
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
-COPY src/ExtensibleChecklist/ExtensibleChecklist.csproj ExtensibleChecklist/
-RUN dotnet restore ExtensibleChecklist/ExtensibleChecklist.csproj
-COPY src/ExtensibleChecklist/ ExtensibleChecklist/
-WORKDIR /src/ExtensibleChecklist
+COPY src/ExtensibleChecklist/ExtensibleChecklist.csproj src/ExtensibleChecklist/
+COPY shared/matha-ui/src/MathaUI/MathaUI.csproj shared/matha-ui/src/MathaUI/
+RUN dotnet restore src/ExtensibleChecklist/ExtensibleChecklist.csproj
+COPY src/ExtensibleChecklist/ src/ExtensibleChecklist/
+COPY shared/matha-ui/src/MathaUI/ shared/matha-ui/src/MathaUI/
+WORKDIR /src/src/ExtensibleChecklist
 RUN dotnet publish -c Release -o /app/publish
 
 FROM base AS final
