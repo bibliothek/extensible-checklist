@@ -28,7 +28,14 @@
     <div class="checklist-header">
         <div>
             <a href="/" class="link-accent no-print" style="font-size: 0.8rem;">&#8592; Back</a>
-            <h1>@checklist.Name</h1>
+            <div class="checklist-title" id="checklistTitle">
+                <h1 id="checklistName">@checklist.Name</h1>
+                <button type="button" onclick="startEditName()" class="btn-icon btn-icon-edit no-print" title="Edit name" aria-label="Edit name">&#9998;</button>
+            </div>
+            <input type="text" value="@checklist.Name" class="checklist-name-input no-print"
+                   id="checklistNameInput" style="display:none;"
+                   onblur="saveChecklistName()"
+                   onkeydown="handleNameKey(event)" />
         </div>
         <div class="checklist-actions no-print">
             <button onclick="toggleHideCompleted()" class="btn btn-secondary btn-sm" id="hideBtn">
@@ -178,6 +185,52 @@
             if (hideCompleted && nowCompleted) el.style.display = '';
             updateProgress();
             showError('Failed to toggle item');
+        }
+    }
+
+    function startEditName() {
+        const input = document.getElementById('checklistNameInput');
+        const title = document.getElementById('checklistTitle');
+        title.style.display = 'none';
+        input.style.display = '';
+        input.focus();
+        input.select();
+    }
+
+    function handleNameKey(event) {
+        if (event.key === 'Enter') {
+            event.target.blur();
+        } else if (event.key === 'Escape') {
+            event.target.value = document.getElementById('checklistName').textContent;
+            event.target.blur();
+        }
+    }
+
+    async function saveChecklistName() {
+        const input = document.getElementById('checklistNameInput');
+        const nameEl = document.getElementById('checklistName');
+        const title = document.getElementById('checklistTitle');
+        const current = nameEl.textContent;
+        const name = input.value.trim();
+
+        input.style.display = 'none';
+        title.style.display = '';
+
+        if (!name) { input.value = current; return; }
+        if (name === current) return;
+
+        try {
+            const res = await fetch(`/api/checklists/${checklistId}/name`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: name })
+            });
+            if (!res.ok) throw new Error();
+            nameEl.textContent = name;
+            document.title = name;
+        } catch {
+            input.value = current;
+            showError('Failed to update checklist name');
         }
     }
 

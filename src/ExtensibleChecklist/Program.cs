@@ -269,6 +269,25 @@ api.MapPost("/checklists/{checklistId}/reorder", async (int checklistId, Reorder
     return Results.Ok();
 });
 
+// Update checklist name
+api.MapPost("/checklists/{checklistId}/name", async (int checklistId, TextUpdate body, AppDbContext db, HttpContext ctx) =>
+{
+    var username = GetUsername(ctx);
+    if (string.IsNullOrEmpty(username)) return Results.Unauthorized();
+
+    var name = body.Text.Trim();
+    if (string.IsNullOrEmpty(name)) return Results.BadRequest(new { error = "Name cannot be empty" });
+
+    var checklist = await db.Checklists.FirstOrDefaultAsync(c => c.Id == checklistId && c.UserId == username);
+    if (checklist is null) return Results.NotFound();
+
+    checklist.Name = name;
+    checklist.UpdatedAt = DateTime.UtcNow;
+    await db.SaveChangesAsync();
+
+    return Results.Json(new { checklist.Id, checklist.Name });
+});
+
 // Toggle hideCompleted
 api.MapPost("/checklists/{checklistId}/hide-completed", async (int checklistId, AppDbContext db, HttpContext ctx) =>
 {

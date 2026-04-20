@@ -271,6 +271,39 @@ a.card-title:hover { color: var(--accent); }
     font-weight: 700;
 }
 
+.checklist-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-icon-edit {
+    font-size: 1rem;
+    padding: 0.35rem 0.5rem;
+}
+
+.checklist-name-input {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text);
+    padding: 0.15rem 0.35rem;
+    border-radius: 0.25rem;
+    font-family: inherit;
+    width: 100%;
+    min-width: 0;
+}
+
+.checklist-name-input:hover {
+    border-color: var(--surface-border);
+}
+
+.checklist-name-input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
 .checklist-actions {
     display: flex;
     gap: 0.35rem;
