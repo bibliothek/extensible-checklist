@@ -41,12 +41,15 @@
             <button onclick="toggleHideCompleted()" class="btn btn-secondary btn-sm" id="hideBtn">
                 @(checklist.HideCompleted ? "Show All" : "Hide Completed")
             </button>
+            <button onclick="toggleHideProgress()" class="btn btn-secondary btn-sm" id="hideProgressBtn">
+                @(checklist.HideProgress ? "Show Progress" : "Hide Progress")
+            </button>
             <button onclick="window.print()" class="btn btn-secondary btn-sm">Print</button>
         </div>
     </div>
 
     <!-- Progress -->
-    <div class="progress-section no-print">
+    <div class="progress-section no-print" id="progressSection" style="@(checklist.HideProgress ? "display:none;" : "")">
         <div class="progress-info">
             <span id="progressText">@completed of @total items completed</span>
             <span id="progressPct">@pct%</span>
@@ -142,6 +145,19 @@
         document.getElementById('progressText').textContent = `${completed} of ${total} items completed`;
         document.getElementById('progressPct').textContent = `${pct}%`;
         document.getElementById('progressFill').style.width = `${pct}%`;
+    }
+
+    async function toggleHideProgress() {
+        try {
+            const res = await fetch(`/api/checklists/${checklistId}/hide-progress`, { method: 'POST' });
+            if (!res.ok) throw new Error();
+            const data = await res.json();
+            const hidden = data.hideProgress;
+            document.getElementById('hideProgressBtn').textContent = hidden ? 'Show Progress' : 'Hide Progress';
+            document.getElementById('progressSection').style.display = hidden ? 'none' : '';
+        } catch {
+            showError('Failed to toggle hide progress');
+        }
     }
 
     async function toggleItem(itemId, clId) {

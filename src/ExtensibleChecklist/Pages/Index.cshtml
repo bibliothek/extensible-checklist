@@ -33,13 +33,16 @@ else
             <div class="card">
                 <a href="/Checklists/Detail/@checklist.Id" class="card-title">@checklist.Name</a>
 
-                <div class="progress-info">
-                    <span>@completed/@total items completed</span>
-                    <span>@pct%</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: @pct%"></div>
-                </div>
+                @if (!checklist.HideProgress)
+                {
+                    <div class="progress-info">
+                        <span>@completed/@total items completed</span>
+                        <span>@pct%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: @pct%"></div>
+                    </div>
+                }
 
                 <p class="text-faint card-date">Created @checklist.CreatedAt.ToString("yyyy-MM-dd")</p>
 

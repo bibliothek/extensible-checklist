@@ -304,6 +304,22 @@ api.MapPost("/checklists/{checklistId}/hide-completed", async (int checklistId, 
     return Results.Json(new { checklist.HideCompleted });
 });
 
+// Toggle hideProgress
+api.MapPost("/checklists/{checklistId}/hide-progress", async (int checklistId, AppDbContext db, HttpContext ctx) =>
+{
+    var username = GetUsername(ctx);
+    if (string.IsNullOrEmpty(username)) return Results.Unauthorized();
+
+    var checklist = await db.Checklists.FirstOrDefaultAsync(c => c.Id == checklistId && c.UserId == username);
+    if (checklist is null) return Results.NotFound();
+
+    checklist.HideProgress = !checklist.HideProgress;
+    checklist.UpdatedAt = DateTime.UtcNow;
+    await db.SaveChangesAsync();
+
+    return Results.Json(new { checklist.HideProgress });
+});
+
 // Export templates as markdown
 api.MapGet("/templates/export", async (AppDbContext db, HttpContext ctx) =>
 {
