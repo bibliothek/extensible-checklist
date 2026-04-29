@@ -26,7 +26,7 @@ else
         @foreach (var template in Model.Templates)
         {
             <div class="card">
-                <h3 class="card-title">@template.Name</h3>
+                <a href="/Templates/Edit/@template.Id" class="card-title">@template.Name</a>
                 <p class="text-muted">@template.Items.Count @(template.Items.Count == 1 ? "item" : "items")</p>
                 <p class="text-faint card-date">Created @template.CreatedAt.ToString("yyyy-MM-dd")</p>
                 <div class="card-actions">
