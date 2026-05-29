@@ -22,10 +22,6 @@
                     ?? User.FindFirst("name")?.Value
                     ?? User.Identity.Name
                     ?? "unknown";
-                <nav class="nav-links">
-                    <a href="/" class="header-btn">Checklists</a>
-                    <a href="/Templates" class="header-btn">Templates</a>
-                </nav>
                 <div class="user-info">
                     @await Component.InvokeAsync("UserMenu", new {
                         username,
@@ -37,6 +33,13 @@
         </div>
     </header>
     <main class="container">
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <nav class="nav-links">
+                <a href="/" class="nav-link-item">Checklists</a>
+                <a href="/Templates" class="nav-link-item">Templates</a>
+            </nav>
+        }
         @RenderBody()
     </main>
     @await RenderSectionAsync("Scripts", required: false)
