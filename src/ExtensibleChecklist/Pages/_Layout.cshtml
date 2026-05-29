@@ -33,13 +33,6 @@
         </div>
     </header>
     <main class="container">
-        @if (User.Identity?.IsAuthenticated == true)
-        {
-            <nav class="nav-links">
-                <a href="/" class="nav-link-item">Checklists</a>
-                <a href="/Templates" class="nav-link-item">Templates</a>
-            </nav>
-        }
         @RenderBody()
     </main>
     @await RenderSectionAsync("Scripts", required: false)

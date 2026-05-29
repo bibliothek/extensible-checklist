@@ -1,11 +1,13 @@
 @page
 @model ExtensibleChecklist.Pages.Templates.IndexModel
 
+<nav class="tab-nav">
+    <a href="/" class="tab-nav-item">Checklists</a>
+    <a href="/Templates" class="tab-nav-item active">Templates</a>
+</nav>
+
 <div class="page-header">
-    <div>
-        <h1>Template Library</h1>
-        <p class="text-muted">Manage your reusable checklist templates</p>
-    </div>
+    <p class="text-muted">Manage your reusable checklist templates</p>
     <div class="header-actions">
         <a href="/api/templates/export" class="btn btn-secondary">Export to Markdown</a>
         <a href="/Templates/Create" class="btn btn-primary">Create New Template</a>
@@ -42,6 +44,3 @@ else
     </div>
 }
 
-<div style="margin-top: 2rem;">
-    <a href="/" class="link-accent">&#8592; Back to Dashboard</a>
-</div>

@@ -1,14 +1,15 @@
 @page
 @model ExtensibleChecklist.Pages.IndexModel
 
+<nav class="tab-nav">
+    <a href="/" class="tab-nav-item active">Checklists</a>
+    <a href="/Templates" class="tab-nav-item">Templates</a>
+</nav>
+
 <div class="page-header">
-    <div>
-        <h1>Dashboard</h1>
-        <p class="text-muted">Your active checklists and quick actions</p>
-    </div>
+    <p class="text-muted">Your active checklists and quick actions</p>
     <div class="header-actions">
         <a href="/Checklists/Create" class="btn btn-primary">Create Checklist</a>
-        <a href="/Templates/Create" class="btn btn-success">Create Template</a>
     </div>
 </div>
 
