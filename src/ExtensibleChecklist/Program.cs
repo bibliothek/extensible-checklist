@@ -242,6 +242,29 @@ api.MapDelete("/checklists/{checklistId}/items/{itemId}", async (int checklistId
     return Results.Ok();
 });
 
+// Delete group from checklist
+api.MapDelete("/checklists/{checklistId}/groups", async (int checklistId, string groupName, AppDbContext db, HttpContext ctx) =>
+{
+    var username = GetUsername(ctx);
+    if (string.IsNullOrEmpty(username)) return Results.Unauthorized();
+
+    groupName = groupName.Trim();
+    if (string.IsNullOrEmpty(groupName)) return Results.BadRequest(new { error = "Group name cannot be empty" });
+
+    var checklist = await db.Checklists
+        .Include(c => c.Items)
+        .FirstOrDefaultAsync(c => c.Id == checklistId && c.UserId == username);
+
+    if (checklist is null) return Results.NotFound();
+
+    var items = checklist.Items.Where(i => i.SourceTemplate == groupName).ToList();
+    db.ChecklistItems.RemoveRange(items);
+    checklist.UpdatedAt = DateTime.UtcNow;
+    await db.SaveChangesAsync();
+
+    return Results.Ok();
+});
+
 // Reorder items
 api.MapPost("/checklists/{checklistId}/reorder", async (int checklistId, ReorderRequest body, AppDbContext db, HttpContext ctx) =>
 {

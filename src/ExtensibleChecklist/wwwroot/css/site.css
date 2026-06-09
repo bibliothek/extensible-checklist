@@ -321,12 +321,26 @@ a.card-title:hover { color: var(--accent); }
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 0.5rem;
     padding: 0.5rem 0.75rem;
     background: color-mix(in srgb, var(--bg) 50%, var(--surface));
+    color: var(--text);
+}
+
+.group-toggle {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+    padding: 0;
+    background: transparent;
     border: none;
     cursor: pointer;
-    color: var(--text);
+    color: inherit;
     font-family: inherit;
+    text-align: left;
 }
 
 .group-header h2 {

@@ -67,10 +67,13 @@
         @foreach (var group in grouped)
         {
             <div class="checklist-group" data-group="@group.Key">
-                <button class="group-header" onclick="toggleGroup(this)">
-                    <h2>@group.Key</h2>
-                    <span class="collapse-icon">&#9660;</span>
-                </button>
+                <div class="group-header">
+                    <button type="button" class="group-toggle" onclick="toggleGroup(this)">
+                        <h2>@group.Key</h2>
+                        <span class="collapse-icon">&#9660;</span>
+                    </button>
+                    <button type="button" onclick="deleteGroup(this, @checklist.Id)" class="btn-icon btn-icon-danger no-print" title="Delete group" aria-label="Delete group">&#10005;</button>
+                </div>
                 <div class="group-items">
                     @foreach (var item in group)
                     {
@@ -350,7 +353,8 @@
     }
 
     function toggleGroup(btn) {
-        const items = btn.nextElementSibling;
+        const header = btn.closest('.group-header');
+        const items = header.nextElementSibling;
         const icon = btn.querySelector('.collapse-icon');
         if (items.style.display === 'none') {
             items.style.display = '';
@@ -358,6 +362,23 @@
         } else {
             items.style.display = 'none';
             icon.textContent = '\u25B6';
+        }
+    }
+
+    async function deleteGroup(btn, clId) {
+        const group = btn.closest('.checklist-group');
+        const groupName = group.dataset.group;
+        if (!confirm(`Delete group "${groupName}" and all of its items?`)) return;
+
+        group.remove();
+        updateProgress();
+
+        try {
+            const res = await fetch(`/api/checklists/${clId}/groups?groupName=${encodeURIComponent(groupName)}`, { method: 'DELETE' });
+            if (!res.ok) throw new Error();
+        } catch {
+            showError('Failed to delete group');
+            location.reload();
         }
     }
 
@@ -385,10 +406,13 @@
         groupDiv.className = 'checklist-group';
         groupDiv.dataset.group = name;
         groupDiv.innerHTML = `
-            <button class="group-header" onclick="toggleGroup(this)">
-                <h2>${name}</h2>
-                <span class="collapse-icon">&#9660;</span>
-            </button>
+            <div class="group-header">
+                <button type="button" class="group-toggle" onclick="toggleGroup(this)">
+                    <h2>${name}</h2>
+                    <span class="collapse-icon">&#9660;</span>
+                </button>
+                <button type="button" onclick="deleteGroup(this, ${clId})" class="btn-icon btn-icon-danger no-print" title="Delete group" aria-label="Delete group">&#10005;</button>
+            </div>
             <div class="group-items">
                 <form class="add-item-form no-print" onsubmit="return addItem(event, '${name}', ${clId})">
                     <span class="text-faint">+</span>
