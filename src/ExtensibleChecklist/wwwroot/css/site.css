@@ -353,22 +353,27 @@ a.card-title:hover { color: var(--accent); }
 }
 
 .group-delete {
-    background: var(--surface);
-    border: 1px solid var(--surface-border);
+    width: 1.5rem;
+    height: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid transparent;
     border-radius: 999px;
-    color: var(--text-muted);
+    color: var(--text-faint);
     cursor: pointer;
     font-family: inherit;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     line-height: 1;
-    padding: 0.25rem 0.5rem;
+    padding: 0;
     transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
 
 .group-delete:hover,
 .group-delete:focus-visible {
     background: color-mix(in srgb, var(--danger) 10%, var(--surface));
-    border-color: var(--danger);
+    border-color: color-mix(in srgb, var(--danger) 35%, var(--surface-border));
     color: var(--danger-hover);
     outline: none;
 }

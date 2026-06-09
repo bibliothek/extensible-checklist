@@ -72,7 +72,7 @@
                         <h2>@group.Key</h2>
                         <span class="collapse-icon">&#9660;</span>
                     </button>
-                    <button type="button" onclick="deleteGroup(this, @checklist.Id)" class="group-delete no-print" title="Delete group" aria-label="Delete group">Delete</button>
+                    <button type="button" onclick="deleteGroup(this, @checklist.Id)" class="group-delete no-print" title="Delete group" aria-label="Delete group">&#10005;</button>
                 </div>
                 <div class="group-items">
                     @foreach (var item in group)
@@ -411,7 +411,7 @@
                     <h2>${name}</h2>
                     <span class="collapse-icon">&#9660;</span>
                 </button>
-                <button type="button" onclick="deleteGroup(this, ${clId})" class="group-delete no-print" title="Delete group" aria-label="Delete group">Delete</button>
+                <button type="button" onclick="deleteGroup(this, ${clId})" class="group-delete no-print" title="Delete group" aria-label="Delete group">&#10005;</button>
             </div>
             <div class="group-items">
                 <form class="add-item-form no-print" onsubmit="return addItem(event, '${name}', ${clId})">
