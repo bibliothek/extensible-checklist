@@ -103,7 +103,7 @@
 
         <!-- Add group -->
         <div class="add-group no-print">
-            <button onclick="showAddGroup()" id="addGroupBtn" class="link-accent" style="font-size: 0.875rem;">+ Add Group</button>
+            <button type="button" onclick="showAddGroup()" id="addGroupBtn" class="btn btn-secondary btn-sm add-group-button">+ Add Group</button>
             <form id="addGroupForm" style="display:none;" onsubmit="return addGroup(event, @checklist.Id)" class="add-group-form">
                 <input type="text" placeholder="Group name..." class="form-input" id="newGroupName" style="flex:1;" />
                 <button type="submit" class="btn btn-primary btn-sm">Add</button>

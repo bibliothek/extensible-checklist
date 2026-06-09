@@ -459,6 +459,21 @@ a.card-title:hover { color: var(--accent); }
     margin-top: 0.75rem;
 }
 
+.add-group-button {
+    background: color-mix(in srgb, var(--surface) 80%, var(--bg));
+    border-style: dashed;
+    color: var(--text-muted);
+}
+
+.add-group-button:hover,
+.add-group-button:focus-visible {
+    background: var(--surface);
+    border-color: var(--accent);
+    color: var(--accent);
+    opacity: 1;
+    outline: none;
+}
+
 .add-group-form {
     display: flex;
     gap: 0.5rem;
