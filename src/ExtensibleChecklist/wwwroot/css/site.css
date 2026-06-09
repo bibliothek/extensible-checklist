@@ -330,7 +330,6 @@ a.card-title:hover { color: var(--accent); }
 .group-toggle {
     flex: 1;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     gap: 0.5rem;
     min-width: 0;
@@ -351,6 +350,27 @@ a.card-title:hover { color: var(--accent); }
 .collapse-icon {
     color: var(--text-faint);
     font-size: 0.75rem;
+}
+
+.group-delete {
+    background: var(--surface);
+    border: 1px solid var(--surface-border);
+    border-radius: 999px;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.75rem;
+    line-height: 1;
+    padding: 0.25rem 0.5rem;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.group-delete:hover,
+.group-delete:focus-visible {
+    background: color-mix(in srgb, var(--danger) 10%, var(--surface));
+    border-color: var(--danger);
+    color: var(--danger-hover);
+    outline: none;
 }
 
 .group-items {
