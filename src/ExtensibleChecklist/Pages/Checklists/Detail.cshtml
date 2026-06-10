@@ -327,6 +327,7 @@
                 body: JSON.stringify({ text, sourceTemplate: groupName })
             });
             if (!res.ok) throw new Error();
+            location.hash = 'focus=' + encodeURIComponent(groupName);
             location.reload();
         } catch {
             showError('Failed to add item');
@@ -424,6 +425,17 @@
         hideAddGroup();
         document.getElementById('newGroupName').value = '';
         return false;
+    }
+
+    // Auto-focus the add-item input after reload
+    if (location.hash.startsWith('#focus=')) {
+        const groupName = decodeURIComponent(location.hash.substring(7));
+        const group = document.querySelector(`.checklist-group[data-group="${CSS.escape(groupName)}"]`);
+        if (group) {
+            const input = group.querySelector('.add-item-input');
+            if (input) input.focus();
+        }
+        history.replaceState(null, '', location.pathname + location.search);
     }
 
 </script>
