@@ -74,9 +74,8 @@ public class CreateModel : PageModel
             }
         }
 
-        // Merge items from selected templates with deduplication
+        // Merge items from selected templates, keeping every entry (no deduplication)
         var mergedItems = new List<ChecklistItem>();
-        var seenTexts = new HashSet<string>();
         var orderCounter = 0;
 
         foreach (var templateId in SelectedTemplateIds)
@@ -86,16 +85,12 @@ public class CreateModel : PageModel
 
             foreach (var item in template.Items)
             {
-                if (seenTexts.Contains(item.Text)) continue;
-
                 mergedItems.Add(new ChecklistItem
                 {
                     Text = item.Text,
                     Order = orderCounter++,
                     SourceTemplate = template.Name,
                 });
-
-                seenTexts.Add(item.Text);
             }
         }
 
