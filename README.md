@@ -6,6 +6,7 @@ A checklist app with reusable templates, built with ASP.NET Core, Entity Framewo
 
 - **Template System**: Create reusable checklist templates
 - **Merge Templates**: Create checklists from multiple templates, keeping every item (duplicates preserved)
+- **Share Checklists**: Share a checklist with any other user in the system; both can edit it, only the owner can delete it
 - **Interactive Editing**: Inline text editing, reordering, completion tracking
 - **Grouped Items**: Items grouped by source template, collapsible
 - **Hide Completed**: Toggle visibility of completed items
@@ -13,6 +14,21 @@ A checklist app with reusable templates, built with ASP.NET Core, Entity Framewo
 - **Dark/Light Mode**: Respects system preference
 - **Export**: Export templates as Markdown
 - **SSO Authentication**: OpenID Connect via MathAuth
+
+## Sharing
+
+Checklists (not templates) can be shared with other users:
+
+- Open a checklist you own and press **Share** to pick from every other user in the system.
+- Everyone the checklist is shared with can edit it — items, groups, name, and view options — and it
+  shows up under **Shared With You** on their dashboard.
+- Only the owner can delete the checklist or change who it is shared with. Deleting it removes it for
+  everyone. A user it was shared with can press **Leave** to drop their own access; the owner keeps
+  the checklist.
+
+Users become available in the share picker once they have signed in at least once (they are recorded
+in the `Users` table on sign-in). Anyone who already owns a checklist or template is backfilled by
+the `AddChecklistSharing` migration.
 
 ## Tech Stack
 
@@ -113,14 +129,18 @@ docker-compose.yml
 auth-config/oidc-clients.json
 src/ExtensibleChecklist/
 ├── Program.cs                  # App config, auth, middleware, API endpoints
+├── Auth/                       # Claims helpers (username, display name)
 ├── Data/AppDbContext.cs         # EF Core context
-├── Models/                     # Template, Checklist entities
+├── Data/ChecklistAccess.cs      # Owner/shared-user access rules
+├── Models/                     # Template, Checklist, ChecklistShare, AppUser entities
+├── Services/UserDirectory.cs    # Users available to share with
 ├── Migrations/                 # EF Core migrations
 ├── Pages/
 │   ├── _Layout.cshtml          # Shared layout with nav
-│   ├── Index.cshtml            # Dashboard
+│   ├── Index.cshtml            # Dashboard (owned + shared with you)
+│   ├── Shared/                 # Razor partials
 │   ├── Templates/              # Template CRUD
-│   └── Checklists/             # Create + interactive detail
+│   └── Checklists/             # Create + interactive detail with share panel
 ├── wwwroot/css/site.css        # Dark/light theme
 ├── appsettings.json
 └── appsettings.Development.json

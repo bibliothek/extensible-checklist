@@ -1,0 +1,63 @@
+@model ExtensibleChecklist.Pages.ChecklistCardViewModel
+@{
+    var checklist = Model.Checklist;
+    var total = checklist.Items.Count;
+    var completed = checklist.Items.Count(i => i.Completed);
+    var pct = total > 0 ? (int)Math.Round(100.0 * completed / total) : 0;
+    var shareCount = checklist.Shares.Count;
+
+    var deletePrompt = shareCount > 0
+        ? $"Delete \"{checklist.Name}\"? It will also disappear for the {shareCount} user(s) it is shared with."
+        : $"Delete \"{checklist.Name}\"?";
+    var leavePrompt = $"Remove \"{checklist.Name}\" from your checklists? The owner keeps it.";
+}
+
+<div class="card">
+    <a href="/Checklists/Detail/@checklist.Id" class="card-title">@checklist.Name</a>
+
+    @if (Model.IsOwner && shareCount > 0)
+    {
+        <span class="share-badge" title="Shared with @shareCount other @(shareCount == 1 ? "user" : "users")">
+            &#128101; Shared with @shareCount
+        </span>
+    }
+    else if (!Model.IsOwner)
+    {
+        <span class="share-badge" title="Owned by @Model.SharedByDisplayName">
+            &#128101; Shared by @Model.SharedByDisplayName
+        </span>
+    }
+
+    @if (!checklist.HideProgress)
+    {
+        <div class="progress-info">
+            <span>@completed/@total items completed</span>
+            <span>@pct%</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: @pct%"></div>
+        </div>
+    }
+
+    <p class="text-faint card-date">Created @checklist.CreatedAt.ToString("yyyy-MM-dd")</p>
+
+    <div class="card-actions">
+        <a href="/Checklists/Detail/@checklist.Id" class="btn btn-secondary">Open</a>
+        @if (Model.IsOwner)
+        {
+            <form method="post" asp-page-handler="Delete" style="flex:1; display:flex;"
+                  onsubmit="return confirm(@Json.Serialize(deletePrompt));">
+                <input type="hidden" name="id" value="@checklist.Id" />
+                <button type="submit" class="btn btn-danger" style="flex:1;">Delete</button>
+            </form>
+        }
+        else
+        {
+            <form method="post" asp-page-handler="Leave" style="flex:1; display:flex;"
+                  onsubmit="return confirm(@Json.Serialize(leavePrompt));">
+                <input type="hidden" name="id" value="@checklist.Id" />
+                <button type="submit" class="btn btn-danger" style="flex:1;">Leave</button>
+            </form>
+        }
+    </div>
+</div>
