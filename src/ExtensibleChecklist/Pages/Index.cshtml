@@ -13,7 +13,7 @@
     </div>
 </div>
 
-@if (Model.Checklists.Count == 0)
+@if (Model.Checklists.Count == 0 && Model.SharedWithMe.Count == 0)
 {
     <div class="empty-state">
         <h2>No active checklists yet</h2>
@@ -21,41 +21,26 @@
         <a href="/Checklists/Create" class="btn btn-primary" style="margin-top: 1rem;">New Checklist</a>
     </div>
 }
-else
+
+@if (Model.Checklists.Count > 0)
 {
     <h2 class="section-title">Recent Checklists</h2>
     <div class="card-grid">
         @foreach (var checklist in Model.Checklists)
         {
-            var total = checklist.Items.Count;
-            var completed = checklist.Items.Count(i => i.Completed);
-            var pct = total > 0 ? (int)Math.Round(100.0 * completed / total) : 0;
+            <partial name="_ChecklistCard" model="new ChecklistCardViewModel(checklist, true, null)" />
+        }
+    </div>
+}
 
-            <div class="card">
-                <a href="/Checklists/Detail/@checklist.Id" class="card-title">@checklist.Name</a>
-
-                @if (!checklist.HideProgress)
-                {
-                    <div class="progress-info">
-                        <span>@completed/@total items completed</span>
-                        <span>@pct%</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: @pct%"></div>
-                    </div>
-                }
-
-                <p class="text-faint card-date">Created @checklist.CreatedAt.ToString("yyyy-MM-dd")</p>
-
-                <div class="card-actions">
-                    <a href="/Checklists/Detail/@checklist.Id" class="btn btn-secondary">Open</a>
-                    <form method="post" asp-page-handler="Delete" style="flex:1; display:flex;"
-                          onsubmit="return confirm('Delete &quot;@checklist.Name.Replace("'", "\\'")&quot;?');">
-                        <input type="hidden" name="id" value="@checklist.Id" />
-                        <button type="submit" class="btn btn-danger" style="flex:1;">Delete</button>
-                    </form>
-                </div>
-            </div>
+@if (Model.SharedWithMe.Count > 0)
+{
+    <h2 class="section-title section-title-spaced">Shared With You</h2>
+    <div class="card-grid">
+        @foreach (var checklist in Model.SharedWithMe)
+        {
+            var owner = Model.OwnerNames.TryGetValue(checklist.UserId, out var name) ? name : checklist.UserId;
+            <partial name="_ChecklistCard" model="new ChecklistCardViewModel(checklist, false, owner)" />
         }
     </div>
 }

@@ -11,6 +11,8 @@ public class AppDbContext : DbContext
     public DbSet<TemplateItem> TemplateItems => Set<TemplateItem>();
     public DbSet<Checklist> Checklists => Set<Checklist>();
     public DbSet<ChecklistItem> ChecklistItems => Set<ChecklistItem>();
+    public DbSet<ChecklistShare> ChecklistShares => Set<ChecklistShare>();
+    public DbSet<AppUser> Users => Set<AppUser>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -28,6 +30,21 @@ public class AppDbContext : DbContext
              .WithOne(i => i.Checklist)
              .HasForeignKey(i => i.ChecklistId)
              .OnDelete(DeleteBehavior.Cascade);
+
+            e.HasMany(c => c.Shares)
+             .WithOne(s => s.Checklist)
+             .HasForeignKey(s => s.ChecklistId)
+             .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<ChecklistShare>(e =>
+        {
+            e.HasIndex(s => new { s.ChecklistId, s.UserId }).IsUnique();
+        });
+
+        modelBuilder.Entity<AppUser>(e =>
+        {
+            e.HasKey(u => u.Username);
         });
     }
 }

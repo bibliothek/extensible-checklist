@@ -21,6 +21,8 @@
         .OrderBy(i => i.Order)
         .GroupBy(i => i.SourceTemplate)
         .ToList();
+
+    var sharedWithLabel = string.Join(", ", Model.SharedWith);
 }
 
 <div id="checklistApp" data-checklist-id="@checklist.Id" data-hide-completed="@checklist.HideCompleted.ToString().ToLower()">
@@ -36,8 +38,26 @@
                    id="checklistNameInput" style="display:none;"
                    onblur="saveChecklistName()"
                    onkeydown="handleNameKey(event)" />
+
+            @if (!Model.IsOwner)
+            {
+                <span class="share-badge" title="Owned by @Model.OwnerDisplayName">
+                    &#128101; Shared by @Model.OwnerDisplayName
+                </span>
+            }
+            else if (Model.SharedWith.Count > 0)
+            {
+                <span class="share-badge" id="shareBadge" title="Shared with @sharedWithLabel">
+                    &#128101; Shared with @Model.SharedWith.Count
+                </span>
+            }
         </div>
         <div class="checklist-actions no-print">
+            @if (Model.IsOwner)
+            {
+                <button type="button" onclick="toggleSharePanel()" class="btn btn-secondary btn-sm" id="shareBtn"
+                        aria-expanded="false" aria-controls="sharePanel">Share</button>
+            }
             <button onclick="toggleHideCompleted()" class="btn btn-secondary btn-sm" id="hideBtn">
                 @(checklist.HideCompleted ? "Show All" : "Hide Completed")
             </button>
@@ -61,6 +81,54 @@
 
     <!-- Error banner -->
     <div id="errorBanner" class="toast toast-error no-print" style="display:none;"></div>
+
+    @if (Model.IsOwner)
+    {
+        <!-- Share panel (owner only) -->
+        <section id="sharePanel" class="share-panel no-print" style="display:none;" aria-labelledby="sharePanelTitle">
+            <h2 id="sharePanelTitle" class="share-panel-title">Share this checklist</h2>
+
+            @if (Model.ShareCandidates.Count == 0)
+            {
+                <p class="text-muted">There is nobody else to share with yet. Other users appear here once they have signed in.</p>
+            }
+            else
+            {
+                <p class="text-muted">
+                    Everyone you pick can edit this checklist. Only you can delete it or change who it is shared with.
+                </p>
+
+                <input type="search" id="shareFilter" class="form-input share-filter"
+                       placeholder="Filter users..." oninput="filterShareCandidates()"
+                       aria-label="Filter users" />
+
+                <ul class="share-user-list" id="shareUserList">
+                    @foreach (var candidate in Model.ShareCandidates)
+                    {
+                        var search = $"{candidate.DisplayName} {candidate.Username}".ToLowerInvariant();
+                        <li class="share-user" data-search="@search">
+                            <label class="share-user-label">
+                                <input type="checkbox" class="share-user-checkbox" value="@candidate.Username"
+                                       @(Model.SharedWith.Contains(candidate.Username) ? "checked" : "") />
+                                <span class="share-user-name">@candidate.DisplayName</span>
+                                @if (!string.Equals(candidate.DisplayName, candidate.Username, StringComparison.Ordinal))
+                                {
+                                    <span class="share-user-handle text-faint">@candidate.Username</span>
+                                }
+                            </label>
+                        </li>
+                    }
+                </ul>
+
+                <p class="text-faint" id="shareEmptyFilter" style="display:none;">No users match that filter.</p>
+
+                <div class="share-panel-actions">
+                    <button type="button" onclick="saveShares()" class="btn btn-primary btn-sm" id="shareSaveBtn">Save sharing</button>
+                    <button type="button" onclick="toggleSharePanel()" class="btn btn-secondary btn-sm">Cancel</button>
+                </div>
+            }
+        </section>
+    }
 
     <!-- Grouped items -->
     <div id="itemsView">
@@ -137,6 +205,55 @@
         el.textContent = msg;
         el.style.display = '';
         setTimeout(() => el.style.display = 'none', 5000);
+    }
+
+    // ---- Sharing (owner only; the panel is not rendered for shared users) ----
+
+    function toggleSharePanel() {
+        const panel = document.getElementById('sharePanel');
+        const btn = document.getElementById('shareBtn');
+        if (!panel) return;
+
+        const opening = panel.style.display === 'none';
+        panel.style.display = opening ? '' : 'none';
+        if (btn) btn.setAttribute('aria-expanded', opening ? 'true' : 'false');
+
+        if (opening) {
+            const filter = document.getElementById('shareFilter');
+            if (filter) filter.focus();
+        }
+    }
+
+    function filterShareCandidates() {
+        const term = document.getElementById('shareFilter').value.trim().toLowerCase();
+        let visible = 0;
+        document.querySelectorAll('#shareUserList .share-user').forEach(row => {
+            const match = !term || row.dataset.search.includes(term);
+            row.style.display = match ? '' : 'none';
+            if (match) visible++;
+        });
+        document.getElementById('shareEmptyFilter').style.display = visible === 0 ? '' : 'none';
+    }
+
+    async function saveShares() {
+        const btn = document.getElementById('shareSaveBtn');
+        const usernames = Array.from(document.querySelectorAll('.share-user-checkbox'))
+            .filter(cb => cb.checked)
+            .map(cb => cb.value);
+
+        btn.disabled = true;
+        try {
+            const res = await fetch(`/api/checklists/${checklistId}/shares`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ usernames })
+            });
+            if (!res.ok) throw new Error();
+            location.reload();
+        } catch {
+            btn.disabled = false;
+            showError('Failed to update sharing');
+        }
     }
 
     function updateProgress() {

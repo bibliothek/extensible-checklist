@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -7,8 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
+using ExtensibleChecklist.Auth;
 using ExtensibleChecklist.Data;
 using ExtensibleChecklist.Models;
+using ExtensibleChecklist.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,8 @@ builder.Services.AddRazorPages();
 // Entity Framework with SQLite
 var connectionString = builder.Configuration.GetConnectionString("Default") ?? "Data Source=data/checklist.db";
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(connectionString));
+
+builder.Services.AddScoped<UserDirectory>();
 
 // OIDC Authentication (same pattern as matha-hub)
 var oidcIssuer = builder.Configuration["OIDC_ISSUER"] ?? "http://localhost:5001/";
@@ -75,6 +78,15 @@ builder.Services.AddAuthentication(options =>
 
     options.Events = new OpenIdConnectEvents
     {
+        OnTicketReceived = async context =>
+        {
+            var username = context.Principal?.GetUsername();
+            if (!string.IsNullOrWhiteSpace(username))
+            {
+                var directory = context.HttpContext.RequestServices.GetRequiredService<UserDirectory>();
+                await directory.TouchAsync(username, context.Principal?.GetDisplayName());
+            }
+        },
         OnRedirectToIdentityProvider = context =>
         {
             var publicAuthority = oidcIssuer.TrimEnd('/');
@@ -146,11 +158,7 @@ app.MapGet("/api/health", () => Results.Ok(new { status = "healthy" }));
 
 // ---- API Endpoints for interactive checklist operations ----
 
-string? GetUsername(HttpContext ctx) =>
-    ctx.User.FindFirstValue("preferred_username")
-    ?? ctx.User.FindFirstValue("name")
-    ?? ctx.User.FindFirstValue(ClaimTypes.Name)
-    ?? ctx.User.Identity?.Name;
+string? GetUsername(HttpContext ctx) => ctx.User.GetUsername();
 
 var api = app.MapGroup("/api")
     .RequireAuthorization()
@@ -162,9 +170,7 @@ api.MapPost("/checklists/{checklistId}/items/{itemId}/toggle", async (int checkl
     var username = GetUsername(ctx);
     if (string.IsNullOrEmpty(username)) return Results.Unauthorized();
 
-    var item = await db.ChecklistItems
-        .Include(i => i.Checklist)
-        .FirstOrDefaultAsync(i => i.Id == itemId && i.ChecklistId == checklistId && i.Checklist.UserId == username);
+    var item = await db.FindEditableItemAsync(checklistId, itemId, username);
 
     if (item is null) return Results.NotFound();
 
@@ -181,9 +187,7 @@ api.MapPost("/checklists/{checklistId}/items/{itemId}/text", async (int checklis
     var username = GetUsername(ctx);
     if (string.IsNullOrEmpty(username)) return Results.Unauthorized();
 
-    var item = await db.ChecklistItems
-        .Include(i => i.Checklist)
-        .FirstOrDefaultAsync(i => i.Id == itemId && i.ChecklistId == checklistId && i.Checklist.UserId == username);
+    var item = await db.FindEditableItemAsync(checklistId, itemId, username);
 
     if (item is null) return Results.NotFound();
 
@@ -200,9 +204,7 @@ api.MapPost("/checklists/{checklistId}/items", async (int checklistId, AddItemRe
     var username = GetUsername(ctx);
     if (string.IsNullOrEmpty(username)) return Results.Unauthorized();
 
-    var checklist = await db.Checklists
-        .Include(c => c.Items)
-        .FirstOrDefaultAsync(c => c.Id == checklistId && c.UserId == username);
+    var checklist = await db.FindEditableWithItemsAsync(checklistId, username);
 
     if (checklist is null) return Results.NotFound();
 
@@ -229,9 +231,7 @@ api.MapDelete("/checklists/{checklistId}/items/{itemId}", async (int checklistId
     var username = GetUsername(ctx);
     if (string.IsNullOrEmpty(username)) return Results.Unauthorized();
 
-    var item = await db.ChecklistItems
-        .Include(i => i.Checklist)
-        .FirstOrDefaultAsync(i => i.Id == itemId && i.ChecklistId == checklistId && i.Checklist.UserId == username);
+    var item = await db.FindEditableItemAsync(checklistId, itemId, username);
 
     if (item is null) return Results.NotFound();
 
@@ -251,9 +251,7 @@ api.MapDelete("/checklists/{checklistId}/groups", async (int checklistId, string
     groupName = groupName.Trim();
     if (string.IsNullOrEmpty(groupName)) return Results.BadRequest(new { error = "Group name cannot be empty" });
 
-    var checklist = await db.Checklists
-        .Include(c => c.Items)
-        .FirstOrDefaultAsync(c => c.Id == checklistId && c.UserId == username);
+    var checklist = await db.FindEditableWithItemsAsync(checklistId, username);
 
     if (checklist is null) return Results.NotFound();
 
@@ -271,9 +269,7 @@ api.MapPost("/checklists/{checklistId}/reorder", async (int checklistId, Reorder
     var username = GetUsername(ctx);
     if (string.IsNullOrEmpty(username)) return Results.Unauthorized();
 
-    var checklist = await db.Checklists
-        .Include(c => c.Items)
-        .FirstOrDefaultAsync(c => c.Id == checklistId && c.UserId == username);
+    var checklist = await db.FindEditableWithItemsAsync(checklistId, username);
 
     if (checklist is null) return Results.NotFound();
 
@@ -301,7 +297,7 @@ api.MapPost("/checklists/{checklistId}/name", async (int checklistId, TextUpdate
     var name = body.Text.Trim();
     if (string.IsNullOrEmpty(name)) return Results.BadRequest(new { error = "Name cannot be empty" });
 
-    var checklist = await db.Checklists.FirstOrDefaultAsync(c => c.Id == checklistId && c.UserId == username);
+    var checklist = await db.FindEditableAsync(checklistId, username);
     if (checklist is null) return Results.NotFound();
 
     checklist.Name = name;
@@ -317,7 +313,7 @@ api.MapPost("/checklists/{checklistId}/hide-completed", async (int checklistId, 
     var username = GetUsername(ctx);
     if (string.IsNullOrEmpty(username)) return Results.Unauthorized();
 
-    var checklist = await db.Checklists.FirstOrDefaultAsync(c => c.Id == checklistId && c.UserId == username);
+    var checklist = await db.FindEditableAsync(checklistId, username);
     if (checklist is null) return Results.NotFound();
 
     checklist.HideCompleted = !checklist.HideCompleted;
@@ -333,7 +329,7 @@ api.MapPost("/checklists/{checklistId}/hide-progress", async (int checklistId, A
     var username = GetUsername(ctx);
     if (string.IsNullOrEmpty(username)) return Results.Unauthorized();
 
-    var checklist = await db.Checklists.FirstOrDefaultAsync(c => c.Id == checklistId && c.UserId == username);
+    var checklist = await db.FindEditableAsync(checklistId, username);
     if (checklist is null) return Results.NotFound();
 
     checklist.HideProgress = !checklist.HideProgress;
@@ -341,6 +337,63 @@ api.MapPost("/checklists/{checklistId}/hide-progress", async (int checklistId, A
     await db.SaveChangesAsync();
 
     return Results.Json(new { checklist.HideProgress });
+});
+
+// ---- Sharing (owner only) ----
+
+// Replace the set of users a checklist is shared with
+api.MapPost("/checklists/{checklistId}/shares", async (int checklistId, ShareRequest body, AppDbContext db, UserDirectory directory, HttpContext ctx) =>
+{
+    var username = GetUsername(ctx);
+    if (string.IsNullOrEmpty(username)) return Results.Unauthorized();
+
+    var checklist = await db.Checklists
+        .OwnedBy(username)
+        .Include(c => c.Shares)
+        .FirstOrDefaultAsync(c => c.Id == checklistId);
+
+    if (checklist is null) return Results.NotFound();
+
+    // Only users that actually exist in the system can be granted access,
+    // and the owner is never stored as a share.
+    var known = (await directory.GetOtherUsersAsync(username))
+        .ToDictionary(u => u.Username, StringComparer.OrdinalIgnoreCase);
+
+    var requested = (body.Usernames ?? [])
+        .Where(u => !string.IsNullOrWhiteSpace(u))
+        .Select(u => u.Trim())
+        .Distinct(StringComparer.OrdinalIgnoreCase)
+        .ToList();
+
+    var unknown = requested.Where(u => !known.ContainsKey(u)).ToList();
+    if (unknown.Count > 0)
+        return Results.BadRequest(new { error = $"Unknown user(s): {string.Join(", ", unknown)}" });
+
+    // Normalise to the directory's casing so comparisons stay stable.
+    var target = requested.Select(u => known[u].Username).ToList();
+
+    var removed = checklist.Shares
+        .Where(s => !target.Contains(s.UserId, StringComparer.OrdinalIgnoreCase))
+        .ToList();
+    db.ChecklistShares.RemoveRange(removed);
+
+    foreach (var user in target)
+    {
+        if (checklist.Shares.Any(s => string.Equals(s.UserId, user, StringComparison.OrdinalIgnoreCase)))
+            continue;
+
+        db.ChecklistShares.Add(new ChecklistShare
+        {
+            ChecklistId = checklist.Id,
+            UserId = user,
+            SharedBy = username,
+        });
+    }
+
+    checklist.UpdatedAt = DateTime.UtcNow;
+    await db.SaveChangesAsync();
+
+    return Results.Json(new { sharedWith = target });
 });
 
 // Export templates as markdown
@@ -384,3 +437,4 @@ record TextUpdate(string Text);
 record AddItemRequest(string Text, string? SourceTemplate);
 record ReorderUpdate(int ItemId, int Order);
 record ReorderRequest(List<ReorderUpdate> Updates);
+record ShareRequest(List<string>? Usernames);
