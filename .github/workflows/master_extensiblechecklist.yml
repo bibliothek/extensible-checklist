@@ -35,7 +35,9 @@ jobs:
         with:
           context: .
           push: true
-          tags: index.docker.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_6885630C247C4FFC98794F8FD3DB32F7 }}/extensiblechecklist:${{ github.sha }}
+          tags: |
+            index.docker.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_6885630C247C4FFC98794F8FD3DB32F7 }}/extensiblechecklist:${{ github.sha }}
+            index.docker.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_6885630C247C4FFC98794F8FD3DB32F7 }}/extensiblechecklist:latest
           file: ./Dockerfile
 
   deploy:
