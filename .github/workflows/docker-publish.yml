@@ -34,5 +34,40 @@ jobs:
           push: true
           tags: |
             index.docker.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_6885630C247C4FFC98794F8FD3DB32F7 }}/extensiblechecklist:${{ github.sha }}
-            index.docker.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_6885630C247C4FFC98794F8FD3DB32F7 }}/extensiblechecklist:latest
           file: ./Dockerfile
+
+  # Bumps the extensiblechecklist tag in matha-web's images.yml; its update.sh cron then
+  # rolls it out. Only for master, so other runs just build/publish.
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    # Queue bumps so an older build can't land after a newer one.
+    concurrency: matha-web-bump
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: bibliothek/matha-web
+          token: ${{ secrets.MATHA_WEB_TOKEN }}
+
+      - name: Bump extensiblechecklist tag in images.yml
+        env:
+          SHA: ${{ github.sha }}
+        run: |
+          sed -i -E "s#^(\s*image: .*/extensiblechecklist:).*#\1${SHA}#" images.yml
+          if git diff --quiet; then
+            echo "images.yml already at ${SHA}"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "Deploy extensiblechecklist ${SHA::7}" \
+            -m "From ${{ github.server_url }}/${{ github.repository }}/commit/${SHA}"
+          # Other apps' pipelines push the same file; rebase and retry on a race.
+          for i in 1 2 3 4 5; do
+            git push && exit 0
+            sleep $((i * 2))
+            git pull --rebase
+          done
+          exit 1
