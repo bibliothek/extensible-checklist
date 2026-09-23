@@ -80,29 +80,29 @@ The file `auth-config/oidc-clients.json` registers the app with the local MathAu
 | Redirect URI | `http://localhost:3000/signin-oidc` |
 | Post-logout URI | `http://localhost:3000` |
 
-## Azure Deployment
+## Container Deployment
 
-The app deploys as a Docker container to Azure App Service via GitHub Actions (`.github/workflows/`).
+The image is built and pushed to the container registry on every push to `master` via GitHub Actions (`.github/workflows/docker-publish.yml`). Tags: `:latest` and `:<commit-sha>`.
 
-### App Service Configuration
+### Runtime Configuration
 
-Set these in **Azure Portal > App Service > Configuration > Application settings**:
+Set these environment variables on whatever host runs the container:
 
 | Setting | Value | Description |
 |---|---|---|
-| `ConnectionStrings__Default` | `Data Source=/app/data/checklist.db` | SQLite path (mount Azure Files at `/app/data`) |
+| `ConnectionStrings__Default` | `Data Source=/app/data/checklist.db` | SQLite path (mount a persistent volume at `/app/data`) |
 | `OIDC_ISSUER` | `https://your-mathauth.example.com/` | MathAuth public URL (what the browser sees) |
 | `OIDC_ISSUER_INTERNAL` | Same as `OIDC_ISSUER`, or internal URL | Server-to-server URL (if different from public) |
 | `OIDC_CLIENT_ID` | Your client ID | Registered in MathAuth |
 | `OIDC_CLIENT_SECRET` | Your client secret | Registered in MathAuth |
 
 Register the app in MathAuth with:
-- **Redirect URI**: `https://your-app.azurewebsites.net/signin-oidc`
-- **Post-logout URI**: `https://your-app.azurewebsites.net`
+- **Redirect URI**: `https://your-host.example.com/signin-oidc`
+- **Post-logout URI**: `https://your-host.example.com`
 
 ### SQLite Persistence
 
-Mount an **Azure Files** share at `/app/data` so the database survives container restarts.
+Mount a persistent volume at `/app/data` so the database survives container restarts.
 
 ## Project Structure
 
