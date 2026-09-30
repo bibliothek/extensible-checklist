@@ -352,7 +352,7 @@ api.MapGet("/templates/export", async (AppDbContext db, HttpContext ctx) =>
     var templates = await db.Templates
         .Where(t => t.UserId == username)
         .Include(t => t.Items.OrderBy(i => i.Order))
-        .OrderBy(t => t.Name)
+        .OrderBy(t => t.Name.ToLower())
         .ToListAsync();
 
     var markdown = "";

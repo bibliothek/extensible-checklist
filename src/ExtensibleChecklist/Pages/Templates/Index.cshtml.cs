@@ -34,7 +34,7 @@ public class IndexModel : PageModel
         Templates = await _db.Templates
             .Where(t => t.UserId == GetUsername())
             .Include(t => t.Items.OrderBy(i => i.Order))
-            .OrderBy(t => t.Name)
+            .OrderBy(t => t.Name.ToLower())
             .ToListAsync();
     }
 

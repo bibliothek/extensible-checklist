@@ -42,7 +42,7 @@ public class CreateModel : PageModel
         Templates = await _db.Templates
             .Where(t => t.UserId == GetUsername())
             .Include(t => t.Items.OrderBy(i => i.Order))
-            .OrderBy(t => t.Name)
+            .OrderBy(t => t.Name.ToLower())
             .ToListAsync();
     }
 
@@ -53,7 +53,7 @@ public class CreateModel : PageModel
         Templates = await _db.Templates
             .Where(t => t.UserId == GetUsername())
             .Include(t => t.Items.OrderBy(i => i.Order))
-            .OrderBy(t => t.Name)
+            .OrderBy(t => t.Name.ToLower())
             .ToListAsync();
 
         // Generate default name if empty
