@@ -169,6 +169,7 @@ api.MapPost("/checklists/{checklistId}/items/{itemId}/toggle", async (int checkl
     if (item is null) return Results.NotFound();
 
     item.Completed = !item.Completed;
+    item.CompletedAt = item.Completed ? DateTime.UtcNow : null;
     item.Checklist.UpdatedAt = DateTime.UtcNow;
     await db.SaveChangesAsync();
 
