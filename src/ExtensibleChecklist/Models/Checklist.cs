@@ -17,6 +17,7 @@ public class ChecklistItem
     public int Id { get; set; }
     public string Text { get; set; } = "";
     public bool Completed { get; set; }
+    public DateTime? CompletedAt { get; set; }
     public int Order { get; set; }
     public string SourceTemplate { get; set; } = "Custom";
     public int ChecklistId { get; set; }
