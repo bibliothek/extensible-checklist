@@ -38,13 +38,18 @@
                    onkeydown="handleNameKey(event)" />
         </div>
         <div class="checklist-actions no-print">
-            <button onclick="toggleHideCompleted()" class="btn btn-secondary btn-sm" id="hideBtn">
-                @(checklist.HideCompleted ? "Show All" : "Hide Completed")
-            </button>
-            <button onclick="toggleHideProgress()" class="btn btn-secondary btn-sm" id="hideProgressBtn">
-                @(checklist.HideProgress ? "Show Progress" : "Hide Progress")
-            </button>
-            <button onclick="window.print()" class="btn btn-secondary btn-sm">Print</button>
+            <div class="user-menu" id="checklistMenu">
+                <button type="button" class="user-menu-trigger checklist-menu-trigger" onclick="this.parentElement.classList.toggle('open')" title="More actions" aria-label="More actions">&#8943;</button>
+                <div class="user-menu-dropdown" onclick="this.parentElement.classList.remove('open')">
+                    <button type="button" onclick="toggleHideCompleted()" class="user-menu-item" id="hideBtn">
+                        @(checklist.HideCompleted ? "Show All" : "Hide Completed")
+                    </button>
+                    <button type="button" onclick="toggleHideProgress()" class="user-menu-item" id="hideProgressBtn">
+                        @(checklist.HideProgress ? "Show Progress" : "Hide Progress")
+                    </button>
+                    <button type="button" onclick="window.print()" class="user-menu-item">Print</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -131,6 +136,11 @@
     }
 
     sortAllGroups();
+
+    document.addEventListener('click', e => {
+        const menu = document.getElementById('checklistMenu');
+        if (!menu.contains(e.target)) menu.classList.remove('open');
+    });
 
     function showError(msg) {
         const el = document.getElementById('errorBanner');

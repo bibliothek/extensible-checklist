@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v6';
+const CACHE_VERSION = 'v7';
 const STATIC_CACHE = `checklist-static-${CACHE_VERSION}`;
 
 const PRECACHE_URLS = [
