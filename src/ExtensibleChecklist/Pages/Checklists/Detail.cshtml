@@ -1,5 +1,6 @@
 @page "{id:int}"
 @model ExtensibleChecklist.Pages.Checklists.DetailModel
+@using System.Globalization
 
 @if (Model.Checklist is null)
 {
@@ -47,6 +48,7 @@
                     <button type="button" onclick="toggleHideProgress()" class="user-menu-item" id="hideProgressBtn">
                         @(checklist.HideProgress ? "Show Progress" : "Hide Progress")
                     </button>
+                    <button type="button" onclick="toggleBurndown()" class="user-menu-item" id="burndownBtn">Show Burndown</button>
                     <button type="button" onclick="window.print()" class="user-menu-item">Print</button>
                 </div>
             </div>
@@ -62,6 +64,15 @@
         <div class="progress-bar">
             <div class="progress-fill" id="progressFill" style="width: @pct%"></div>
         </div>
+    </div>
+
+    <!-- Burndown -->
+    <div class="burndown-section no-print" id="burndownSection" style="display:none;">
+        <div class="burndown-legend">
+            <span><span class="burndown-swatch bd-swatch-created"></span>Created <strong id="bdCreatedCount"></strong></span>
+            <span><span class="burndown-swatch bd-swatch-completed"></span>Completed <strong id="bdCompletedCount"></strong></span>
+        </div>
+        <div class="burndown-chart" id="burndownChart"></div>
     </div>
 
     <!-- Error banner -->
@@ -85,6 +96,8 @@
                         <div class="checklist-item @(item.Completed ? "item-completed" : "")"
                              data-item-id="@item.Id"
                              data-completed="@item.Completed.ToString().ToLower()"
+                             data-created-at="@item.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ss'Z'", CultureInfo.InvariantCulture)"
+                             data-completed-at="@(item.CompletedAt?.ToString("yyyy-MM-ddTHH:mm:ss'Z'", CultureInfo.InvariantCulture))"
                              style="@(checklist.HideCompleted && item.Completed ? "display:none;" : "")">
                             <input type="checkbox" @(item.Completed ? "checked" : "")
                                    onchange="toggleItem(@item.Id, @checklist.Id)" class="item-checkbox" />
@@ -158,6 +171,118 @@
         document.getElementById('progressText').textContent = `${completed} of ${total} items completed`;
         document.getElementById('progressPct').textContent = `${pct}%`;
         document.getElementById('progressFill').style.width = `${pct}%`;
+        if (showBurndown) renderBurndown();
+    }
+
+    let showBurndown = false;
+
+    function toggleBurndown() {
+        showBurndown = !showBurndown;
+        document.getElementById('burndownBtn').textContent = showBurndown ? 'Hide Burndown' : 'Show Burndown';
+        document.getElementById('burndownSection').style.display = showBurndown ? '' : 'none';
+        if (showBurndown) renderBurndown();
+    }
+
+    window.addEventListener('resize', () => { if (showBurndown) renderBurndown(); });
+
+    function renderBurndown() {
+        const chart = document.getElementById('burndownChart');
+        const items = Array.from(document.querySelectorAll('.checklist-item'));
+        const created = items.map(el => Date.parse(el.dataset.createdAt)).filter(t => !isNaN(t)).sort((a, b) => a - b);
+        const completed = items
+            .filter(el => el.dataset.completed === 'true')
+            .map(el => Date.parse(el.dataset.completedAt))
+            .filter(t => !isNaN(t))
+            .sort((a, b) => a - b);
+
+        document.getElementById('bdCreatedCount').textContent = created.length;
+        document.getElementById('bdCompletedCount').textContent = completed.length;
+
+        if (created.length === 0) {
+            chart.innerHTML = '<p class="text-muted burndown-empty">No items yet.</p>';
+            return;
+        }
+
+        const W = Math.max(chart.clientWidth, 280), H = 220;
+        const m = { l: 32, r: 32, t: 12, b: 24 };
+        const end = Date.now();
+        const start = Math.min(created[0], end - 3600_000);
+        const maxY = Math.max(created.length, 1);
+        const yStep = Math.max(1, Math.ceil(maxY / 4));
+        const yMax = yStep * Math.ceil(maxY / yStep);
+        const x = t => m.l + (t - start) / (end - start) * (W - m.l - m.r);
+        const y = v => m.t + (1 - v / yMax) * (H - m.t - m.b);
+        const countAt = (times, t) => times.filter(v => v <= t).length;
+
+        const stepPath = times => {
+            let d = `M${x(start)},${y(0)}`;
+            times.forEach((t, i) => { d += `H${x(t)}V${y(i + 1)}`; });
+            return d + `H${x(end)}`;
+        };
+
+        const fmt = t => new Date(t).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+        const fmtFull = t => new Date(t).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+        let grid = '';
+        for (let v = 0; v <= yMax; v += yStep) {
+            grid += `<line class="bd-grid" x1="${m.l}" x2="${W - m.r}" y1="${y(v)}" y2="${y(v)}"/>`;
+            grid += `<text class="bd-axis" x="${m.l - 6}" y="${y(v)}" text-anchor="end" dominant-baseline="middle">${v}</text>`;
+        }
+        const xTicks = [start, start + (end - start) / 2, end];
+        const anchors = ['start', 'middle', 'end'];
+        xTicks.forEach((t, i) => {
+            grid += `<text class="bd-axis" x="${x(t)}" y="${H - 6}" text-anchor="${anchors[i]}">${fmt(t)}</text>`;
+        });
+
+        // Direct end labels, nudged apart when they would overlap
+        let yc = y(created.length), yd = y(completed.length);
+        if (Math.abs(yc - yd) < 12) { yc -= 6; yd += 6; }
+
+        chart.innerHTML = `
+            <svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Items created vs completed over time">
+                ${grid}
+                <path class="bd-line bd-created" d="${stepPath(created)}"/>
+                <path class="bd-line bd-completed" d="${stepPath(completed)}"/>
+                <text class="bd-end-label" x="${W - m.r + 6}" y="${yc}" dominant-baseline="middle">${created.length}</text>
+                <text class="bd-end-label" x="${W - m.r + 6}" y="${yd}" dominant-baseline="middle">${completed.length}</text>
+                <g class="bd-hover" style="display:none;">
+                    <line class="bd-crosshair" y1="${m.t}" y2="${H - m.b}"/>
+                    <circle class="bd-dot bd-dot-created" r="4"/>
+                    <circle class="bd-dot bd-dot-completed" r="4"/>
+                </g>
+                <rect class="bd-hit" x="${m.l}" y="${m.t}" width="${W - m.l - m.r}" height="${H - m.t - m.b}"/>
+            </svg>
+            <div class="burndown-tooltip" style="display:none;"></div>`;
+
+        const svg = chart.querySelector('svg');
+        const hover = svg.querySelector('.bd-hover');
+        const tip = chart.querySelector('.burndown-tooltip');
+        const hit = svg.querySelector('.bd-hit');
+
+        hit.addEventListener('pointermove', e => {
+            const px = e.clientX - svg.getBoundingClientRect().left;
+            const t = start + (px - m.l) / (W - m.l - m.r) * (end - start);
+            const c = countAt(created, t), d = countAt(completed, t);
+            hover.style.display = '';
+            hover.querySelector('.bd-crosshair').setAttribute('x1', px);
+            hover.querySelector('.bd-crosshair').setAttribute('x2', px);
+            hover.querySelector('.bd-dot-created').setAttribute('cx', px);
+            hover.querySelector('.bd-dot-created').setAttribute('cy', y(c));
+            hover.querySelector('.bd-dot-completed').setAttribute('cx', px);
+            hover.querySelector('.bd-dot-completed').setAttribute('cy', y(d));
+            tip.innerHTML = `<div class="bd-tip-date">${fmtFull(t)}</div>
+                <div><span class="burndown-swatch bd-swatch-created"></span>Created <strong>${c}</strong></div>
+                <div><span class="burndown-swatch bd-swatch-completed"></span>Completed <strong>${d}</strong></div>
+                <div class="text-muted">Open <strong>${c - d}</strong></div>`;
+            tip.style.display = '';
+            const left = px + 12 + tip.offsetWidth > W ? px - 12 - tip.offsetWidth : px + 12;
+            tip.style.left = `${left}px`;
+            tip.style.top = `${m.t}px`;
+        });
+        hit.addEventListener('pointerleave', () => {
+            hover.style.display = 'none';
+            tip.style.display = 'none';
+        });
     }
 
     async function toggleHideProgress() {
@@ -179,7 +304,9 @@
         const nowCompleted = !wasCompleted;
 
         // Visual update
+        const prevCompletedAt = el.dataset.completedAt;
         el.dataset.completed = nowCompleted.toString();
+        el.dataset.completedAt = nowCompleted ? new Date().toISOString() : '';
         el.classList.toggle('item-completed');
         if (hideCompleted && nowCompleted) el.style.display = 'none';
         updateProgress();
@@ -209,6 +336,7 @@
         } catch {
             // Revert on error
             el.dataset.completed = wasCompleted.toString();
+            el.dataset.completedAt = prevCompletedAt;
             el.classList.toggle('item-completed');
             el.querySelector('.item-checkbox').checked = wasCompleted;
             if (hideCompleted && nowCompleted) el.style.display = '';
