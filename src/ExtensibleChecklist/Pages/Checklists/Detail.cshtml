@@ -48,7 +48,9 @@
                     <button type="button" onclick="toggleHideProgress()" class="user-menu-item" id="hideProgressBtn">
                         @(checklist.HideProgress ? "Show Progress" : "Hide Progress")
                     </button>
-                    <button type="button" onclick="toggleBurndown()" class="user-menu-item" id="burndownBtn">Show Burndown</button>
+                    <button type="button" onclick="toggleBurndown()" class="user-menu-item" id="burndownBtn">
+                        @(checklist.ShowBurndown ? "Hide Burndown" : "Show Burndown")
+                    </button>
                     <button type="button" onclick="window.print()" class="user-menu-item">Print</button>
                 </div>
             </div>
@@ -67,7 +69,7 @@
     </div>
 
     <!-- Burndown -->
-    <div class="burndown-section no-print" id="burndownSection" style="display:none;">
+    <div class="burndown-section no-print" id="burndownSection" style="@(checklist.ShowBurndown ? "" : "display:none;")">
         <div class="burndown-legend">
             <span><span class="burndown-swatch bd-swatch-created"></span>Created <strong id="bdCreatedCount"></strong></span>
             <span><span class="burndown-swatch bd-swatch-completed"></span>Completed <strong id="bdCompletedCount"></strong></span>
@@ -174,13 +176,20 @@
         if (showBurndown) renderBurndown();
     }
 
-    let showBurndown = false;
+    let showBurndown = @(checklist.ShowBurndown ? "true" : "false");
 
-    function toggleBurndown() {
-        showBurndown = !showBurndown;
-        document.getElementById('burndownBtn').textContent = showBurndown ? 'Hide Burndown' : 'Show Burndown';
-        document.getElementById('burndownSection').style.display = showBurndown ? '' : 'none';
-        if (showBurndown) renderBurndown();
+    async function toggleBurndown() {
+        try {
+            const res = await fetch(`/api/checklists/${checklistId}/show-burndown`, { method: 'POST' });
+            if (!res.ok) throw new Error();
+            const data = await res.json();
+            showBurndown = data.showBurndown;
+            document.getElementById('burndownBtn').textContent = showBurndown ? 'Hide Burndown' : 'Show Burndown';
+            document.getElementById('burndownSection').style.display = showBurndown ? '' : 'none';
+            if (showBurndown) renderBurndown();
+        } catch {
+            showError('Failed to toggle burndown');
+        }
     }
 
     window.addEventListener('resize', () => { if (showBurndown) renderBurndown(); });
@@ -575,6 +584,8 @@
         }
         history.replaceState(null, '', location.pathname + location.search);
     }
+
+    if (showBurndown) renderBurndown();
 
 </script>
 }

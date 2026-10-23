@@ -7,6 +7,7 @@ public class Checklist
     public string UserId { get; set; } = "";
     public bool HideCompleted { get; set; }
     public bool HideProgress { get; set; }
+    public bool ShowBurndown { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     public List<ChecklistItem> Items { get; set; } = [];
